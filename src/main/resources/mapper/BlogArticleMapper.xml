@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xc.blogbackend.mapper.BlogArticleMapper">
+
+    <resultMap id="BaseResultMap" type="com.xc.blogbackend.model.domain.BlogArticle">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="article_title" column="article_title" jdbcType="VARCHAR"/>
+            <result property="author_id" column="author_id" jdbcType="INTEGER"/>
+            <result property="category_id" column="category_id" jdbcType="INTEGER"/>
+            <result property="article_content" column="article_content" jdbcType="VARCHAR"/>
+            <result property="article_cover" column="article_cover" jdbcType="VARCHAR"/>
+            <result property="is_top" column="is_top" jdbcType="INTEGER"/>
+            <result property="status" column="status" jdbcType="INTEGER"/>
+            <result property="type" column="type" jdbcType="INTEGER"/>
+            <result property="origin_url" column="origin_url" jdbcType="VARCHAR"/>
+            <result property="createdAt" column="createdAt" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updatedAt" jdbcType="TIMESTAMP"/>
+            <result property="view_times" column="view_times" jdbcType="INTEGER"/>
+            <result property="article_description" column="article_description" jdbcType="VARCHAR"/>
+            <result property="thumbs_up_times" column="thumbs_up_times" jdbcType="INTEGER"/>
+            <result property="reading_duration" column="reading_duration" jdbcType="DOUBLE"/>
+            <result property="article_order" column="article_order" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,article_title,author_id,
+        category_id,article_content,article_cover,
+        is_top,status,type,
+        origin_url,createdAt,updatedAt,
+        view_times,article_description,thumbs_up_times,
+        reading_duration,article_order
+    </sql>
+</mapper>
