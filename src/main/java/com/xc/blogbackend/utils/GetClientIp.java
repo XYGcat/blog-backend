@@ -2,6 +2,11 @@ package com.xc.blogbackend.utils;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ *获取用户ip
+ *
+ * @author 星尘
+ */
 public class GetClientIp {
     public static String getClientIp(HttpServletRequest request) {
         // 尝试从请求头中获取X-Real-IP，该请求头通常由一些代理服务器设置

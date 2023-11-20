@@ -4,10 +4,12 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 
@@ -16,6 +18,16 @@ import java.util.Date;
 @TableName(value ="blog_talk")
 @Data
 public class BlogTalk implements Serializable {
+
+    @TableField(exist = false)
+    private String  avatar;
+
+    @TableField(exist = false)
+    private String nick_name;
+
+    @TableField(exist = false)
+    private List<String> talkImgList;
+
     /**
      * 
      */
@@ -56,12 +68,14 @@ public class BlogTalk implements Serializable {
      * 
      */
     @TableField(value = "createdAt")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdAt;
 
     /**
      * 
      */
     @TableField(value = "updatedAt")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updatedAt;
 
     @TableField(exist = false)

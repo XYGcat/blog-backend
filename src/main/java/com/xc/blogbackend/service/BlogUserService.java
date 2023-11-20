@@ -43,8 +43,8 @@ public interface BlogUserService extends IService<BlogUser> {
     /**
      * 根据id查询用户信息
      *
-     * @param id
+     * @param user_id 用户id
      * @return
      */
-    BlogUser getOneUserInfo(Long id);
+    BlogUser getOneUserInfo(Integer user_id);
 }

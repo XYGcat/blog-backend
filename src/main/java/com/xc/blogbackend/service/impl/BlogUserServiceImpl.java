@@ -158,12 +158,12 @@ public class BlogUserServiceImpl extends ServiceImpl<BlogUserMapper, BlogUser>
     }
 
     @Override
-    public BlogUser getOneUserInfo(Long id) {
+    public BlogUser getOneUserInfo(Integer user_id) {
         QueryWrapper<BlogUser> queryWrapper = new QueryWrapper<>();
-        if (id == null) {
+        if (user_id == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR,"为空");
         }
-        queryWrapper.eq("id",id);
+        queryWrapper.eq("id",user_id);
         BlogUser blogUser = blogUserMapper.selectOne(queryWrapper);
         return getSafetyUser(blogUser);
     }

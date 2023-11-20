@@ -12,11 +12,11 @@ import java.util.Date;
 
 /**
  * 
- * @TableName blog_tag
+ * @TableName blog_talk_photo
  */
-@TableName(value ="blog_tag")
+@TableName(value ="blog_talk_photo")
 @Data
-public class BlogTag implements Serializable {
+public class BlogTalkPhoto implements Serializable {
     /**
      * 
      */
@@ -24,10 +24,16 @@ public class BlogTag implements Serializable {
     private Integer id;
 
     /**
-     * 标签名称 唯一
+     * 说说的id
      */
-    @TableField(value = "tag_name")
-    private String tag_name;
+    @TableField(value = "talk_id")
+    private Integer talk_id;
+
+    /**
+     * 图片地址
+     */
+    @TableField(value = "url")
+    private String url;
 
     /**
      * 
@@ -57,9 +63,10 @@ public class BlogTag implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        BlogTag other = (BlogTag) that;
+        BlogTalkPhoto other = (BlogTalkPhoto) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getTag_name() == null ? other.getTag_name() == null : this.getTag_name().equals(other.getTag_name()))
+            && (this.getTalk_id() == null ? other.getTalk_id() == null : this.getTalk_id().equals(other.getTalk_id()))
+            && (this.getUrl() == null ? other.getUrl() == null : this.getUrl().equals(other.getUrl()))
             && (this.getCreatedAt() == null ? other.getCreatedAt() == null : this.getCreatedAt().equals(other.getCreatedAt()))
             && (this.getUpdatedAt() == null ? other.getUpdatedAt() == null : this.getUpdatedAt().equals(other.getUpdatedAt()));
     }
@@ -69,7 +76,8 @@ public class BlogTag implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getTag_name() == null) ? 0 : getTag_name().hashCode());
+        result = prime * result + ((getTalk_id() == null) ? 0 : getTalk_id().hashCode());
+        result = prime * result + ((getUrl() == null) ? 0 : getUrl().hashCode());
         result = prime * result + ((getCreatedAt() == null) ? 0 : getCreatedAt().hashCode());
         result = prime * result + ((getUpdatedAt() == null) ? 0 : getUpdatedAt().hashCode());
         return result;
@@ -82,7 +90,8 @@ public class BlogTag implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", tag_name=").append(tag_name);
+        sb.append(", talk_id=").append(talk_id);
+        sb.append(", url=").append(url);
         sb.append(", createdAt=").append(createdAt);
         sb.append(", updatedAt=").append(updatedAt);
         sb.append(", serialVersionUID=").append(serialVersionUID);

@@ -45,6 +45,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
     @Override
     public long getArticleCount() {
         // 创建 QueryWrapper 对象，用于构建查询条件
+        //// TODO: 2023-11-20 提取该类的QueryWrapper放在方法外面
         QueryWrapper<BlogArticle> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("status",1);
 
@@ -154,7 +155,8 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
             promiseList.add(future);
         }
 
-        // 遍历List对象中的每个Future对象
+        // 遍历promiseList对象中的每个Future对象
+        //// TODO: 2023-11-20 使用foreach循环
         for (int i = 0; i < promiseList.size(); i++) {
             try {
                 // 使用get方法获取每个异步任务的结果，并对结果进行处理

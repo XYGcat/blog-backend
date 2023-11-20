@@ -109,7 +109,7 @@ public class UserController {
     }
 
     @GetMapping("/getUserInfoById/{id}")
-    public BaseResponse<BlogUser> getUserInfoById(@PathVariable Long id){
+    public BaseResponse<BlogUser> getUserInfo(@PathVariable Integer id){
         if (id != null) {
             if (id == 5201314) {
                 BlogUser blogUser = new BlogUser();
@@ -118,6 +118,7 @@ public class UserController {
                 blogUser.setNick_name("超级管理员");
                 return ResultUtils.success(blogUser);
             } else {
+                //// TODO: 2023-11-20 过滤返回值
                 BlogUser userInfo = blogUserService.getOneUserInfo(id);
                 return ResultUtils.success(userInfo);
             }
