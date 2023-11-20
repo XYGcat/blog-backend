@@ -16,6 +16,10 @@ public class ResultUtils {
         return new BaseResponse<>(0,result,"OK");
     }
 
+    public static <T> BaseResponse<T> success(T result, String message){
+        return new BaseResponse<>(0,result,message);
+    }
+
     /**
      * 失败
      * @param errorCode

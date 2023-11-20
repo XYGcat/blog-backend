@@ -2,6 +2,7 @@ package com.xc.blogbackend.model.domain;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -10,7 +11,7 @@ import java.util.Map;
  *
  */
 @Data
-public class ArticleDTO {
+public class ArticleDTO implements Serializable {
 
     private String categoryName; // 文章所属分类名
     private Map<String, Object> tagList; // 文章标签列表

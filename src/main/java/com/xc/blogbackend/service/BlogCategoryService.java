@@ -26,4 +26,20 @@ public interface BlogCategoryService extends IService<BlogCategory> {
      * @return
      */
     List<BlogCategory> getCategoryDictionary();
+
+    /**
+     * 根据id或者分类名称获取分类信息
+     *
+     * @param category_name
+     * @return
+     */
+    BlogCategory getOneCategory(String category_name);
+
+    /**
+     * 新增分类
+     *
+     * @param category_name
+     * @return
+     */
+    BlogCategory createCategory(String category_name);
 }

@@ -18,4 +18,20 @@ public interface BlogTagService extends IService<BlogTag> {
      * @return
      */
     List<BlogTag> getTagDictionary();
+
+    /**
+     * 根据(id或者)标签名称获取标签信息
+     *
+     * @param tag_name
+     * @return
+     */
+    BlogTag getOneTag(String tag_name);
+
+    /**
+     * 新增标签
+     *
+     * @param tag_name
+     * @return
+     */
+    BlogTag createTag(String tag_name);
 }

@@ -219,4 +219,42 @@ public class BlogArticle implements Serializable {
         sb.append("]");
         return sb.toString();
     }
+
+    /**
+     * 自定义方法，一次性插入多个值
+     *
+     * @param article_title
+     * @param author_id
+     * @param article_content
+     * @param article_cover
+     * @param is_top
+     * @param article_order
+     * @param status
+     * @param type
+     * @param origin_url
+     * @param article_description
+     */
+    public void setValues(
+            String article_title,
+            Integer author_id,
+            String article_content,
+            String article_cover,
+            Integer is_top,
+            Integer article_order,
+            Integer status,
+            Integer type,
+            String origin_url,
+            String article_description
+    ) {
+        this.article_title = article_title;
+        this.author_id = author_id;
+        this.article_content = article_content;
+        this.article_cover = article_cover;
+        this.is_top = is_top;
+        this.article_order = article_order;
+        this.status = status;
+        this.type = type;
+        this.origin_url = origin_url;
+        this.article_description = article_description;
+    }
 }

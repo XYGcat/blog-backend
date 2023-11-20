@@ -1,6 +1,7 @@
 package com.xc.blogbackend.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xc.blogbackend.common.ErrorCode;
 import com.xc.blogbackend.exception.BusinessException;
@@ -72,10 +73,14 @@ public class BlogUserServiceImpl extends ServiceImpl<BlogUserMapper, BlogUser>
             throw new BusinessException(ErrorCode.PARAMS_ERROR,"用户不存在");
         }
         //更新插入ip
-        BlogUser blogUser = new BlogUser();
-        blogUser.setIp(ip);
-        blogUser.setId(user.getId());
-        boolean saveResult = this.updateById(blogUser);
+//        BlogUser blogUser = new BlogUser();
+//        blogUser.setIp(ip);
+//        blogUser.setId(user.getId());
+//        boolean saveResult = this.updateById(blogUser);
+        UpdateWrapper<BlogUser> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("id", user.getId()).set("ip", ip);
+        this.update(updateWrapper);
+
         //3.用户脱敏
         BlogUser safetyUser = getSafetyUser(user);
         //4.记录用户的登录态

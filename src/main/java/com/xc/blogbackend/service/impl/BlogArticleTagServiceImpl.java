@@ -76,6 +76,18 @@ public class BlogArticleTagServiceImpl extends ServiceImpl<BlogArticleTagMapper,
 
         return result;
     }
+
+    @Override
+    public List<BlogArticleTag> createArticleTags(List<BlogArticleTag> articleTagList) {
+        ArrayList<BlogArticleTag> articleTag = new ArrayList<>();
+        //todo  在数据库xml中编写批量插入语句
+        for (BlogArticleTag blogArticleTag : articleTagList){
+            blogArticleTagMapper.insert(blogArticleTag);
+            articleTag.add(blogArticleTag);
+        }
+
+        return articleTag != null ? articleTag : null;
+    }
 }
 
 

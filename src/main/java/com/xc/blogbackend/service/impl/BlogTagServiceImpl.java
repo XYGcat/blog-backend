@@ -24,12 +24,34 @@ public class BlogTagServiceImpl extends ServiceImpl<BlogTagMapper, BlogTag>
     @Resource
     private BlogTagMapper blogTagMapper;
 
+    private final QueryWrapper<BlogTag> queryWrapper = new QueryWrapper<>();
+
     @Override
     public List<BlogTag> getTagDictionary() {
-        QueryWrapper<BlogTag> queryWrapper = new QueryWrapper<>();
+        queryWrapper.clear();   //清除其他方法的查询条件，以免条件叠加导致意外的查询结果
         queryWrapper.select("id","tag_name", "createdAt", "updatedAt");
-        List<BlogTag> blogTags = blogTagMapper.selectList(queryWrapper);
-        return blogTags;
+        return blogTagMapper.selectList(queryWrapper);
+    }
+
+    @Override
+    public BlogTag getOneTag(String tag_name) {
+        queryWrapper.clear();   //清除其他方法的查询条件，以免条件叠加导致意外的查询结果
+        if (tag_name != null) {
+            queryWrapper.eq("tag_name",tag_name);
+        }
+        BlogTag blogTag = blogTagMapper.selectOne(queryWrapper);
+        return blogTag;
+    }
+
+    @Override
+    public BlogTag createTag(String tag_name) {
+        BlogTag blogTag = new BlogTag();
+        blogTag.setTag_name(tag_name);
+        blogTagMapper.insert(blogTag);
+
+        queryWrapper.clear();
+        Integer id = blogTag.getId();
+        return blogTagMapper.selectById(id);
     }
 }
 

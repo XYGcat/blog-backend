@@ -36,6 +36,14 @@ public interface BlogArticleService extends IService<BlogArticle> {
      */
     Boolean getArticleInfoByTitle(String id,String article_title);
 
+    /**
+     * 新增文章
+     *
+     * @param article
+     * @return
+     */
+    BlogArticle createArticle(BlogArticle article);
+
 //    /**
 //     * 获取标签总数
 //     *

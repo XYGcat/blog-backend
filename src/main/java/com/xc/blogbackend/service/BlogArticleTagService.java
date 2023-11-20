@@ -27,4 +27,12 @@ public interface BlogArticleTagService extends IService<BlogArticleTag> {
      * @return
      */
     Map<String, Object> getTagListByArticleId(int article_id);
+
+    /**
+     * 批量增加文章标签关联
+     *
+     * @param articleTagList
+     * @return
+     */
+    List<BlogArticleTag> createArticleTags(List<BlogArticleTag> articleTagList);
 }

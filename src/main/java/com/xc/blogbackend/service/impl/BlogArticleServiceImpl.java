@@ -197,6 +197,16 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
         }
     }
 
+    @Override
+    public BlogArticle createArticle(BlogArticle article) {
+        Integer insert = blogArticleMapper.insert(article);
+        if (insert != null){
+            return article;
+        }else {
+            return null;
+        }
+    }
+
 
 }
 
