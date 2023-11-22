@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xc.blogbackend.mapper.BlogPhotoAlbumMapper">
+
+    <resultMap id="BaseResultMap" type="com.xc.blogbackend.model.domain.BlogPhotoAlbum">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="album_name" column="album_name" jdbcType="VARCHAR"/>
+            <result property="description" column="description" jdbcType="VARCHAR"/>
+            <result property="createdAt" column="createdAt" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updatedAt" jdbcType="TIMESTAMP"/>
+            <result property="album_cover" column="album_cover" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,album_name,description,
+        createdAt,updatedAt,album_cover
+    </sql>
+</mapper>

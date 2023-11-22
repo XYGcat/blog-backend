@@ -22,6 +22,7 @@ public class ArticleRestDTO implements Serializable {
     private String origin_url; // 原文链接，翻译或转载时填写
 //    private List<String> coverList; // 封面列表
     private String article_description; // 文章描述
+
     private String category_id; //分类id
 
     public void setValues(

@@ -16,7 +16,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
+
+import java.util.Map;
 
 import static com.xc.blogbackend.contant.BlogUserConstant.ADMIN_PASSWORD;
 import static com.xc.blogbackend.utils.SecretKeyUtil.SECRET_KEY_BYTES;
@@ -60,6 +61,7 @@ public class UserController {
                         .claim("username", "admin")
                         .signWith(Keys.hmacShaKeyFor(SECRET_KEY_BYTES))
                         .compact();
+
                 BlogUser blogUser = new BlogUser();
                 blogUser.setUsername("超级管理员");
                 blogUser.setRole(1);
@@ -82,6 +84,7 @@ public class UserController {
                     .claim("username", blogUser.getUsername())
                     .signWith(Keys.hmacShaKeyFor(SECRET_KEY_BYTES))
                     .compact();
+
             blogUser.setToken(token);
 
             return ResultUtils.success(blogUser);
@@ -94,7 +97,7 @@ public class UserController {
      * @return
      */
     @PostMapping("/register")
-    public BaseResponse<Long> userRegister(@RequestBody UserRegisterRequest userRegisterRequest,HttpServletRequest request) throws IOException {
+    public BaseResponse<Map<String,String>> userRegister(@RequestBody UserRegisterRequest userRegisterRequest,HttpServletRequest request) {
         if(userRegisterRequest == null){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
@@ -104,7 +107,9 @@ public class UserController {
         if(StringUtils.isAnyBlank(username,password,checkPassword)){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        long result = blogUserService.userRegister(username, password, checkPassword);
+        //获取客户端ip
+        String ip = GetClientIp.getClientIp(request);
+        Map<String,String> result = blogUserService.userRegister(username, password, checkPassword, ip);
         return ResultUtils.success(result);
     }
 

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
@@ -96,8 +97,8 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
                     for (BlogTalkPhoto photo : v) {
                         int index = findRowIndex(rows, photo.getTalk_id());
                         if (index != -1) {
-                            List<String> talkImgList = v.stream().map(BlogTalkPhoto::getUrl).collect(Collectors.toList());
-                            rows.get(index).setTalkImgList(talkImgList);
+                            List<String> talkImgListResponse = v.stream().map(BlogTalkPhoto::getUrl).collect(Collectors.toList());
+                            rows.get(index).setTalkImgListResponse(talkImgListResponse);
                         }
                     }
                 }
@@ -148,6 +149,24 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
         pageInfoResult.setList(rows);
 
         return pageInfoResult;
+    }
+
+    @Override
+    public BlogTalk publishTalk(BlogTalk blogTalk) {
+        List<Map<String, String>> talkImgList = blogTalk.getTalkImgList();
+        blogTalkMapper.insert(blogTalk);
+
+        if (blogTalk.getId() != null) {
+            List<BlogTalkPhoto> imgList = talkImgList.stream().map(img -> {
+                BlogTalkPhoto transformedImg = new BlogTalkPhoto();
+                transformedImg.setTalk_id(blogTalk.getId());
+                transformedImg.setUrl(img.get("url"));
+                return transformedImg;
+            }).collect(Collectors.toList());
+
+            blogTalkPhotoService.publishTalkPhoto(imgList);
+        }
+        return blogTalk;
     }
 }
 

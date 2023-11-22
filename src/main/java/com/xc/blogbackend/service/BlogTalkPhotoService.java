@@ -19,4 +19,12 @@ public interface BlogTalkPhotoService extends IService<BlogTalkPhoto> {
      * @return
      */
    List<BlogTalkPhoto> getPhotoByTalkId(Integer talk_id);
+
+    /**
+     * 新增说说图片
+     *
+     * @param imgList
+     * @return
+     */
+   List<BlogTalkPhoto> publishTalkPhoto(List<BlogTalkPhoto> imgList);
 }

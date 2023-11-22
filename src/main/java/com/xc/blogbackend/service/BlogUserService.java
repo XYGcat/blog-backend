@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.xc.blogbackend.model.domain.BlogUser;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
 * @author XC
@@ -30,7 +31,7 @@ public interface BlogUserService extends IService<BlogUser> {
      * @param checkPassword 校验密码
      * @return 新用户 id
      */
-    long userRegister(String username,String password,String checkPassword);
+    Map<String,String> userRegister(String username, String password, String checkPassword, String ip);
 
     /**
      * 用户脱敏

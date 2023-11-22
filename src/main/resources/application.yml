@@ -22,3 +22,16 @@ mybatis-plus:
       logic-delete-field: isDelete # 全局逻辑删除的实体字段名(since 3.3.0,配置后可以忽略不配置步骤2)
       logic-delete-value: 1 # 逻辑已删除值(默认为 1)
       logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
+qiniu:
+  # 七牛云访问秘钥
+  accessKey: BPdbkan5aZEackrnJm7Bk65a5pYvb0QKEBUsTBG_
+  # 七牛云密钥
+  secretKey: VZhE0sW6zEWLPr0oc6KE1dmOpyW8F6DczIY1W-xv
+  # 绑定自己的域名
+  domain: s4gm27ul6.hn-bkt.clouddn.com
+  # bucket名称
+  bucketName: blog-xc
+  #本地 local 七牛云 qiniu  云服务器 online
+  UPLOADTYPE: 'qiniu'
+  #服务器地址 用于拼接图片显示 可以使用七牛云测试域名 前面请带上http://或者https://根据实际情况带上
+  BASEURL: s4gm27ul6.hn-bkt.clouddn.com

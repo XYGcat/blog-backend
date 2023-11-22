@@ -16,6 +16,8 @@ import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -89,7 +91,7 @@ public class BlogUserServiceImpl extends ServiceImpl<BlogUserMapper, BlogUser>
     }
 
     @Override
-    public long userRegister(String username, String password, String checkPassword) {
+    public Map<String,String> userRegister(String username, String password, String checkPassword, String ip) {
         //1.校验
         //账户密码不能为空
         if (StringUtils.isAnyBlank(username,password,checkPassword)){
@@ -124,15 +126,21 @@ public class BlogUserServiceImpl extends ServiceImpl<BlogUserMapper, BlogUser>
         String encryptPassword = DigestUtils.md5DigestAsHex((SALT + password).getBytes());
         //3.插入数据
         BlogUser blogUser = new BlogUser();
+        Integer id = blogUser.getId();
         blogUser.setUsername(username);
         blogUser.setPassword(encryptPassword);
         blogUser.setAvatar("https://pic.imgdb.cn/item/65114060c458853aef1f9fa4.jpg");
         blogUser.setNick_name(RandomUsernameGenerator.generateRandomUsername());
+        blogUser.setIp(ip);
         boolean saveResult = this.save(blogUser);
+        Integer id1 = blogUser.getId();
         if(!saveResult){
             throw new BusinessException(ErrorCode.PARAMS_ERROR,"为空");
         }
-        return blogUser.getId();
+        Map<String, String> userMap = new HashMap<>();
+        userMap.put("id",String.valueOf(blogUser.getId()));
+        userMap.put("username",blogUser.getUsername());
+        return userMap;
     }
 
     /**

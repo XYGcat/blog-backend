@@ -21,4 +21,11 @@ public interface BlogTalkService extends IService<BlogTalk> {
      */
     PageInfoResult<BlogTalk> getTalkList(Integer current,Integer size,Integer status);
 
+    /**
+     * 新增说说
+     *
+     * @param blogTalk
+     * @return
+     */
+    BlogTalk publishTalk(BlogTalk blogTalk);
 }

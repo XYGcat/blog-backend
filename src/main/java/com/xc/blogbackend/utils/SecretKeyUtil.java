@@ -6,6 +6,11 @@ import io.jsonwebtoken.security.Keys;
 import javax.crypto.SecretKey;
 import java.util.Base64;
 
+/**
+ * 生成HMAC-SHA-256算法的密钥工具类
+ *
+ * @author 星尘
+ */
 public class SecretKeyUtil {
 
     // 声明为类的静态常量

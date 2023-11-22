@@ -10,6 +10,7 @@ import lombok.Data;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -26,7 +27,10 @@ public class BlogTalk implements Serializable {
     private String nick_name;
 
     @TableField(exist = false)
-    private List<String> talkImgList;
+    private List<String> talkImgListResponse;
+
+    @TableField(exist = false)
+    private List<Map<String,String>> talkImgList;   //添加说说时的图片数据列表请求体
 
     /**
      * 
@@ -68,8 +72,9 @@ public class BlogTalk implements Serializable {
      * 
      */
     @TableField(value = "createdAt")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")    //保证在返回 JSON 格式数据时，日期字段按照指定格式展示
     private Date createdAt;
+
 
     /**
      * 

@@ -45,6 +45,12 @@ public class BlogTalkPhotoServiceImpl extends ServiceImpl<BlogTalkPhotoMapper, B
         }
         return talkPhotos;
     }
+
+    @Override
+    public List<BlogTalkPhoto> publishTalkPhoto(List<BlogTalkPhoto> imgList) {
+        saveBatch(imgList);
+        return imgList;
+    }
 }
 
 
