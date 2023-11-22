@@ -2,6 +2,7 @@ package com.xc.blogbackend.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xc.blogbackend.model.domain.BlogUser;
+import com.xc.blogbackend.model.domain.result.PageInfoResult;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -48,4 +49,15 @@ public interface BlogUserService extends IService<BlogUser> {
      * @return
      */
     BlogUser getOneUserInfo(Integer user_id);
+
+    /**
+     * 分页查询用户列表
+     *
+     * @param current
+     * @param nick_name
+     * @param role
+     * @param size
+     * @return
+     */
+    PageInfoResult<BlogUser> getUserList(Integer current, String nick_name, Integer role, Integer size);
 }

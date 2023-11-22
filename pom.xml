@@ -92,6 +92,22 @@
             <artifactId>qiniu-java-sdk</artifactId>
             <version>7.14.0</version>
         </dependency>
+        <!-- ip2region IP解析 -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.4.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.lionsoul</groupId>
+            <artifactId>ip2region</artifactId>
+            <version>2.7.0</version>
+        </dependency>
     </dependencies>
 
     <build>

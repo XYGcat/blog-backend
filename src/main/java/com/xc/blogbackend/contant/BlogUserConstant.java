@@ -26,4 +26,9 @@ public interface BlogUserConstant {
      * 超级管理员密码
      */
     String ADMIN_PASSWORD = "318807xc";
+
+    /**
+     * "盐"值：混淆密码
+     */
+    String SALT = "xc";
 }

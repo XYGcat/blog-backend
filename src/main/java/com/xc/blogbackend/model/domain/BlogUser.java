@@ -19,6 +19,12 @@ import java.util.Date;
 public class BlogUser implements Serializable {
 
     /**
+     * ip所在地理位置
+     */
+    @TableField(exist = false)
+    private String ip_address;
+
+    /**
      * 添加一个token字段
      */
     @TableField(exist = false)

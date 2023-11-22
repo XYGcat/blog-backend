@@ -41,11 +41,11 @@ public class BlogPhotoAlbumServiceImpl extends ServiceImpl<BlogPhotoAlbumMapper,
         // 创建Page对象，设置当前页和分页大小
         Page<BlogPhotoAlbum> page = new Page<>(offset, limit);
         // 获取说说列表，使用page方法传入Page对象和QueryWrapper对象
-        Page<BlogPhotoAlbum> articlePage = blogPhotoAlbumMapper.selectPage(page, queryWrapper);
+        Page<BlogPhotoAlbum> photoAlbumPage = blogPhotoAlbumMapper.selectPage(page, queryWrapper);
         // 获取分页数据
-        List<BlogPhotoAlbum> rows = articlePage.getRecords();
+        List<BlogPhotoAlbum> rows = photoAlbumPage.getRecords();
         // 获取说说总数
-        long count = articlePage.getTotal();
+        long count = photoAlbumPage.getTotal();
 
         //添加返回值
         PageInfoResult<BlogPhotoAlbum> pageInfoResult = new PageInfoResult<>();

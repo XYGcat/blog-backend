@@ -2,12 +2,16 @@ package com.xc.blogbackend.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xc.blogbackend.common.ErrorCode;
+import com.xc.blogbackend.contant.BlogUserConstant;
 import com.xc.blogbackend.exception.BusinessException;
 import com.xc.blogbackend.mapper.BlogUserMapper;
 import com.xc.blogbackend.model.domain.BlogUser;
+import com.xc.blogbackend.model.domain.result.PageInfoResult;
 import com.xc.blogbackend.service.BlogUserService;
+import com.xc.blogbackend.utils.IpUtils;
 import com.xc.blogbackend.utils.RandomUsernameGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -17,6 +21,7 @@ import org.springframework.util.DigestUtils;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -36,10 +41,7 @@ public class BlogUserServiceImpl extends ServiceImpl<BlogUserMapper, BlogUser>
     @Resource
     private BlogUserMapper blogUserMapper;
 
-    /**
-     * "盐"值：混淆密码
-     */
-    private static final String SALT = "xc";
+    private final QueryWrapper<BlogUser> queryWrapper = new QueryWrapper<>();
 
     @Override
     public BlogUser userLogin(String username, String password,String ip, HttpServletRequest request){
@@ -63,9 +65,9 @@ public class BlogUserServiceImpl extends ServiceImpl<BlogUserMapper, BlogUser>
             throw new BusinessException(ErrorCode.PARAMS_ERROR,"账户不能包含特殊字符");
         }
         //2.加密
-        String encryptPassword = DigestUtils.md5DigestAsHex((SALT + password).getBytes());
+        String encryptPassword = DigestUtils.md5DigestAsHex((BlogUserConstant.SALT + password).getBytes());
         //查询用户是否存在
-        QueryWrapper<BlogUser> queryWrapper = new QueryWrapper<>();
+        queryWrapper.clear();
         queryWrapper.eq("BINARY username",username);
         queryWrapper.eq("BINARY password",encryptPassword);
         BlogUser user = blogUserMapper.selectOne(queryWrapper);
@@ -116,14 +118,14 @@ public class BlogUserServiceImpl extends ServiceImpl<BlogUserMapper, BlogUser>
             throw new BusinessException(ErrorCode.PARAMS_ERROR,"密码和校验密码不相同");
         }
         //账户不能重复
-        QueryWrapper<BlogUser> queryWrapper = new QueryWrapper<>();
+        queryWrapper.clear();
         queryWrapper.eq("username",username);
         long count = blogUserMapper.selectCount(queryWrapper);
         if (count > 0){
             throw new BusinessException(ErrorCode.PARAMS_ERROR,"账户不能重复");
         }
         //2.加密
-        String encryptPassword = DigestUtils.md5DigestAsHex((SALT + password).getBytes());
+        String encryptPassword = DigestUtils.md5DigestAsHex((BlogUserConstant.SALT + password).getBytes());
         //3.插入数据
         BlogUser blogUser = new BlogUser();
         Integer id = blogUser.getId();
@@ -167,13 +169,55 @@ public class BlogUserServiceImpl extends ServiceImpl<BlogUserMapper, BlogUser>
 
     @Override
     public BlogUser getOneUserInfo(Integer user_id) {
-        QueryWrapper<BlogUser> queryWrapper = new QueryWrapper<>();
+        queryWrapper.clear();
         if (user_id == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR,"为空");
         }
         queryWrapper.eq("id",user_id);
         BlogUser blogUser = blogUserMapper.selectOne(queryWrapper);
         return getSafetyUser(blogUser);
+    }
+
+    @Override
+    public PageInfoResult<BlogUser> getUserList(Integer current, String nick_name, Integer role, Integer size) {
+        // 分页参数处理
+        int offset = (current - 1) * size;
+        int limit = size;
+
+        queryWrapper.clear();
+        if (role != null) {
+            queryWrapper.eq("role", role);
+        }
+        if (nick_name != null && !nick_name.isEmpty()) {
+            queryWrapper.like("nick_name", "%" + nick_name + "%");
+        }
+        //构建查询条件并返回除密码外的其他列
+        queryWrapper.select(BlogUser.class, info -> !info.getColumn().equals("password"));
+
+        // 创建Page对象，设置当前页和分页大小
+        Page<BlogUser> page = new Page<>(offset, limit);
+        // 获取用户列表，使用page方法传入Page对象和QueryWrapper对象
+        Page<BlogUser> userPage = blogUserMapper.selectPage(page, queryWrapper);
+        // 获取分页数据
+        List<BlogUser> rows = userPage.getRecords();
+        // 获取说说总数
+        long count = userPage.getTotal();
+
+        rows.forEach(row -> {
+            if (row.getIp() != null && !row.getIp().isEmpty()) {
+                row.setIp_address(IpUtils.getLocation(row.getIp()));
+            } else {
+                row.setIp_address("火星");
+            }
+        });
+
+        PageInfoResult<BlogUser> pageInfoResult = new PageInfoResult<>();
+        pageInfoResult.setList(rows);
+        pageInfoResult.setTotal(count);
+        pageInfoResult.setCurrent(current);
+        pageInfoResult.setSize(size);
+
+        return pageInfoResult;
     }
 }
 

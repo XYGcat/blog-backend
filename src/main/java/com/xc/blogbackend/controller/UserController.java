@@ -7,8 +7,9 @@ import com.xc.blogbackend.exception.BusinessException;
 import com.xc.blogbackend.model.domain.BlogUser;
 import com.xc.blogbackend.model.domain.request.UserLoginRequest;
 import com.xc.blogbackend.model.domain.request.UserRegisterRequest;
+import com.xc.blogbackend.model.domain.result.PageInfoResult;
 import com.xc.blogbackend.service.BlogUserService;
-import com.xc.blogbackend.utils.GetClientIp;
+import com.xc.blogbackend.utils.IpUtils;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.apache.commons.lang3.StringUtils;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-
 import java.util.Map;
 
 import static com.xc.blogbackend.contant.BlogUserConstant.ADMIN_PASSWORD;
@@ -36,13 +36,14 @@ public class UserController {
 
     /**
      * 登录接口
+     *
      * @param userLoginRequest
      * @param request
      * @return
      */
     @PostMapping("/login")
     public BaseResponse<BlogUser> userLogin(@RequestBody UserLoginRequest userLoginRequest, HttpServletRequest request){
-        String ipAddress = GetClientIp.getClientIp(request);
+        String ipAddress = IpUtils.getClientIp(request);
         if(userLoginRequest == null){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
@@ -93,6 +94,7 @@ public class UserController {
 
     /**
      * 注册接口
+     *
      * @param userRegisterRequest
      * @return
      */
@@ -108,11 +110,17 @@ public class UserController {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         //获取客户端ip
-        String ip = GetClientIp.getClientIp(request);
+        String ip = IpUtils.getClientIp(request);
         Map<String,String> result = blogUserService.userRegister(username, password, checkPassword, ip);
         return ResultUtils.success(result);
     }
 
+    /**
+     * 根据用户id获取用户信息
+     *
+     * @param id
+     * @return
+     */
     @GetMapping("/getUserInfoById/{id}")
     public BaseResponse<BlogUser> getUserInfo(@PathVariable Integer id){
         if (id != null) {
@@ -130,5 +138,22 @@ public class UserController {
         }else{
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
+    }
+
+    /**
+     * 分页获取用户列表
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping("")
+    public BaseResponse<PageInfoResult<BlogUser>> getUserList(@RequestBody Map<String,Object> request){
+        Integer current = (Integer) request.get("current");
+        String nick_name = (String) request.get("nick_name");
+        Integer role = (Integer) request.get("role");
+        Integer size = (Integer) request.get("size");
+        PageInfoResult<BlogUser> userList = blogUserService.getUserList(current, nick_name, role, size);
+
+        return ResultUtils.success(userList,"分页获取用户列表成功");
     }
 }
