@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xc.blogbackend.mapper.BlogLinksMapper">
+
+    <resultMap id="BaseResultMap" type="com.xc.blogbackend.model.domain.BlogLinks">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="site_name" column="site_name" jdbcType="VARCHAR"/>
+            <result property="site_desc" column="site_desc" jdbcType="VARCHAR"/>
+            <result property="site_avatar" column="site_avatar" jdbcType="VARCHAR"/>
+            <result property="url" column="url" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="INTEGER"/>
+            <result property="createdAt" column="createdAt" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updatedAt" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,site_name,site_desc,
+        site_avatar,url,status,
+        createdAt,updatedAt
+    </sql>
+</mapper>

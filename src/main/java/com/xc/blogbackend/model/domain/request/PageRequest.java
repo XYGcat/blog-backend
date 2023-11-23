@@ -23,4 +23,6 @@ public class PageRequest implements Serializable {
     private String message;
     @JsonDeserialize(using = CustomTimeDeserializer.class)
     private List<String> time = new ArrayList<>();
+    private String site_name;
+    private Integer status;
 }
