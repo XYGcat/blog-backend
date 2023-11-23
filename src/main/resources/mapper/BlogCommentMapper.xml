@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xc.blogbackend.mapper.BlogCommentMapper">
+
+    <resultMap id="BaseResultMap" type="com.xc.blogbackend.model.domain.BlogComment">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="parent_id" column="parent_id" jdbcType="INTEGER"/>
+            <result property="for_id" column="for_id" jdbcType="INTEGER"/>
+            <result property="type" column="type" jdbcType="INTEGER"/>
+            <result property="from_id" column="from_id" jdbcType="INTEGER"/>
+            <result property="from_name" column="from_name" jdbcType="VARCHAR"/>
+            <result property="from_avatar" column="from_avatar" jdbcType="VARCHAR"/>
+            <result property="to_id" column="to_id" jdbcType="INTEGER"/>
+            <result property="to_name" column="to_name" jdbcType="VARCHAR"/>
+            <result property="to_avatar" column="to_avatar" jdbcType="VARCHAR"/>
+            <result property="content" column="content" jdbcType="VARCHAR"/>
+            <result property="thumbs_up" column="thumbs_up" jdbcType="INTEGER"/>
+            <result property="createdAt" column="createdAt" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updatedAt" jdbcType="TIMESTAMP"/>
+            <result property="ip" column="ip" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,parent_id,for_id,
+        type,from_id,from_name,
+        from_avatar,to_id,to_name,
+        to_avatar,content,thumbs_up,
+        createdAt,updatedAt,ip
+    </sql>
+</mapper>

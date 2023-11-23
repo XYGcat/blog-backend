@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xc.blogbackend.mapper.BlogMessageMapper">
+
+    <resultMap id="BaseResultMap" type="com.xc.blogbackend.model.domain.BlogMessage">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="tag" column="tag" jdbcType="VARCHAR"/>
+            <result property="message" column="message" jdbcType="VARCHAR"/>
+            <result property="color" column="color" jdbcType="VARCHAR"/>
+            <result property="font_size" column="font_size" jdbcType="INTEGER"/>
+            <result property="bg_color" column="bg_color" jdbcType="VARCHAR"/>
+            <result property="bg_url" column="bg_url" jdbcType="VARCHAR"/>
+            <result property="user_id" column="user_id" jdbcType="INTEGER"/>
+            <result property="like_times" column="like_times" jdbcType="INTEGER"/>
+            <result property="createdAt" column="createdAt" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updatedAt" jdbcType="TIMESTAMP"/>
+            <result property="font_weight" column="font_weight" jdbcType="INTEGER"/>
+            <result property="nick_name" column="nick_name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,tag,message,
+        color,font_size,bg_color,
+        bg_url,user_id,like_times,
+        createdAt,updatedAt,font_weight,
+        nick_name
+    </sql>
+</mapper>
