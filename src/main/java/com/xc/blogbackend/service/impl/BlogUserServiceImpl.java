@@ -145,12 +145,6 @@ public class BlogUserServiceImpl extends ServiceImpl<BlogUserMapper, BlogUser>
         return userMap;
     }
 
-    /**
-     * 用户脱敏
-     *
-     * @param originUser
-     * @return
-     */
     @Override
     public BlogUser getSafetyUser(BlogUser originUser) {
         if(originUser == null){

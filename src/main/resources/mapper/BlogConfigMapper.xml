@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xc.blogbackend.mapper.BlogConfigMapper">
+
+    <resultMap id="BaseResultMap" type="com.xc.blogbackend.model.domain.BlogConfig">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="blog_name" column="blog_name" jdbcType="VARCHAR"/>
+            <result property="blog_avatar" column="blog_avatar" jdbcType="VARCHAR"/>
+            <result property="avatar_bg" column="avatar_bg" jdbcType="VARCHAR"/>
+            <result property="personal_say" column="personal_say" jdbcType="VARCHAR"/>
+            <result property="blog_notice" column="blog_notice" jdbcType="VARCHAR"/>
+            <result property="qq_link" column="qq_link" jdbcType="VARCHAR"/>
+            <result property="we_chat_link" column="we_chat_link" jdbcType="VARCHAR"/>
+            <result property="github_link" column="github_link" jdbcType="VARCHAR"/>
+            <result property="git_ee_link" column="git_ee_link" jdbcType="VARCHAR"/>
+            <result property="bilibili_link" column="bilibili_link" jdbcType="VARCHAR"/>
+            <result property="view_time" column="view_time" jdbcType="BIGINT"/>
+            <result property="createdAt" column="createdAt" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updatedAt" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,blog_name,blog_avatar,
+        avatar_bg,personal_say,blog_notice,
+        qq_link,we_chat_link,github_link,
+        git_ee_link,bilibili_link,view_time,
+        createdAt,updatedAt
+    </sql>
+</mapper>

@@ -146,7 +146,7 @@ public class UserController {
      * @param request
      * @return
      */
-    @PostMapping("")
+    @PostMapping("/getUserList")
     public BaseResponse<PageInfoResult<BlogUser>> getUserList(@RequestBody Map<String,Object> request){
         Integer current = (Integer) request.get("current");
         String nick_name = (String) request.get("nick_name");
