@@ -39,14 +39,14 @@ public class BlogPhotoAlbum implements Serializable {
      * 
      */
     @TableField(value = "createdAt")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")    //保证在返回 JSON 格式数据时，日期字段按照指定格式展示
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")    //保证在返回 JSON 格式数据时，日期字段按照指定格式展示
     private Date createdAt;
 
     /**
      * 
      */
     @TableField(value = "updatedAt")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")    //保证在返回 JSON 格式数据时，日期字段按照指定格式展示
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")    //保证在返回 JSON 格式数据时，日期字段按照指定格式展示
     private Date updatedAt;
 
     /**

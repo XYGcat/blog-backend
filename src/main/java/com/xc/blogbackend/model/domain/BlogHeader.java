@@ -33,14 +33,14 @@ public class BlogHeader implements Serializable {
      * 创建时间
      */
     @TableField(value = "createdAt")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createdAt;
 
     /**
      * 更新时间
      */
     @TableField(value = "updatedAt")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date updatedAt;
 
     /**

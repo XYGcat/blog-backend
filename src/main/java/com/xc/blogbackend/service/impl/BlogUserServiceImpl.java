@@ -41,8 +41,6 @@ public class BlogUserServiceImpl extends ServiceImpl<BlogUserMapper, BlogUser>
     @Resource
     private BlogUserMapper blogUserMapper;
 
-    private final QueryWrapper<BlogUser> queryWrapper = new QueryWrapper<>();
-
     @Override
     public BlogUser userLogin(String username, String password,String ip, HttpServletRequest request){
         //1.校验
@@ -67,7 +65,7 @@ public class BlogUserServiceImpl extends ServiceImpl<BlogUserMapper, BlogUser>
         //2.加密
         String encryptPassword = DigestUtils.md5DigestAsHex((BlogUserConstant.SALT + password).getBytes());
         //查询用户是否存在
-        queryWrapper.clear();
+        QueryWrapper<BlogUser> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("BINARY username",username);
         queryWrapper.eq("BINARY password",encryptPassword);
         BlogUser user = blogUserMapper.selectOne(queryWrapper);
@@ -118,7 +116,7 @@ public class BlogUserServiceImpl extends ServiceImpl<BlogUserMapper, BlogUser>
             throw new BusinessException(ErrorCode.PARAMS_ERROR,"密码和校验密码不相同");
         }
         //账户不能重复
-        queryWrapper.clear();
+        QueryWrapper<BlogUser> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("username",username);
         long count = blogUserMapper.selectCount(queryWrapper);
         if (count > 0){
@@ -163,7 +161,7 @@ public class BlogUserServiceImpl extends ServiceImpl<BlogUserMapper, BlogUser>
 
     @Override
     public BlogUser getOneUserInfo(Integer user_id) {
-        queryWrapper.clear();
+        QueryWrapper<BlogUser> queryWrapper = new QueryWrapper<>();
         if (user_id == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR,"为空");
         }
@@ -178,7 +176,7 @@ public class BlogUserServiceImpl extends ServiceImpl<BlogUserMapper, BlogUser>
         int offset = (current - 1) * size;
         int limit = size;
 
-        queryWrapper.clear();
+        QueryWrapper<BlogUser> queryWrapper = new QueryWrapper<>();
         if (role != null) {
             queryWrapper.eq("role", role);
         }

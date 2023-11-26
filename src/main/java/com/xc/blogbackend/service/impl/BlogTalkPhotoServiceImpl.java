@@ -22,19 +22,17 @@ import java.util.List;
 public class BlogTalkPhotoServiceImpl extends ServiceImpl<BlogTalkPhotoMapper, BlogTalkPhoto>
     implements BlogTalkPhotoService{
 
-    private final QueryWrapper<BlogTalkPhoto> queryWrapper = new QueryWrapper<>();
-
     @Resource
     private BlogTalkPhotoMapper blogTalkPhotoMapper;
 
     @Override
     public List<BlogTalkPhoto> getPhotoByTalkId(Integer talk_id) {
-        queryWrapper.clear();
+        QueryWrapper<BlogTalkPhoto> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("talk_id",talk_id);
         List<BlogTalkPhoto> talkPhotos = blogTalkPhotoMapper.selectList(queryWrapper);
         //返回一个经过处理的对象数组
         if (talkPhotos != null) {
-            ArrayList<BlogTalkPhoto> talkPhotosList = new ArrayList<>();
+            List<BlogTalkPhoto> talkPhotosList = new ArrayList<>();
             for (BlogTalkPhoto blogTalkPhoto : talkPhotos){
                 BlogTalkPhoto talkPhoto = new BlogTalkPhoto();
                 talkPhoto.setTalk_id(blogTalkPhoto.getTalk_id());

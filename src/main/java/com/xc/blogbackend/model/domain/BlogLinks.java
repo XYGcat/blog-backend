@@ -57,14 +57,14 @@ public class BlogLinks implements Serializable {
      * 
      */
     @TableField(value = "createdAt")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createdAt;
 
     /**
      * 
      */
     @TableField(value = "updatedAt")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date updatedAt;
 
     @TableField(exist = false)
