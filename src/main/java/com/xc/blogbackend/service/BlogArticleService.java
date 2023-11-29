@@ -34,7 +34,7 @@ public interface BlogArticleService extends IService<BlogArticle> {
      * @param article_title
      * @return
      */
-    Boolean getArticleInfoByTitle(String id,String article_title);
+    Boolean getArticleInfoByTitle(Integer id,String article_title);
 
     /**
      * 新增文章
@@ -44,24 +44,53 @@ public interface BlogArticleService extends IService<BlogArticle> {
      */
     BlogArticle createArticle(BlogArticle article);
 
-//    /**
-//     * 获取标签总数
-//     *
-//     * @return
-//     */
-//    BlogArticle getTagCount();
-//
-//    /**
-//     *获取分类总数
-//     *
-//     * @return
-//     */
-//    BlogArticle getCategoryCount();
-//
-//    /**
-//     *获取用户总数
-//     *
-//     * @return
-//     */
-//    BlogArticle getUserCount();
+    /**
+     * 根据文章id获取文章详细信息
+     *
+     * @param article_id
+     * @return
+     */
+    BlogArticle getArticleById(Integer article_id);
+
+    /**
+     * 修改文章信息
+     *
+     * @param blogArticle
+     * @return
+     */
+    Boolean updateArticle(BlogArticle blogArticle);
+
+    /**
+     * 根据文章获取文章封面
+     *
+     * @param article_id
+     * @return
+     */
+    String getArticleCoverById(Integer article_id);
+
+    /**
+     * 公开或隐藏文章
+     *
+     * @param id
+     * @param status
+     * @return
+     */
+    Boolean toggleArticlePublic(Integer id,Integer status);
+
+    /**
+     * 恢复文章
+     *
+     * @param id
+     * @return
+     */
+    Boolean revertArticle(Integer id);
+
+    /**
+     * 删除文章
+     *
+     * @param id
+     * @param status
+     * @return
+     */
+    Boolean deleteArticle(Integer id,Integer status);
 }

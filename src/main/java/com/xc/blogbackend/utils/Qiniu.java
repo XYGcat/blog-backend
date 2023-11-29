@@ -1,6 +1,10 @@
 package com.xc.blogbackend.utils;
 
 import com.qiniu.common.QiniuException;
+import com.qiniu.http.Response;
+import com.qiniu.storage.BucketManager;
+import com.qiniu.storage.Configuration;
+import com.qiniu.storage.Region;
 import com.qiniu.util.Auth;
 import com.xc.blogbackend.config.QiniuConfig;
 import org.springframework.stereotype.Component;
@@ -30,6 +34,29 @@ public class Qiniu {
         Auth auth = Auth.create(accessKey, secretKey);
         String token = auth.uploadToken(bucket);
         return token;
+    }
+
+    public Boolean deleteFile(String key){
+        String accessKey = qiniuConfig.getAccessKey();
+        String secretKey = qiniuConfig.getSecretKey();
+        String bucket = qiniuConfig.getBucketName();
+        //构造一个带指定 Region 对象的配置类
+        Configuration cfg = new Configuration(Region.region0());
+        //...其他参数参考类注释
+        Auth auth = Auth.create(accessKey, secretKey);
+        BucketManager bucketManager = new BucketManager(auth, cfg);
+        try {
+            Response delete = bucketManager.delete(bucket, key);
+            System.out.println(delete);
+            if (delete.statusCode == 200 ) {
+                return true;
+            }
+        } catch (QiniuException ex) {
+            //如果遇到异常，说明删除失败
+            System.err.println(ex.code());
+            System.err.println(ex.response.toString());
+        }
+        return false;
     }
 
     /**

@@ -34,4 +34,11 @@ public interface BlogTagService extends IService<BlogTag> {
      * @return
      */
     BlogTag createTag(String tag_name);
+
+    /**
+     * 获取标签总数
+     *
+     * @return
+     */
+    Long getTagCount();
 }

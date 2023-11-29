@@ -33,8 +33,6 @@ import java.util.stream.IntStream;
 public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
     implements BlogTalkService{
 
-    private final QueryWrapper<BlogTalk> queryWrapper = new QueryWrapper<>();    // 构建查询条件
-
     @Resource
     private BlogTalkMapper blogTalkMapper;
 
@@ -54,7 +52,7 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
         int offset = (current - 1) * size;
         int limit = size;
 
-        queryWrapper.clear();
+        QueryWrapper<BlogTalk> queryWrapper = new QueryWrapper<>();    // 构建查询条件
         // 如果说说状态不为空，使用eq精确查询
         if (status != null) {
             queryWrapper.eq("status", status);

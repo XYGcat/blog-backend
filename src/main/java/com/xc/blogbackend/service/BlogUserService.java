@@ -60,4 +60,19 @@ public interface BlogUserService extends IService<BlogUser> {
      * @return
      */
     PageInfoResult<BlogUser> getUserList(Integer current, String nick_name, Integer role, Integer size);
+
+    /**
+     *获取用户总数
+     *
+     * @return
+     */
+    Long getUserCount();
+
+    /**
+     * 根据用户id获取昵称
+     *
+     * @param user_id
+     * @return
+     */
+    String getAuthorNameById(Integer user_id);
 }

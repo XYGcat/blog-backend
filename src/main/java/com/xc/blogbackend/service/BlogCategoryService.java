@@ -18,7 +18,7 @@ public interface BlogCategoryService extends IService<BlogCategory> {
      * @param category_id
      * @return
      */
-    String getCategoryNameById(int category_id);
+    String getCategoryNameById(Integer category_id);
 
     /**
      * 获取分类数据字典
@@ -42,4 +42,12 @@ public interface BlogCategoryService extends IService<BlogCategory> {
      * @return
      */
     BlogCategory createCategory(String category_name);
+
+    /**
+     *获取分类总数
+     *
+     * @return
+     */
+    Long getCategoryCount();
+
 }

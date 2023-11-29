@@ -26,7 +26,7 @@ public interface BlogArticleTagService extends IService<BlogArticleTag> {
      * @param article_id
      * @return
      */
-    Map<String, Object> getTagListByArticleId(int article_id);
+    Map<String, Object> getTagListByArticleId(Integer article_id);
 
     /**
      * 批量增加文章标签关联
@@ -35,4 +35,12 @@ public interface BlogArticleTagService extends IService<BlogArticleTag> {
      * @return
      */
     List<BlogArticleTag> createArticleTags(List<BlogArticleTag> articleTagList);
+
+    /**
+     * 根据文章id删除文章标签关联
+     *
+     * @param article_id
+     * @return
+     */
+    Integer deleteArticleTag(Integer article_id);
 }

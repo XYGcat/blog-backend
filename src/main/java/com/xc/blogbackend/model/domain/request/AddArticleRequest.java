@@ -17,10 +17,10 @@ import java.util.Map;
 public class AddArticleRequest implements Serializable {
     private static final long serialVersionUID = -7600022127166394703L;
 
-    private ArticleDtae finalArticle;
+    private ArticleDate finalArticle;
 
     @Data
-    public static class ArticleDtae{
+    public static class ArticleDate{
         private Integer id; // 文章 ID
         private String article_title; // 文章标题
         private BlogCategory category; // 文章所属的分类信息

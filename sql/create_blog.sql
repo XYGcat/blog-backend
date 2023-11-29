@@ -32,15 +32,15 @@ CREATE TABLE `blog_article`  (
   `status` int(11) NULL DEFAULT 1 COMMENT '文章状态  1 公开 2 私密 3 草稿箱',
   `type` int(11) NULL DEFAULT 1 COMMENT '文章类型 1 原创 2 转载 3 翻译',
   `origin_url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '原文链接 是转载或翻译的情况下提供',
-  `createdAt` datetime NULL DEFAULT CURRENT_TIMESTAMP,
-  `updatedAt` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+  `createdAt` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updatedAt` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `view_times` int(11) NULL DEFAULT 0 COMMENT '文章访问次数',
   `article_description` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '描述信息 不能为空',
   `thumbs_up_times` int(11) NULL DEFAULT 0 COMMENT '文章点赞次数',
   `reading_duration` double NULL DEFAULT 0 COMMENT '文章阅读时长',
   `article_order` int(11) NULL DEFAULT NULL COMMENT '排序 1 最大 往后越小 用于置顶文章的排序',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 38 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for blog_article_tag
@@ -50,10 +50,10 @@ CREATE TABLE `blog_article_tag`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `article_id` int(11) NULL DEFAULT NULL COMMENT '文章id',
   `tag_id` int(11) NULL DEFAULT NULL COMMENT '标签id',
-  `createdAt` datetime NULL DEFAULT CURRENT_TIMESTAMP,
-  `updatedAt` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+  `createdAt` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updatedAt` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 225 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for blog_category
@@ -62,8 +62,8 @@ DROP TABLE IF EXISTS `blog_category`;
 CREATE TABLE `blog_category`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `category_name` varchar(55) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '分类名称 唯一',
-  `createdAt` datetime NULL DEFAULT CURRENT_TIMESTAMP,
-  `updatedAt` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+  `createdAt` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updatedAt` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `category_name`(`category_name`) USING BTREE,
   UNIQUE INDEX `category_name_2`(`category_name`) USING BTREE,
@@ -80,7 +80,7 @@ CREATE TABLE `blog_category`  (
   UNIQUE INDEX `category_name_13`(`category_name`) USING BTREE,
   UNIQUE INDEX `category_name_14`(`category_name`) USING BTREE,
   UNIQUE INDEX `category_name_15`(`category_name`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for blog_comment
@@ -99,11 +99,11 @@ CREATE TABLE `blog_comment`  (
   `to_avatar` varchar(555) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '被回复人的头像',
   `content` varchar(555) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '评论内容',
   `thumbs_up` int(11) NULL DEFAULT 0 COMMENT '评论点赞数',
-  `createdAt` datetime NULL DEFAULT CURRENT_TIMESTAMP,
-  `updatedAt` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+  `createdAt` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updatedAt` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `ip` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'ip地址',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 347 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for blog_config
@@ -122,10 +122,10 @@ CREATE TABLE `blog_config`  (
   `git_ee_link` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'git_ee链接',
   `bilibili_link` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'bilibili链接',
   `view_time` bigint(20) NULL DEFAULT 0 COMMENT '博客被访问的次数',
-  `createdAt` datetime NULL DEFAULT CURRENT_TIMESTAMP,
-  `updatedAt` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+  `createdAt` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updatedAt` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for blog_header
@@ -134,11 +134,11 @@ DROP TABLE IF EXISTS `blog_header`;
 CREATE TABLE `blog_header`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `bg_url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '背景图',
-  `createdAt` datetime NULL DEFAULT CURRENT_TIMESTAMP,
-  `updatedAt` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+  `createdAt` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updatedAt` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `route_name` varchar(555) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '路由名称',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 26 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for blog_like
@@ -149,10 +149,10 @@ CREATE TABLE `blog_like`  (
   `type` int(11) NULL DEFAULT NULL COMMENT '点赞类型 1 文章 2 说说 3 留言 4 评论',
   `for_id` int(11) NULL DEFAULT NULL COMMENT '点赞的id 文章id 说说id 留言id',
   `user_id` int(11) NULL DEFAULT NULL COMMENT '点赞用户id',
-  `createdAt` datetime NULL DEFAULT CURRENT_TIMESTAMP,
-  `updatedAt` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+  `createdAt` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updatedAt` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 175 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for blog_links
@@ -165,10 +165,10 @@ CREATE TABLE `blog_links`  (
   `site_avatar` varchar(555) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '网站头像',
   `url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '网站地址',
   `status` int(11) NULL DEFAULT NULL COMMENT '友链状态 1 待审核 2 审核通过',
-  `createdAt` datetime NULL DEFAULT CURRENT_TIMESTAMP,
-  `updatedAt` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+  `createdAt` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updatedAt` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 24 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for blog_message
@@ -184,12 +184,12 @@ CREATE TABLE `blog_message`  (
   `bg_url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '背景图片',
   `user_id` int(11) NULL DEFAULT NULL COMMENT '留言用户的id',
   `like_times` int(11) NULL DEFAULT 0 COMMENT '点赞次数',
-  `createdAt` datetime NULL DEFAULT CURRENT_TIMESTAMP,
-  `updatedAt` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+  `createdAt` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updatedAt` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `font_weight` int(11) NULL DEFAULT 500 COMMENT '字体宽度',
   `nick_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '游客用户的昵称',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 64 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for blog_notify
@@ -202,10 +202,10 @@ CREATE TABLE `blog_notify`  (
   `type` int(11) NULL DEFAULT NULL COMMENT '通知类型 1 文章 2 说说 3 留言 4 友链',
   `to_id` int(11) NULL DEFAULT NULL COMMENT '说说或者是文章的id 用于跳转',
   `isView` int(11) NULL DEFAULT 1 COMMENT '是否被查看 1 没有 2 已经查看',
-  `createdAt` datetime NULL DEFAULT CURRENT_TIMESTAMP,
-  `updatedAt` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+  `createdAt` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updatedAt` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 302 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for blog_photo
@@ -216,10 +216,10 @@ CREATE TABLE `blog_photo`  (
   `album_id` int(11) NULL DEFAULT NULL COMMENT '相册 id 属于哪个相册',
   `url` varchar(555) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '图片地址',
   `status` int(11) NULL DEFAULT 1 COMMENT '状态 1 正常 2 回收站',
-  `createdAt` datetime NULL DEFAULT CURRENT_TIMESTAMP,
-  `updatedAt` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+  `createdAt` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updatedAt` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 288 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for blog_photo_album
@@ -229,11 +229,11 @@ CREATE TABLE `blog_photo_album`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `album_name` varchar(26) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '相册名称',
   `description` varchar(55) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '相册描述信息',
-  `createdAt` datetime NULL DEFAULT CURRENT_TIMESTAMP,
-  `updatedAt` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+  `createdAt` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updatedAt` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `album_cover` varchar(555) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '相册封面',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for blog_recommend
@@ -243,8 +243,8 @@ CREATE TABLE `blog_recommend`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(55) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '推荐网站标题',
   `link` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '网站地址',
-  `createdAt` datetime NULL DEFAULT CURRENT_TIMESTAMP,
-  `updatedAt` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+  `createdAt` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updatedAt` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
@@ -255,8 +255,8 @@ DROP TABLE IF EXISTS `blog_tag`;
 CREATE TABLE `blog_tag`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `tag_name` varchar(55) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '标签名称 唯一',
-  `createdAt` datetime NULL DEFAULT CURRENT_TIMESTAMP,
-  `updatedAt` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+  `createdAt` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updatedAt` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `tag_name`(`tag_name`) USING BTREE,
   UNIQUE INDEX `tag_name_2`(`tag_name`) USING BTREE,
@@ -282,7 +282,7 @@ CREATE TABLE `blog_tag`  (
   UNIQUE INDEX `tag_name_22`(`tag_name`) USING BTREE,
   UNIQUE INDEX `tag_name_23`(`tag_name`) USING BTREE,
   UNIQUE INDEX `tag_name_24`(`tag_name`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 20 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for blog_talk
@@ -295,10 +295,10 @@ CREATE TABLE `blog_talk`  (
   `status` int(11) NULL DEFAULT 1 COMMENT '说说状态 1 公开 2 私密 3 回收站',
   `is_top` int(11) NULL DEFAULT 2 COMMENT '是否置顶 1 置顶 2 不置顶',
   `like_times` int(11) NULL DEFAULT 0 COMMENT '点赞次数',
-  `createdAt` datetime NULL DEFAULT CURRENT_TIMESTAMP,
-  `updatedAt` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+  `createdAt` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updatedAt` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 62 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for blog_talk_photo
@@ -308,10 +308,10 @@ CREATE TABLE `blog_talk_photo`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `talk_id` int(11) NULL DEFAULT NULL COMMENT '说说的id',
   `url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '图片地址',
-  `createdAt` datetime NULL DEFAULT CURRENT_TIMESTAMP,
-  `updatedAt` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+  `createdAt` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updatedAt` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 90 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for blog_user
@@ -324,8 +324,8 @@ CREATE TABLE `blog_user`  (
   `role` int(11) NOT NULL DEFAULT 2 COMMENT '用户角色 1 管理员 2 普通用户',
   `nick_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '用户昵称',
   `avatar` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '用户头像',
-  `createdAt` datetime NULL DEFAULT CURRENT_TIMESTAMP,
-  `updatedAt` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+  `createdAt` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updatedAt` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `qq` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '用户QQ 用于联系',
   `ip` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT 'ip属地',
   PRIMARY KEY (`id`) USING BTREE,
@@ -351,6 +351,6 @@ CREATE TABLE `blog_user`  (
   UNIQUE INDEX `username_20`(`username`) USING BTREE,
   UNIQUE INDEX `username_21`(`username`) USING BTREE,
   UNIQUE INDEX `username_22`(`username`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 197 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 SET FOREIGN_KEY_CHECKS = 1;

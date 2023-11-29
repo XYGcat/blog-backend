@@ -211,6 +211,21 @@ public class BlogUserServiceImpl extends ServiceImpl<BlogUserMapper, BlogUser>
 
         return pageInfoResult;
     }
+
+    @Override
+    public Long getUserCount() {
+        QueryWrapper<BlogUser> queryWrapper = new QueryWrapper<>();
+        Long count = blogUserMapper.selectCount(queryWrapper);
+
+        return count;
+    }
+
+    @Override
+    public String getAuthorNameById(Integer user_id) {
+        BlogUser blogUser = blogUserMapper.selectById(user_id);
+
+        return blogUser != null ? blogUser.getNick_name() : null;
+    }
 }
 
 

@@ -53,7 +53,7 @@ public class BlogArticleTagServiceImpl extends ServiceImpl<BlogArticleTagMapper,
     }
 
     @Override
-    public Map<String, Object> getTagListByArticleId(int article_id) {
+    public Map<String, Object> getTagListByArticleId(Integer article_id) {
         // 查询关联的标签 ID 列表
         QueryWrapper<BlogArticleTag> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("article_id",article_id);
@@ -87,6 +87,14 @@ public class BlogArticleTagServiceImpl extends ServiceImpl<BlogArticleTagMapper,
         }
 
         return articleTag != null ? articleTag : null;
+    }
+
+    @Override
+    public Integer deleteArticleTag(Integer article_id) {
+        QueryWrapper<BlogArticleTag> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("article_id",article_id);
+        int deleteById = blogArticleTagMapper.delete(queryWrapper);
+        return deleteById;
     }
 }
 

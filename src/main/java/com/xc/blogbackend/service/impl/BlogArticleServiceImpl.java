@@ -1,8 +1,12 @@
 package com.xc.blogbackend.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.qiniu.common.QiniuException;
+import com.xc.blogbackend.common.ErrorCode;
+import com.xc.blogbackend.exception.BusinessException;
 import com.xc.blogbackend.mapper.BlogArticleMapper;
 import com.xc.blogbackend.model.domain.ArticleDTO;
 import com.xc.blogbackend.model.domain.BlogArticle;
@@ -11,6 +15,8 @@ import com.xc.blogbackend.model.domain.result.PageInfoResult;
 import com.xc.blogbackend.service.BlogArticleService;
 import com.xc.blogbackend.service.BlogArticleTagService;
 import com.xc.blogbackend.service.BlogCategoryService;
+import com.xc.blogbackend.service.BlogUserService;
+import com.xc.blogbackend.utils.Qiniu;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,10 +48,15 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
     @Resource
     private BlogCategoryService blogCategoryService;
 
+    @Resource
+    private BlogUserService blogUserService;
+
+    @Resource
+    private Qiniu qiniu;
+
     @Override
     public long getArticleCount() {
         // 创建 QueryWrapper 对象，用于构建查询条件
-        //// TODO: 2023-11-20 提取该类的QueryWrapper放在方法外面
         QueryWrapper<BlogArticle> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("status",1);
 
@@ -155,15 +166,19 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
             promiseList.add(future);
         }
 
-        // 遍历promiseList对象中的每个Future对象
-        //// TODO: 2023-11-20 使用foreach循环
-        for (int i = 0; i < promiseList.size(); i++) {
+        // 使用增强的 for 循环遍历 promiseList
+        for (Future<ArticleDTO> future : promiseList) {
             try {
-                // 使用get方法获取每个异步任务的结果，并对结果进行处理
-                ArticleDTO res = promiseList.get(i).get();
-                rows.get(i).setCategoryName(res.getCategoryName());
-                rows.get(i).setTagNameList(res.getTagNameList());
-            } catch (InterruptedException | ExecutionException e) {
+                ArticleDTO res = future.get();
+                // 获取当前 future 的索引
+                int index = promiseList.indexOf(future);
+                if (index != -1) {
+                    // 直接在循环中修改 rows 的数据
+                    rows.get(index).setCategoryName(res.getCategoryName());
+                    rows.get(index).setTagNameList(res.getTagNameList());
+                    rows.get(index).setArticle_cover(qiniu.downloadUrl(rows.get(index).getArticle_cover()));
+                }
+            } catch (InterruptedException | ExecutionException | QiniuException e) {
                 // 处理可能抛出的异常
                 e.printStackTrace();
             }
@@ -183,7 +198,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
     }
 
     @Override
-    public Boolean getArticleInfoByTitle(String id, String article_title) {
+    public Boolean getArticleInfoByTitle(Integer id, String article_title) {
         QueryWrapper<BlogArticle> queryWrapper = new QueryWrapper<>();
         queryWrapper.select("id");
         queryWrapper.eq("article_title",article_title);
@@ -206,6 +221,101 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
             return article;
         }else {
             return null;
+        }
+    }
+
+    @Override
+    public BlogArticle getArticleById(Integer article_id) {
+        if (article_id == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR,"为空");
+        }
+        BlogArticle blogArticle = blogArticleMapper.selectById(article_id);
+        if (blogArticle != null) {
+            // 对浏览次数属性进行自增
+            blogArticle.setView_times(blogArticle.getView_times() + 1);
+            // 保存更新后的文章对象到数据库
+            blogArticleMapper.updateById(blogArticle);
+        }
+        // 获取标签列表
+        Map<String, Object> listByArticleId = blogArticleTagService.getTagListByArticleId(article_id);
+        List<Integer> tagIdList = (List<Integer>) listByArticleId.get("tagIdList");
+        List<String> tagNameList = (List<String>) listByArticleId.get("tagNameList");
+        // 获取分类名称
+        String categoryNameById = blogCategoryService.getCategoryNameById(blogArticle.getCategory_id());
+        // 获取文章作者昵称
+        String authorNameById = blogUserService.getAuthorNameById(blogArticle.getAuthor_id());
+
+        blogArticle.setTagIdList(tagIdList);
+        blogArticle.setTagNameList(tagNameList);
+        blogArticle.setAuthorName(authorNameById);
+        blogArticle.setCategoryName(categoryNameById);
+
+        return blogArticle;
+    }
+
+    @Override
+    public Boolean updateArticle(BlogArticle blogArticle) {
+        int res = 0;
+        try {
+            UpdateWrapper<BlogArticle> updateWrapper = new UpdateWrapper<>();
+            updateWrapper.eq("id", blogArticle.getId()); // 设置更新条件：ID 等于给定文章的 ID
+
+            res = blogArticleMapper.update(blogArticle, updateWrapper);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return res > 0 ? true : false;
+    }
+
+    @Override
+    public String getArticleCoverById(Integer article_id) {
+        BlogArticle blogArticle = blogArticleMapper.selectById(article_id);
+        return blogArticle.getArticle_cover();
+    }
+
+    @Override
+    public Boolean toggleArticlePublic(Integer id, Integer status) {
+        if (status == 2) {
+            status = 1;
+        } else {
+            status = 2;
+        }
+        BlogArticle blogArticle = new BlogArticle();
+        blogArticle.setStatus(status);
+        UpdateWrapper<BlogArticle> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("id",id);
+        int update = blogArticleMapper.update(blogArticle, updateWrapper);
+
+        return update > 0;
+    }
+
+    @Override
+    public Boolean revertArticle(Integer id) {
+        BlogArticle blogArticle = new BlogArticle();
+        blogArticle.setStatus(1);
+        UpdateWrapper<BlogArticle> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("id",id);
+        int update = blogArticleMapper.update(blogArticle, updateWrapper);
+        return update >0;
+    }
+
+    @Override
+    public Boolean deleteArticle(Integer id, Integer status) {
+        if (status != 3) {
+            BlogArticle blogArticle = new BlogArticle();
+            blogArticle.setStatus(3);
+            UpdateWrapper<BlogArticle> updateWrapper = new UpdateWrapper<>();
+            updateWrapper.eq("id",id);
+            int update = blogArticleMapper.update(blogArticle, updateWrapper);
+            return update > 0;
+        }else {
+            int deleteById = blogArticleMapper.deleteById(id);
+            if (deleteById > 0) {
+                // 删除和标签的关联
+                blogArticleTagService.deleteArticleTag(id);
+            }
+            return deleteById > 0;
         }
     }
 

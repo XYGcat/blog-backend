@@ -25,7 +25,7 @@ public class BlogCategoryServiceImpl extends ServiceImpl<BlogCategoryMapper, Blo
     private BlogCategoryMapper blogCategoryMapper;
 
     @Override
-    public String getCategoryNameById(int category_id) {
+    public String getCategoryNameById(Integer category_id) {
         BlogCategory category = blogCategoryMapper.selectById(category_id);
         return category != null ? category.getCategory_name() : null;
     }
@@ -57,6 +57,14 @@ public class BlogCategoryServiceImpl extends ServiceImpl<BlogCategoryMapper, Blo
 
         Integer id = category.getId();
         return blogCategoryMapper.selectById(id);
+    }
+
+    @Override
+    public Long getCategoryCount() {
+        QueryWrapper<BlogCategory> queryWrapper = new QueryWrapper<>();
+        Long count = blogCategoryMapper.selectCount(queryWrapper);
+
+        return count;
     }
 }
 

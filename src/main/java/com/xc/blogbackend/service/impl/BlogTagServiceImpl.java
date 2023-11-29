@@ -24,18 +24,16 @@ public class BlogTagServiceImpl extends ServiceImpl<BlogTagMapper, BlogTag>
     @Resource
     private BlogTagMapper blogTagMapper;
 
-    private final QueryWrapper<BlogTag> queryWrapper = new QueryWrapper<>();
-
     @Override
     public List<BlogTag> getTagDictionary() {
-        queryWrapper.clear();   //清除其他方法的查询条件，以免条件叠加导致意外的查询结果
+        QueryWrapper<BlogTag> queryWrapper = new QueryWrapper<>();
         queryWrapper.select("id","tag_name", "createdAt", "updatedAt");
         return blogTagMapper.selectList(queryWrapper);
     }
 
     @Override
     public BlogTag getOneTag(String tag_name) {
-        queryWrapper.clear();   //清除其他方法的查询条件，以免条件叠加导致意外的查询结果
+        QueryWrapper<BlogTag> queryWrapper = new QueryWrapper<>();
         if (tag_name != null) {
             queryWrapper.eq("tag_name",tag_name);
         }
@@ -49,9 +47,17 @@ public class BlogTagServiceImpl extends ServiceImpl<BlogTagMapper, BlogTag>
         blogTag.setTag_name(tag_name);
         blogTagMapper.insert(blogTag);
 
-        queryWrapper.clear();
+        QueryWrapper<BlogTag> queryWrapper = new QueryWrapper<>();
         Integer id = blogTag.getId();
         return blogTagMapper.selectById(id);
+    }
+
+    @Override
+    public Long getTagCount() {
+        QueryWrapper<BlogTag> queryWrapper = new QueryWrapper<>();
+        Long count = blogTagMapper.selectCount(queryWrapper);
+
+        return count;
     }
 }
 

@@ -21,6 +21,12 @@ import java.util.Map;
 public class BlogArticle implements Serializable {
 
     @TableField(exist = false)
+    private List<Integer> tagIdList;
+
+    @TableField(exist = false)
+    private String authorName;
+
+    @TableField(exist = false)
     private String categoryName;    // 文章所属分类名
 
     @TableField(exist = false)
@@ -29,9 +35,9 @@ public class BlogArticle implements Serializable {
     @TableField(exist = false)
     private List<String> tagNameList;   // 标签名列表
 
-    public void setTagNameList(List<String> tagNameList){
-        this.tagNameList = tagNameList;
-    }
+//    public void setTagNameList(List<String> tagNameList){
+//        this.tagNameList = tagNameList;
+//    }
 
     /**
      * 

@@ -13,6 +13,6 @@ import java.io.Serializable;
 public class TitleExistRequest implements Serializable {
     private static final long serialVersionUID = 9075383600717772790L;
 
-    private String id;
+    private Integer id;
     private String article_title;
 }
