@@ -1,9 +1,12 @@
 package com.xc.blogbackend.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xc.blogbackend.mapper.BlogCategoryMapper;
 import com.xc.blogbackend.model.domain.BlogCategory;
+import com.xc.blogbackend.model.domain.result.PageInfoResult;
 import com.xc.blogbackend.service.BlogCategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -56,7 +59,8 @@ public class BlogCategoryServiceImpl extends ServiceImpl<BlogCategoryMapper, Blo
         blogCategoryMapper.insert(category);
 
         Integer id = category.getId();
-        return blogCategoryMapper.selectById(id);
+        BlogCategory blogCategory = blogCategoryMapper.selectById(id);
+        return blogCategory;
     }
 
     @Override
@@ -65,6 +69,53 @@ public class BlogCategoryServiceImpl extends ServiceImpl<BlogCategoryMapper, Blo
         Long count = blogCategoryMapper.selectCount(queryWrapper);
 
         return count;
+    }
+
+    @Override
+    public PageInfoResult<BlogCategory> getCategoryList(String category_name, Integer current, Integer size) {
+        // 分页参数处理
+        int offset = (current - 1) * size;
+        int limit = size;
+
+        // 构建查询条件
+        QueryWrapper<BlogCategory> queryWrapper = new QueryWrapper<>();
+        // 如果分类名不为空，使用like模糊查询
+        if (category_name != null && !category_name.isEmpty()) {
+            queryWrapper.like("category_name", "%" + category_name + "%");
+        }
+
+        // 创建Page对象，设置当前页和分页大小
+        Page<BlogCategory> page = new Page<>(offset, limit);
+        // 获取分类列表，使用page方法传入Page对象和QueryWrapper对象
+        Page<BlogCategory> categoryPage = blogCategoryMapper.selectPage(page, queryWrapper);
+        // 获取分页数据
+        List<BlogCategory> rows = categoryPage.getRecords();
+        // 获取分类总数
+        long count = categoryPage.getTotal();
+
+        PageInfoResult<BlogCategory> pageInfoResult = new PageInfoResult<>();
+        pageInfoResult.setCurrent(current);
+        pageInfoResult.setTotal(count);
+        pageInfoResult.setSize(size);
+        pageInfoResult.setList(rows);
+
+        return pageInfoResult;
+    }
+
+    @Override
+    public Boolean updateCategory(Integer id, String category_name) {
+        BlogCategory blogCategory = new BlogCategory();
+        blogCategory.setCategory_name(category_name);
+        UpdateWrapper<BlogCategory> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("id",id);
+        int update = blogCategoryMapper.update(blogCategory, updateWrapper);
+        return update > 0;
+    }
+
+    @Override
+    public Boolean deleteCategories(List<Integer> idList) {
+        int batchIds = blogCategoryMapper.deleteBatchIds(idList);
+        return batchIds > 0;
     }
 }
 

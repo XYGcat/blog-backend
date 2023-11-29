@@ -28,4 +28,55 @@ public interface BlogTalkService extends IService<BlogTalk> {
      * @return
      */
     BlogTalk publishTalk(BlogTalk blogTalk);
+
+    /**
+     *根据id获取说说详情
+     *
+     * @param id
+     * @return
+     */
+    BlogTalk getTalkById(Integer id);
+
+    /**
+     * 修改说说
+     *
+     * @param blogTalk
+     * @return
+     */
+   Boolean updateTalk(BlogTalk blogTalk);
+
+    /**
+     * 置顶/取消置顶 说说
+     *
+     * @param id
+     * @param is_top
+     * @return
+     */
+   Boolean toggleTop(Integer id,Integer is_top);
+
+    /**
+     * 切换说说公开性
+     *
+     * @param id
+     * @param status
+     * @return
+     */
+   Boolean togglePublic(Integer id,Integer status);
+
+    /**
+     * 删除说说
+     *
+     * @param id
+     * @param status
+     * @return
+     */
+   Boolean deleteTalkById(Integer id,Integer status);
+
+    /**
+     * 恢复说说
+     *
+     * @param id
+     * @return
+     */
+   Boolean revertTalk(Integer id);
 }

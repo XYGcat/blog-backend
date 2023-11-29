@@ -25,6 +25,11 @@ public class UtilsController {
     @Resource
     private Qiniu qiniu;
 
+    /**
+     * 生成七牛云上传凭证
+     *
+     * @return
+     */
     @GetMapping("/uploadToken")
     public BaseResponse<List<String>> getuploadToken(){
         String uploadToken = qiniu.uploadToken();
@@ -35,6 +40,12 @@ public class UtilsController {
         return ResultUtils.success(tokenList);
     }
 
+    /**
+     * 删除七牛云图片
+     *
+     * @param request
+     * @return
+     */
     @PostMapping("/deleteFile")
     public BaseResponse<Boolean> deleteFile(@RequestBody Map<String,String> request){
         String article_cover = request.get("article_cover");

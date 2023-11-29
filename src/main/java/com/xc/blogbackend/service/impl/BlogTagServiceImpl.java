@@ -1,9 +1,12 @@
 package com.xc.blogbackend.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.xc.blogbackend.model.domain.BlogTag;
 import com.xc.blogbackend.mapper.BlogTagMapper;
+import com.xc.blogbackend.model.domain.BlogTag;
+import com.xc.blogbackend.model.domain.result.PageInfoResult;
 import com.xc.blogbackend.service.BlogTagService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -49,7 +52,8 @@ public class BlogTagServiceImpl extends ServiceImpl<BlogTagMapper, BlogTag>
 
         QueryWrapper<BlogTag> queryWrapper = new QueryWrapper<>();
         Integer id = blogTag.getId();
-        return blogTagMapper.selectById(id);
+        BlogTag tag = blogTagMapper.selectById(id);
+        return tag;
     }
 
     @Override
@@ -58,6 +62,53 @@ public class BlogTagServiceImpl extends ServiceImpl<BlogTagMapper, BlogTag>
         Long count = blogTagMapper.selectCount(queryWrapper);
 
         return count;
+    }
+
+    @Override
+    public PageInfoResult<BlogTag> getTalkList(Integer current, Integer size, String tag_name) {
+        // 分页参数处理
+        int offset = (current - 1) * size;
+        int limit = size;
+
+        // 构建查询条件
+        QueryWrapper<BlogTag> queryWrapper = new QueryWrapper<>();
+        // 如果标签名不为空，使用like模糊查询
+        if (tag_name != null && !tag_name.isEmpty()) {
+            queryWrapper.like("tag_name", "%" + tag_name + "%");
+        }
+
+        // 创建Page对象，设置当前页和分页大小
+        Page<BlogTag> page = new Page<>(offset, limit);
+        // 获取标签列表，使用page方法传入Page对象和QueryWrapper对象
+        Page<BlogTag> tagPage = blogTagMapper.selectPage(page, queryWrapper);
+        // 获取分页数据
+        List<BlogTag> rows = tagPage.getRecords();
+        // 获取标签总数
+        long count = tagPage.getTotal();
+
+        PageInfoResult<BlogTag> pageInfoResult = new PageInfoResult<>();
+        pageInfoResult.setCurrent(current);
+        pageInfoResult.setTotal(count);
+        pageInfoResult.setSize(size);
+        pageInfoResult.setList(rows);
+
+        return pageInfoResult;
+    }
+
+    @Override
+    public Boolean updateTag(Integer id, String tag_name) {
+        BlogTag blogTag = new BlogTag();
+        blogTag.setTag_name(tag_name);
+        UpdateWrapper<BlogTag> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("id",id);
+        int update = blogTagMapper.update(blogTag, updateWrapper);
+        return update > 0;
+    }
+
+    @Override
+    public Boolean deleteTags(List<Integer> idList) {
+        int batchIds = blogTagMapper.deleteBatchIds(idList);
+        return batchIds > 0;
     }
 }
 

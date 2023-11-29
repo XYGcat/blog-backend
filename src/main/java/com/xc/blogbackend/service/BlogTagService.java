@@ -2,6 +2,7 @@ package com.xc.blogbackend.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xc.blogbackend.model.domain.BlogTag;
+import com.xc.blogbackend.model.domain.result.PageInfoResult;
 
 import java.util.List;
 
@@ -41,4 +42,31 @@ public interface BlogTagService extends IService<BlogTag> {
      * @return
      */
     Long getTagCount();
+
+    /**
+     * 分页查找标签
+     *
+     * @param current
+     * @param size
+     * @param tag_name
+     * @return
+     */
+    PageInfoResult<BlogTag> getTalkList(Integer current,Integer size,String tag_name);
+
+    /**
+     * 修改标签
+     *
+     * @param id
+     * @param tag_name
+     * @return
+     */
+    Boolean updateTag(Integer id,String tag_name);
+
+    /**
+     * 删除标签
+     *
+     * @param idList
+     * @return
+     */
+    Boolean deleteTags(List<Integer> idList);
 }

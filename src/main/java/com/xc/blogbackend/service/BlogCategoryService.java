@@ -2,6 +2,7 @@ package com.xc.blogbackend.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xc.blogbackend.model.domain.BlogCategory;
+import com.xc.blogbackend.model.domain.result.PageInfoResult;
 
 import java.util.List;
 
@@ -50,4 +51,30 @@ public interface BlogCategoryService extends IService<BlogCategory> {
      */
     Long getCategoryCount();
 
+    /**
+     * 分页获取分类列表
+     *
+     * @param category_name
+     * @param current
+     * @param size
+     * @return
+     */
+    PageInfoResult<BlogCategory> getCategoryList(String category_name,Integer current,Integer size);
+
+    /**
+     * 修改分类
+     *
+     * @param id
+     * @param category_name
+     * @return
+     */
+    Boolean updateCategory(Integer id,String category_name);
+
+    /**
+     * 删除分类
+     *
+     * @param idList
+     * @return
+     */
+    Boolean deleteCategories(List<Integer> idList);
 }

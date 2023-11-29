@@ -1,9 +1,12 @@
 package com.xc.blogbackend.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qiniu.common.QiniuException;
+import com.xc.blogbackend.common.ErrorCode;
+import com.xc.blogbackend.exception.BusinessException;
 import com.xc.blogbackend.mapper.BlogTalkMapper;
 import com.xc.blogbackend.model.domain.BlogTalk;
 import com.xc.blogbackend.model.domain.BlogTalkPhoto;
@@ -17,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -253,6 +257,91 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
             blogTalkPhotoService.publishTalkPhoto(imgList);
         }
         return blogTalk;
+    }
+
+    @Override
+    public BlogTalk getTalkById(Integer id) {
+        BlogTalk blogTalk = blogTalkMapper.selectById(id);
+        if (blogTalk != null) {
+            List<BlogTalkPhoto> photos = blogTalkPhotoService.getPhotoByTalkId(id);
+            List<String> talkImgList = photos.stream().map(BlogTalkPhoto::getUrl).collect(Collectors.toList());
+            blogTalk.setTalkImgListResponse(talkImgList);
+            return blogTalk;
+        }
+        return null;
+    }
+
+    @Override
+    public Boolean updateTalk(BlogTalk blogTalk) {
+        Integer id = blogTalk.getId();
+        List<Map<String, String>> talkImgList = blogTalk.getTalkImgList();
+        List<BlogTalkPhoto> imgList = new ArrayList<>();
+
+        int updateById = blogTalkMapper.updateById(blogTalk);
+        if (updateById > 0) {
+            // 先删除图片关联
+            Boolean aBoolean = blogTalkPhotoService.deleteTalkPhoto(id);
+            if (aBoolean){
+                imgList = talkImgList.stream().map(img -> {
+                    BlogTalkPhoto blogTalkPhoto = new BlogTalkPhoto();
+                    blogTalkPhoto.setTalk_id(id);
+                    blogTalkPhoto.setUrl(img.get("url"));
+                    return blogTalkPhoto;
+                }).collect(Collectors.toList());
+            }
+            // 添加图片关联
+            List<BlogTalkPhoto> blogTalkPhotos = blogTalkPhotoService.publishTalkPhoto(imgList);
+
+            return updateById > 0;
+        }else {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+    }
+
+    @Override
+    public Boolean toggleTop(Integer id, Integer is_top) {
+        BlogTalk blogTalk = new BlogTalk();
+        blogTalk.setIs_top(is_top);
+        UpdateWrapper<BlogTalk> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("id",id);
+        int update = blogTalkMapper.update(blogTalk, updateWrapper);
+        return update > 0;
+    }
+
+    @Override
+    public Boolean togglePublic(Integer id, Integer status) {
+        BlogTalk blogTalk = new BlogTalk();
+        blogTalk.setStatus(status);
+        UpdateWrapper<BlogTalk> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("id",id);
+        int update = blogTalkMapper.update(blogTalk, updateWrapper);
+        return update > 0;
+    }
+
+    @Override
+    public Boolean deleteTalkById(Integer id, Integer status) {
+        int res;
+        if (status == 1 || status == 2) {
+            BlogTalk blogTalk = new BlogTalk();
+            blogTalk.setStatus(3);
+            UpdateWrapper<BlogTalk> updateWrapper = new UpdateWrapper<>();
+            updateWrapper.eq("id",id);
+            res = blogTalkMapper.update(blogTalk, updateWrapper);
+        }else {
+            res = blogTalkMapper.deleteById(id);
+            Boolean aBoolean = blogTalkPhotoService.deleteTalkPhoto(id);
+        }
+        return res > 0;
+    }
+
+    @Override
+    public Boolean revertTalk(Integer id) {
+        BlogTalk blogTalk = new BlogTalk();
+        blogTalk.setStatus(1);
+        UpdateWrapper<BlogTalk> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("id",id);
+        int res = blogTalkMapper.update(blogTalk, updateWrapper);
+        return res > 0;
     }
 }
 

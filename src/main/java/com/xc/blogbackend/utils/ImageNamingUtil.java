@@ -9,7 +9,11 @@ import java.util.UUID;
  */
 public class ImageNamingUtil {
 
-    //传入一个图片前缀的参数
+    /**
+     * 图片命名随机生成
+     *
+     * @return
+     */
     public static String generateUniqueImageName() {
         String uuid = UUID.randomUUID().toString();
         String imageName = uuid.replaceAll("-", "").substring(0, 16);

@@ -17,6 +17,7 @@ import java.util.Date;
 @TableName(value ="blog_talk_photo")
 @Data
 public class BlogTalkPhoto implements Serializable {
+
     /**
      * 
      */

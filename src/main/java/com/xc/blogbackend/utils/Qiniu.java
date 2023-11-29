@@ -10,6 +10,7 @@ import com.xc.blogbackend.config.QiniuConfig;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 七牛云工具类
@@ -36,6 +37,12 @@ public class Qiniu {
         return token;
     }
 
+    /**
+     * 删除七牛云中的图片(传入字符串)
+     *
+     * @param key
+     * @return
+     */
     public Boolean deleteFile(String key){
         String accessKey = qiniuConfig.getAccessKey();
         String secretKey = qiniuConfig.getSecretKey();
@@ -47,7 +54,6 @@ public class Qiniu {
         BucketManager bucketManager = new BucketManager(auth, cfg);
         try {
             Response delete = bucketManager.delete(bucket, key);
-            System.out.println(delete);
             if (delete.statusCode == 200 ) {
                 return true;
             }
@@ -57,6 +63,38 @@ public class Qiniu {
             System.err.println(ex.response.toString());
         }
         return false;
+    }
+
+    /**
+     * 删除七牛云中的图片(传入字符串数组)
+     *
+     * @param keys
+     * @return
+     */
+    public boolean deleteFile(List<String> keys) {
+        String accessKey = qiniuConfig.getAccessKey();
+        String secretKey = qiniuConfig.getSecretKey();
+        String bucket = qiniuConfig.getBucketName();
+        Configuration cfg = new Configuration(Region.region0());
+        Auth auth = Auth.create(accessKey, secretKey);
+        BucketManager bucketManager = new BucketManager(auth, cfg);
+
+        boolean allDeleted = true; // 标记所有文件是否都删除成功
+
+        for (String key : keys) {
+            try {
+                Response delete = bucketManager.delete(bucket, key);
+                if (delete.statusCode != 200) {
+                    allDeleted = false; // 如果有任何一个文件删除失败，将标记置为 false
+                }
+            } catch (QiniuException ex) {
+                System.err.println("Failed to delete file with key: " + key);
+                System.err.println(ex.code());
+                System.err.println(ex.response.toString());
+                allDeleted = false; // 如果遇到异常，也将标记置为 false
+            }
+        }
+        return allDeleted; // 返回是否所有文件都删除成功的标记
     }
 
     /**

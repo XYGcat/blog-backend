@@ -5,12 +5,15 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xc.blogbackend.mapper.BlogTalkPhotoMapper;
 import com.xc.blogbackend.model.domain.BlogTalkPhoto;
 import com.xc.blogbackend.service.BlogTalkPhotoService;
+import com.xc.blogbackend.utils.Qiniu;
+import com.xc.blogbackend.utils.StringManipulation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
 * @author XC
@@ -24,6 +27,9 @@ public class BlogTalkPhotoServiceImpl extends ServiceImpl<BlogTalkPhotoMapper, B
 
     @Resource
     private BlogTalkPhotoMapper blogTalkPhotoMapper;
+
+    @Resource
+    private Qiniu qiniu;
 
     @Override
     public List<BlogTalkPhoto> getPhotoByTalkId(Integer talk_id) {
@@ -48,6 +54,27 @@ public class BlogTalkPhotoServiceImpl extends ServiceImpl<BlogTalkPhotoMapper, B
     public List<BlogTalkPhoto> publishTalkPhoto(List<BlogTalkPhoto> imgList) {
         saveBatch(imgList);
         return imgList;
+    }
+
+    @Override
+    public Boolean deleteTalkPhoto(Integer talk_id) {
+        List<String> keys = new ArrayList<>();
+        QueryWrapper<BlogTalkPhoto> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("talk_id",talk_id);
+        queryWrapper.select("url");
+        List<BlogTalkPhoto> talkPhotos = blogTalkPhotoMapper.selectList(queryWrapper);
+
+        keys = talkPhotos.stream().map(v -> {
+            return StringManipulation.subString(v.getUrl());
+        }).collect(Collectors.toList());
+        //删除图片
+        boolean deleteFile = qiniu.deleteFile(keys);
+
+        queryWrapper.clear();
+        queryWrapper.eq("talk_id",talk_id);
+        int delete = blogTalkPhotoMapper.delete(queryWrapper);
+
+        return delete > 0;
     }
 }
 

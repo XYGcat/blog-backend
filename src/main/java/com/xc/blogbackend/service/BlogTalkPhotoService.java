@@ -27,4 +27,12 @@ public interface BlogTalkPhotoService extends IService<BlogTalkPhoto> {
      * @return
      */
    List<BlogTalkPhoto> publishTalkPhoto(List<BlogTalkPhoto> imgList);
+
+    /**
+     * 根据说说id删除图片
+     *
+     * @param talk_id
+     * @return
+     */
+   Boolean deleteTalkPhoto(Integer talk_id);
 }
