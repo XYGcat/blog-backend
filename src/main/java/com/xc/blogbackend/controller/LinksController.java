@@ -25,6 +25,12 @@ public class LinksController {
     @Resource
     private BlogLinksService blogLinksService;
 
+    /**
+     * 分页获取友链
+     *
+     * @param pageRequest
+     * @return
+     */
     @PostMapping("/getLinksList")
     public BaseResponse<PageInfoResult<BlogLinks>> getLinksList(@RequestBody PageRequest pageRequest){
         PageInfoResult<BlogLinks> linksList = blogLinksService.getLinksList(pageRequest);

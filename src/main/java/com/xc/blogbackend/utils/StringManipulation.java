@@ -9,19 +9,27 @@ package com.xc.blogbackend.utils;
  */
 public class StringManipulation {
     public static String subString(String imgUrl){
-        // 根据斜杠进行分割
-        String[] parts = imgUrl.split("/");
+        // 找到第一个斜杠的索引
+        int firstSlashIndex = imgUrl.indexOf('/');
 
-        // 如果分割后的部分数小于2，返回原始字符串
-        if (parts.length < 2) {
-            return imgUrl;
+        // 找到第二个斜杠的索引，从第一个斜杠的下一个位置开始搜索
+        int secondSlashIndex = imgUrl.indexOf('/', firstSlashIndex + 1);
+
+        // 找到第三个斜杠的索引，从第二个斜杠的下一个位置开始搜索
+        int thirdSlashIndex = imgUrl.indexOf('/', secondSlashIndex + 1);
+
+        // 找到问号的索引，从第三个斜杠之后开始搜索
+        int questionMarkIndex = imgUrl.indexOf('?', thirdSlashIndex + 1);
+
+        // 如果存在第三个斜杠并且存在问号，截取第三个斜杠后到问号之间的内容并返回
+        if (thirdSlashIndex != -1 && questionMarkIndex != -1) {
+            return imgUrl.substring(thirdSlashIndex + 1, questionMarkIndex);
+        } else if (thirdSlashIndex != -1) {
+            // 如果不存在问号，截取第三个斜杠后的内容并返回
+            return imgUrl.substring(thirdSlashIndex + 1);
+        } else {
+            // 处理 URL 中少于三个斜杠的情况，或者不存在问号
+            return "Invalid URL";
         }
-
-        // 取倒数第二个和最后一个部分
-        String secondLastPart = parts[parts.length - 2];
-        String lastPart = parts[parts.length - 1];
-
-        // 返回倒数第二个斜杠后的字符串
-        return secondLastPart + "/" + lastPart;
     }
 }

@@ -68,7 +68,7 @@ public class BlogTalkPhotoServiceImpl extends ServiceImpl<BlogTalkPhotoMapper, B
             return StringManipulation.subString(v.getUrl());
         }).collect(Collectors.toList());
         //删除图片
-        boolean deleteFile = qiniu.deleteFile(keys);
+        Boolean deleteFile = qiniu.deleteFile(keys);
 
         queryWrapper.clear();
         queryWrapper.eq("talk_id",talk_id);

@@ -131,6 +131,7 @@ public class ArticleController {
      * @return
      */
     @DeleteMapping("/delete/{id}/{status}")
+    @Transactional(rollbackFor = Exception.class)  //Spring 的事务管理，如果发生异常，会自动回滚事务
     public BaseResponse<Boolean> deleteArticle(@PathVariable Integer id,@PathVariable Integer status) throws QiniuException {
         if (status == 3) {
             String oldCover = blogArticleService.getArticleCoverById(id);

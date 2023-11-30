@@ -59,6 +59,7 @@ public class Qiniu {
             }
         } catch (QiniuException ex) {
             //如果遇到异常，说明删除失败
+            System.err.println("Failed to delete file with key: " + key);
             System.err.println(ex.code());
             System.err.println(ex.response.toString());
         }
@@ -71,7 +72,7 @@ public class Qiniu {
      * @param keys
      * @return
      */
-    public boolean deleteFile(List<String> keys) {
+    public Boolean deleteFile(List<String> keys) {
         String accessKey = qiniuConfig.getAccessKey();
         String secretKey = qiniuConfig.getSecretKey();
         String bucket = qiniuConfig.getBucketName();
@@ -83,6 +84,8 @@ public class Qiniu {
 
         for (String key : keys) {
             try {
+//                //图片链接转码（中文路径可能会出错）
+//                String encodedKey = URLEncoder.encode(key, StandardCharsets.UTF_8.toString());
                 Response delete = bucketManager.delete(bucket, key);
                 if (delete.statusCode != 200) {
                     allDeleted = false; // 如果有任何一个文件删除失败，将标记置为 false
@@ -106,7 +109,7 @@ public class Qiniu {
         //手动拼接
         String secretKey = qiniuConfig.getSecretKey();
         String accessKey = qiniuConfig.getAccessKey();
-//        String publicUrl = String.format("%s", imgUrl);
+//        String publicUrl = String.format("%s", imgUrl);   //String.format 方法用于将一个格式化字符串中的占位符替换为相应的值
         Auth auth = Auth.create(accessKey, secretKey);
         long expireInSeconds = 3600;   //自定义链接过期时间
         String finalUrl = auth.privateDownloadUrl(imgUrl, expireInSeconds);

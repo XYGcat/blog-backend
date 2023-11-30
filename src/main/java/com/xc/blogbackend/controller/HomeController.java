@@ -35,6 +35,11 @@ public class HomeController {
     private BlogUserService blogUserService;
 
 
+    /**
+     * 获取一些统计信息
+     *
+     * @return
+     */
     @GetMapping("/statistic")
     public BaseResponse<StatisticResult> userStatistic(){
         long articleCount = blogArticleService.getArticleCount();

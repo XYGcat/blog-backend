@@ -12,11 +12,11 @@ import java.util.Date;
 
 /**
  * 
- * @TableName blog_tag
+ * @TableName blog_photo
  */
-@TableName(value ="blog_tag")
+@TableName(value ="blog_photo")
 @Data
-public class BlogTag implements Serializable {
+public class BlogPhoto implements Serializable {
     /**
      * 
      */
@@ -24,10 +24,22 @@ public class BlogTag implements Serializable {
     private Integer id;
 
     /**
-     * 标签名称 唯一
+     * 相册 id 属于哪个相册
      */
-    @TableField(value = "tag_name")
-    private String tag_name;
+    @TableField(value = "album_id")
+    private Integer album_id;
+
+    /**
+     * 图片地址
+     */
+    @TableField(value = "url")
+    private String url;
+
+    /**
+     * 状态 1 正常 2 回收站
+     */
+    @TableField(value = "status")
+    private Integer status;
 
     /**
      * 创建时间
@@ -57,9 +69,11 @@ public class BlogTag implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        BlogTag other = (BlogTag) that;
+        BlogPhoto other = (BlogPhoto) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getTag_name() == null ? other.getTag_name() == null : this.getTag_name().equals(other.getTag_name()))
+            && (this.getAlbum_id() == null ? other.getAlbum_id() == null : this.getAlbum_id().equals(other.getAlbum_id()))
+            && (this.getUrl() == null ? other.getUrl() == null : this.getUrl().equals(other.getUrl()))
+            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getCreatedAt() == null ? other.getCreatedAt() == null : this.getCreatedAt().equals(other.getCreatedAt()))
             && (this.getUpdatedAt() == null ? other.getUpdatedAt() == null : this.getUpdatedAt().equals(other.getUpdatedAt()));
     }
@@ -69,7 +83,9 @@ public class BlogTag implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getTag_name() == null) ? 0 : getTag_name().hashCode());
+        result = prime * result + ((getAlbum_id() == null) ? 0 : getAlbum_id().hashCode());
+        result = prime * result + ((getUrl() == null) ? 0 : getUrl().hashCode());
+        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getCreatedAt() == null) ? 0 : getCreatedAt().hashCode());
         result = prime * result + ((getUpdatedAt() == null) ? 0 : getUpdatedAt().hashCode());
         return result;
@@ -82,7 +98,9 @@ public class BlogTag implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", tag_name=").append(tag_name);
+        sb.append(", album_id=").append(album_id);
+        sb.append(", url=").append(url);
+        sb.append(", status=").append(status);
         sb.append(", createdAt=").append(createdAt);
         sb.append(", updatedAt=").append(updatedAt);
         sb.append(", serialVersionUID=").append(serialVersionUID);
