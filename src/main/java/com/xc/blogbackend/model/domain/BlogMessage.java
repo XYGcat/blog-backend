@@ -18,6 +18,10 @@ import java.util.Date;
 @Data
 public class BlogMessage implements Serializable {
 
+    //是否点赞
+    @TableField(exist = false)
+    private Boolean  is_like;
+
     /**
      *评论总数
      */

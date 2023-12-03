@@ -1,18 +1,22 @@
 package com.xc.blogbackend.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.qiniu.common.QiniuException;
 import com.xc.blogbackend.mapper.BlogLinksMapper;
 import com.xc.blogbackend.model.domain.BlogLinks;
 import com.xc.blogbackend.model.domain.request.PageRequest;
 import com.xc.blogbackend.model.domain.result.PageInfoResult;
 import com.xc.blogbackend.service.BlogLinksService;
+import com.xc.blogbackend.utils.Qiniu;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
 * @author XC
@@ -27,7 +31,8 @@ public class BlogLinksServiceImpl extends ServiceImpl<BlogLinksMapper, BlogLinks
     @Resource
     private BlogLinksMapper blogLinksMapper;
 
-    private final QueryWrapper<BlogLinks> queryWrapper = new QueryWrapper<>();
+    @Resource
+    private Qiniu qiniu;
 
     @Override
     public PageInfoResult<BlogLinks> getLinksList(PageRequest pageRequest) {
@@ -41,7 +46,7 @@ public class BlogLinksServiceImpl extends ServiceImpl<BlogLinksMapper, BlogLinks
         int offset = (current - 1) * size;
         int limit = size;
 
-        queryWrapper.clear();
+        QueryWrapper<BlogLinks> queryWrapper = new QueryWrapper<>();
         if (site_name != null && !site_name.isEmpty()) {
             queryWrapper.like("site_name", "%" + site_name + "%");
         }
@@ -61,6 +66,15 @@ public class BlogLinksServiceImpl extends ServiceImpl<BlogLinksMapper, BlogLinks
         // 获取说说总数
         long count = messagePage.getTotal();
 
+        for (BlogLinks v : rows){
+            try {
+                String downloadUrl = qiniu.downloadUrl(v.getSite_avatar());
+                v.setSite_avatar(downloadUrl);
+            } catch (QiniuException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
         PageInfoResult<BlogLinks> pageInfoResult = new PageInfoResult<>();
         pageInfoResult.setSize(size);
         pageInfoResult.setCurrent(current);
@@ -68,6 +82,37 @@ public class BlogLinksServiceImpl extends ServiceImpl<BlogLinksMapper, BlogLinks
         pageInfoResult.setList(rows);
 
         return pageInfoResult;
+    }
+
+    @Override
+    public Boolean addOrUpdateLinks(Map<String, Object> request) {
+        Integer id = (Integer) request.get("id");
+        String site_name = (String) request.get("site_name");
+        String site_desc = (String) request.get("site_desc");
+        String site_avatar = (String) request.get("site_avatar");
+        String url = (String) request.get("url");
+        int res;
+
+        if (id != null) {
+            BlogLinks blogLinks = new BlogLinks();
+            blogLinks.setSite_name(site_name);
+            blogLinks.setSite_desc(site_desc);
+            blogLinks.setSite_avatar(site_avatar);
+            blogLinks.setUrl(url);
+            UpdateWrapper<BlogLinks> updateWrapper = new UpdateWrapper<>();
+            updateWrapper.eq("id",id);
+            res = blogLinksMapper.update(blogLinks, updateWrapper);
+        }else {
+            BlogLinks blogLinks = new BlogLinks();
+            blogLinks.setSite_name(site_name);
+            blogLinks.setSite_desc(site_desc);
+            blogLinks.setSite_avatar(site_avatar);
+            blogLinks.setUrl(url);
+            blogLinks.setStatus(1);
+            res = blogLinksMapper.insert(blogLinks);
+        }
+
+        return res > 0;
     }
 }
 

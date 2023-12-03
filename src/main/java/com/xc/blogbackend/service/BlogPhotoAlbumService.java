@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.xc.blogbackend.model.domain.BlogPhotoAlbum;
 import com.xc.blogbackend.model.domain.result.PageInfoResult;
 
+import java.util.List;
+
 /**
 * @author XC
 * @description 针对表【blog_photo_album】的数据库操作Service
@@ -58,4 +60,12 @@ public interface BlogPhotoAlbumService extends IService<BlogPhotoAlbum> {
      * @return
      */
     Boolean deleteAlbum(Integer id);
+
+    /**
+     * 前台
+     * 获取全部相册列表
+     *
+     * @return
+     */
+    List<BlogPhotoAlbum> getAllAlbumList();
 }

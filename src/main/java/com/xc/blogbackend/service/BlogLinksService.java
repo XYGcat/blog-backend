@@ -5,6 +5,8 @@ import com.xc.blogbackend.model.domain.BlogLinks;
 import com.xc.blogbackend.model.domain.request.PageRequest;
 import com.xc.blogbackend.model.domain.result.PageInfoResult;
 
+import java.util.Map;
+
 /**
 * @author XC
 * @description 针对表【blog_links】的数据库操作Service
@@ -20,4 +22,11 @@ public interface BlogLinksService extends IService<BlogLinks> {
      */
     PageInfoResult<BlogLinks> getLinksList(PageRequest pageRequest);
 
+    /**
+     * 新增/编辑友链
+     *
+     * @param request
+     * @return
+     */
+    Boolean addOrUpdateLinks(Map<String,Object> request);
 }

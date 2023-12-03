@@ -35,10 +35,6 @@ public class BlogArticle implements Serializable {
     @TableField(exist = false)
     private List<String> tagNameList;   // 标签名列表
 
-//    public void setTagNameList(List<String> tagNameList){
-//        this.tagNameList = tagNameList;
-//    }
-
     /**
      * 
      */

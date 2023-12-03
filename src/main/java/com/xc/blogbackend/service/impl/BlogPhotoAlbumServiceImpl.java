@@ -120,6 +120,15 @@ public class BlogPhotoAlbumServiceImpl extends ServiceImpl<BlogPhotoAlbumMapper,
         Boolean aBoolean = blogPhotoService.deletePhotosByAlbumId(id);
         return deleteById > 0;
     }
+
+    @Override
+    public List<BlogPhotoAlbum> getAllAlbumList() {
+        QueryWrapper<BlogPhotoAlbum> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByDesc("createdAt");
+        List<BlogPhotoAlbum> blogPhotoAlbums = blogPhotoAlbumMapper.selectList(queryWrapper);
+
+        return blogPhotoAlbums;
+    }
 }
 
 

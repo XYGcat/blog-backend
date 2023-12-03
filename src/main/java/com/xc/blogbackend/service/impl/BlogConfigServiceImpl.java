@@ -24,11 +24,9 @@ public class BlogConfigServiceImpl extends ServiceImpl<BlogConfigMapper, BlogCon
     @Resource
     private BlogConfigMapper blogConfigMapper;
 
-    private final QueryWrapper<BlogConfig> queryWrapper = new QueryWrapper<>();
-
     @Override
     public BlogConfig getConfig() {
-        queryWrapper.clear();
+        QueryWrapper<BlogConfig> queryWrapper = new QueryWrapper<>();
         queryWrapper.last("limit 1");
         List<BlogConfig> blogConfigs = blogConfigMapper.selectList(queryWrapper);
         if (blogConfigs != null && !blogConfigs.isEmpty()) {
@@ -36,6 +34,22 @@ public class BlogConfigServiceImpl extends ServiceImpl<BlogConfigMapper, BlogCon
         } else {
             return null;
         }
+    }
+
+    @Override
+    public String addView() {
+        String flag;
+        BlogConfig config;
+        List<BlogConfig> blogConfigs = blogConfigMapper.selectList(null);
+        if (!blogConfigs.isEmpty()) {
+            BlogConfig blogConfig = blogConfigs.get(0);
+            blogConfig.setView_time(blogConfig.getView_time() + 1);
+            boolean byId = this.updateById(blogConfig);
+            flag = "添加成功";
+        }else {
+            flag = "需要初始化";
+        }
+        return flag;
     }
 }
 

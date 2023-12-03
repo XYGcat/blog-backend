@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -113,5 +114,17 @@ public class PhotoAlbumController {
         Boolean deleteAlbum = blogPhotoAlbumService.deleteAlbum(id);
 
         return ResultUtils.success(deleteAlbum,"删除相册成功");
+    }
+
+    /**
+     * 前台接口
+     * 一次性获取所有的相册列表
+     *
+     * @return
+     */
+    @GetMapping("/getAllAlbumList")
+    public BaseResponse<List<BlogPhotoAlbum>> getAllAlbumList(){
+        List<BlogPhotoAlbum> allAlbumList = blogPhotoAlbumService.getAllAlbumList();
+        return ResultUtils.success(allAlbumList,"获取所有相册列表成功");
     }
 }

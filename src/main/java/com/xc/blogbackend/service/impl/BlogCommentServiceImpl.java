@@ -23,11 +23,9 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
     @Resource
     private BlogCommentMapper blogCommentMapper;
 
-    private final QueryWrapper<BlogComment> queryWrapper = new QueryWrapper<>();
-
     @Override
     public Long getCommentTotal(Integer for_id, Integer type) {
-        queryWrapper.clear();
+        QueryWrapper<BlogComment> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("for_id", for_id).eq("type", type);
         Long count = blogCommentMapper.selectCount(queryWrapper);
         return count;

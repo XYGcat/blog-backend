@@ -43,7 +43,7 @@ public interface BlogTalkService extends IService<BlogTalk> {
      * @param blogTalk
      * @return
      */
-   Boolean updateTalk(BlogTalk blogTalk);
+    Boolean updateTalk(BlogTalk blogTalk);
 
     /**
      * 置顶/取消置顶 说说
@@ -52,7 +52,7 @@ public interface BlogTalkService extends IService<BlogTalk> {
      * @param is_top
      * @return
      */
-   Boolean toggleTop(Integer id,Integer is_top);
+    Boolean toggleTop(Integer id,Integer is_top);
 
     /**
      * 切换说说公开性
@@ -61,7 +61,7 @@ public interface BlogTalkService extends IService<BlogTalk> {
      * @param status
      * @return
      */
-   Boolean togglePublic(Integer id,Integer status);
+    Boolean togglePublic(Integer id,Integer status);
 
     /**
      * 删除说说
@@ -70,7 +70,7 @@ public interface BlogTalkService extends IService<BlogTalk> {
      * @param status
      * @return
      */
-   Boolean deleteTalkById(Integer id,Integer status);
+    Boolean deleteTalkById(Integer id,Integer status);
 
     /**
      * 恢复说说
@@ -78,5 +78,15 @@ public interface BlogTalkService extends IService<BlogTalk> {
      * @param id
      * @return
      */
-   Boolean revertTalk(Integer id);
+    Boolean revertTalk(Integer id);
+
+    /**
+     * 前台获取说说列表
+     *
+     * @param current
+     * @param size
+     * @param user_id
+     * @return
+     */
+    PageInfoResult<BlogTalk> blogGetTalkList(Integer current,Integer size,Integer user_id);
 }

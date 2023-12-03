@@ -153,4 +153,20 @@ public class TalkController {
         hashMap.put("id",publishTalk.getId());
         return ResultUtils.success(hashMap,"发布说说成功");
     }
+
+    /**
+     * 前台
+     * 获取说说列表
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping("/blogGetTalkList")
+    public BaseResponse<PageInfoResult<BlogTalk>> blogGetTalkList(@RequestBody Map<String,Integer> request){
+        Integer current = request.get("current");
+        Integer size = request.get("size");
+        Integer user_id = request.get("user_id");
+        PageInfoResult<BlogTalk> talkPageInfoResult = blogTalkService.blogGetTalkList(current, size, user_id);
+        return ResultUtils.success(talkPageInfoResult,"获取说说列表成功");
+    }
 }

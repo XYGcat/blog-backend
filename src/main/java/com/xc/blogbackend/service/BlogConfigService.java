@@ -17,4 +17,10 @@ public interface BlogConfigService extends IService<BlogConfig> {
      */
     BlogConfig getConfig();
 
+    /**
+     * 增加网站访问次数
+     *
+     * @return
+     */
+    String addView();
 }

@@ -14,6 +14,7 @@ import com.xc.blogbackend.model.domain.request.ArticleRequest;
 import com.xc.blogbackend.model.domain.request.TitleExistRequest;
 import com.xc.blogbackend.model.domain.request.UpdateArticleRequest;
 import com.xc.blogbackend.model.domain.result.PageInfoResult;
+import com.xc.blogbackend.model.domain.result.RecommendResult;
 import com.xc.blogbackend.service.BlogArticleService;
 import com.xc.blogbackend.service.BlogArticleTagService;
 import com.xc.blogbackend.service.BlogCategoryService;
@@ -242,6 +243,53 @@ public class ArticleController {
             throw new RuntimeException("新增文章失败");
         }
     }
+
+
+    /**
+     * 前台 start
+     * 分页获取文章 按照置顶和发布时间倒序排序
+     *
+     * @param current
+     * @param size
+     * @return
+     */
+    @GetMapping("/blogHomeGetArticleList/{current}/{size}")
+    public BaseResponse<PageInfoResult<BlogArticle>> blogHomeGetArticleList(@PathVariable Integer current,
+                                                                            @PathVariable  Integer size){
+        PageInfoResult<BlogArticle> pageInfoResult = blogArticleService.blogHomeGetArticleList(current, size);
+
+        return ResultUtils.success(pageInfoResult,"获取文章列表成功");
+    }
+
+    /**
+     * 根据文章获取上下一篇文章 和推荐文章
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/getRecommendArticleById/{id}")
+    public BaseResponse<RecommendResult> getRecommendArticleById(@PathVariable Integer id){
+        if(id == null){
+            throw new BusinessException(ErrorCode.NULL_ERROR);
+        }
+        RecommendResult recommendArticleById = blogArticleService.getRecommendArticleById(id);
+        return ResultUtils.success(recommendArticleById,"获取推荐文章成功");
+    }
+
+    /**
+     * 分页获取时间轴信息
+     *
+     * @param current
+     * @param size
+     * @return
+     */
+    @GetMapping("/blogTimelineGetArticleList/{current}/{size}")
+    public BaseResponse<PageInfoResult<BlogArticle>> blogTimelineGetArticleList(@PathVariable Integer current, @PathVariable Integer size){
+        PageInfoResult<BlogArticle> result = blogArticleService.blogTimelineGetArticleList(current, size);
+
+        return ResultUtils.success(result,"获取文章时间轴列表成功");
+    }
+
 
     /**
      * 新增和编辑文章关于分类的公共方法

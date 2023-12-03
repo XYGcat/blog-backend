@@ -12,21 +12,20 @@ import com.xc.blogbackend.model.domain.ArticleDTO;
 import com.xc.blogbackend.model.domain.BlogArticle;
 import com.xc.blogbackend.model.domain.request.ArticleRequest;
 import com.xc.blogbackend.model.domain.result.PageInfoResult;
+import com.xc.blogbackend.model.domain.result.RecommendResult;
 import com.xc.blogbackend.service.BlogArticleService;
 import com.xc.blogbackend.service.BlogArticleTagService;
 import com.xc.blogbackend.service.BlogCategoryService;
 import com.xc.blogbackend.service.BlogUserService;
 import com.xc.blogbackend.utils.Qiniu;
+import com.xc.blogbackend.utils.StringManipulation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.*;
 
 /**
@@ -319,7 +318,200 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
         }
     }
 
+    @Override
+    public PageInfoResult<BlogArticle> blogHomeGetArticleList(Integer current, Integer size) {
+        // 分页参数处理
+        int offset = (current - 1) * size;
+        int limit = size;
 
+        // 构建查询条件
+        QueryWrapper<BlogArticle> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("status", 1);
+        // 设置排序规则
+        queryWrapper.orderByAsc("is_top")
+                .orderByAsc("article_order")
+                .orderByDesc("createdAt");
+        // 设置属性过滤，排除 articleContent 和 originUrl 属性
+        queryWrapper.select(BlogArticle.class, info -> !info.getColumn().equals("article_content")
+                && !info.getColumn().equals("origin_url"));
+//        // 排除文章内容和原始链接属性，使用select方法传入属性名的数组
+//        queryWrapper.select("id","article_title","author_id","category_id","article_cover",
+//                "is_top","status","type","createdAt", "updatedAt","view_times","article_description",
+//                "thumbs_up_times","reading_duration","article_order");
+
+        // 创建Page对象，设置当前页和分页大小
+        Page<BlogArticle> page = new Page<>(offset, limit);
+        // 获取文章列表，使用page方法传入Page对象和QueryWrapper对象
+        Page<BlogArticle> articlePage = blogArticleMapper.selectPage(page, queryWrapper);
+        // 获取分页数据
+        List<BlogArticle> rows = articlePage.getRecords();
+        // 获取文章总数
+        Long count = articlePage.getTotal();
+
+        // 创建一个ExecutorService对象，根据你的需要选择合适的线程池大小
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
+
+        // 创建一个List<Future>对象，用于存储每个异步任务的返回值
+        List<Future<ArticleDTO>> promiseList = new ArrayList<>();
+
+        // 遍历rows数组中的每个元素
+        for (BlogArticle v : rows) {
+            // 创建一个Callable对象，定义异步任务的逻辑
+            Callable<ArticleDTO> task = () -> {
+                // 调用其他方法或访问数据库，获取需要的数据
+                String categoryName = blogCategoryService.getCategoryNameById(v.getCategory_id());
+                Map<String, Object> tagList = blogArticleTagService.getTagListByArticleId(v.getId());
+                // 创建一个对象，存储数据
+                ArticleDTO articleDTO = new ArticleDTO();
+                articleDTO.setCategoryName(categoryName);
+                articleDTO.setTagList(tagList);
+                // 返回对象
+                return articleDTO;
+            };
+            // 将Callable对象提交给线程池执行，并将返回的Future对象添加到List对象中
+            Future<ArticleDTO> future = executorService.submit(task);
+            promiseList.add(future);
+        }
+
+        // 使用增强的 for 循环遍历 promiseList
+        for (Future<ArticleDTO> future : promiseList) {
+            try {
+                ArticleDTO res = future.get();
+                // 获取当前 future 的索引
+                int index = promiseList.indexOf(future);
+                if (index != -1) {
+                    // 直接在循环中修改 rows 的数据
+                    rows.get(index).setCategoryName(res.getCategoryName());
+                    rows.get(index).setTagNameList(res.getTagNameList());
+                    rows.get(index).setArticle_cover(qiniu.downloadUrl(rows.get(index).getArticle_cover()));
+                }
+            } catch (InterruptedException | ExecutionException | QiniuException e) {
+                // 处理可能抛出的异常
+                e.printStackTrace();
+            }
+        }
+        // 关闭线程池
+        executorService.shutdown();
+
+        //添加返回值
+        PageInfoResult<BlogArticle> pageInfoResult = new PageInfoResult<>();
+        pageInfoResult.setSize(size);
+        pageInfoResult.setCurrent(current);
+        pageInfoResult.setTotal(count);
+        pageInfoResult.setList(rows);
+
+        return pageInfoResult;
+    }
+
+    @Override
+    public RecommendResult getRecommendArticleById(Integer article_id) {
+        // 上一篇文章id
+        QueryWrapper<BlogArticle> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lt("id",article_id);
+        queryWrapper.eq("status",1);
+        queryWrapper.select("id","article_title","article_cover");
+        queryWrapper.orderByDesc("id");
+        BlogArticle contextPrevious = blogArticleMapper.selectOne(queryWrapper);
+
+        // 下一篇文章id
+        queryWrapper.clear();
+        queryWrapper.gt("id",article_id);
+        queryWrapper.eq("status",1);
+        queryWrapper.select("id","article_title","article_cover");
+        queryWrapper.orderByAsc("id");
+        BlogArticle contentNext = blogArticleMapper.selectOne(queryWrapper);
+
+        // 上下文不存在的话就取当前的
+        if (contextPrevious == null) {
+            queryWrapper.clear();
+            queryWrapper.eq("id",article_id);
+            queryWrapper.select("id","article_title","article_cover");
+            contextPrevious = blogArticleMapper.selectOne(queryWrapper);
+        }
+        if (contentNext == null) {
+            queryWrapper.clear();
+            queryWrapper.eq("id",article_id);
+            queryWrapper.select("id","article_title","article_cover");
+            contentNext = blogArticleMapper.selectOne(queryWrapper);
+        }
+        Map<String, Object> tagListByArticleId = blogArticleTagService.getTagListByArticleId(article_id);
+        List<Integer> tagIdList = (List<Integer>) tagListByArticleId.get("tagIdList");
+        ArrayList<Integer> articleIdList = new ArrayList<>();
+        for (Integer tag_id : tagIdList){
+            List<Integer> listByTagId = blogArticleTagService.getArticleIdListByTagId(tag_id);
+            if (listByTagId != null) {
+                articleIdList.addAll(listByTagId);
+            }
+        }
+
+        // 获取文章tagId在本文章中的 最多六篇推荐文章
+        queryWrapper.clear();
+        queryWrapper.in("id", articleIdList)
+                    .eq("status", 1);
+        // 设置返回结果中包含的属性
+        queryWrapper.select("id", "article_title", "article_cover", "createdAt");
+        // 设置排序规则，按 createdAt 降序排列
+        queryWrapper.orderByDesc("createdAt");
+        // 设置查询结果数量限制为 6 条记录
+        queryWrapper.last("LIMIT 6");
+
+        List<BlogArticle> recommend = blogArticleMapper.selectList(queryWrapper);
+
+        RecommendResult recommendResult = new RecommendResult();
+        recommendResult.setRecommend(recommend);
+        recommendResult.setNext(contentNext);
+        recommendResult.setPrevious(contextPrevious);
+
+        return recommendResult;
+    }
+
+    @Override
+    public PageInfoResult<BlogArticle>  blogTimelineGetArticleList(Integer current, Integer size) {
+        // 分页参数处理
+        int offset = (current - 1) * size;
+        int limit = size;
+
+        QueryWrapper<BlogArticle> queryWrapper = new QueryWrapper<>();    // 构建查询条件
+        queryWrapper.eq("status", 1);
+        queryWrapper.select("id","article_title","article_cover","createdAt");
+        //按照 createdAt 降序排列
+        queryWrapper.orderByDesc("createdAt");
+        // 创建Page对象，设置当前页和分页大小
+        Page<BlogArticle> page = new Page<>(offset, limit);
+        // 获取通知列表，使用page方法传入Page对象和QueryWrapper对象
+        Page<BlogArticle> articlePage = blogArticleMapper.selectPage(page, queryWrapper);
+        // 获取分页数据
+        List<BlogArticle> rows = articlePage.getRecords();
+        // 获取通知总数
+        long count = articlePage.getTotal();
+
+        Map<String, List<BlogArticle>> resultList = new HashMap<>();
+        for (BlogArticle v : rows){
+            Date createdAt = v.getCreatedAt();
+            String year = "year_" + StringManipulation.getYearFromDate(createdAt);
+            //如果resultList中已经有了year这个键，它将直接将v添加到对应的列表中；
+            //如果没有这个键，它将会新建一个ArrayList，并将v加入其中.
+            resultList.computeIfAbsent(year, k -> new ArrayList<>()).add(v);
+        }
+        // 整合数据
+        List<Map<String, Object>> finalList = new ArrayList<>();
+        for (String key : resultList.keySet()) {
+            String year = key.replace("year_", "");
+
+            Map<String, Object> obj = new HashMap<>();
+            obj.put("year", year);
+            obj.put("articleList", resultList.get(key));
+
+            finalList.add(obj);
+        }
+
+        PageInfoResult<BlogArticle> pageInfoResult = new PageInfoResult<>();
+        pageInfoResult.setCurrent(current);
+        pageInfoResult.setFinalList(finalList);
+        pageInfoResult.setTotal(count);
+        pageInfoResult.setSize(size);
+        return pageInfoResult;
+    }
 }
 
 

@@ -25,4 +25,6 @@ public class PageRequest implements Serializable {
     private List<String> time = new ArrayList<>();
     private String site_name;
     private Integer status;
+    private String tag;
+    private Integer user_id;
 }

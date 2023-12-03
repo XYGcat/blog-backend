@@ -12,6 +12,7 @@ import com.xc.blogbackend.model.domain.BlogTalk;
 import com.xc.blogbackend.model.domain.BlogTalkPhoto;
 import com.xc.blogbackend.model.domain.BlogUser;
 import com.xc.blogbackend.model.domain.result.PageInfoResult;
+import com.xc.blogbackend.service.BlogLikeService;
 import com.xc.blogbackend.service.BlogTalkPhotoService;
 import com.xc.blogbackend.service.BlogTalkService;
 import com.xc.blogbackend.service.BlogUserService;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -45,6 +47,9 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
 
     @Resource
     private BlogUserService blogUserService;
+
+    @Resource
+    private BlogLikeService blogLikeService;
 
     @Resource
     private Qiniu qiniu;
@@ -123,7 +128,6 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
 
         return pageInfoResult;
     }
-
 
       //同步实现方法
 //    public PageInfoResult<BlogTalk> getTalkList(Integer current, Integer size, Integer status) {
@@ -342,6 +346,99 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
         updateWrapper.eq("id",id);
         int res = blogTalkMapper.update(blogTalk, updateWrapper);
         return res > 0;
+    }
+
+    @Override
+    public PageInfoResult<BlogTalk> blogGetTalkList(Integer current, Integer size, Integer user_id) {
+        // 分页参数处理
+        int offset = (current - 1) * size;
+        int limit = size;
+
+        QueryWrapper<BlogTalk> queryWrapper = new QueryWrapper<>();    // 构建查询条件
+        queryWrapper.eq("status", 1);
+        //按照 is_top 升序和 createdAt 降序排列
+        queryWrapper.orderByAsc("is_top")
+                    .orderByDesc("createdAt");
+        // 创建Page对象，设置当前页和分页大小
+        Page<BlogTalk> page = new Page<>(offset, limit);
+        // 获取说说列表，使用page方法传入Page对象和QueryWrapper对象
+        Page<BlogTalk> articlePage = blogTalkMapper.selectPage(page, queryWrapper);
+        // 获取分页数据
+        List<BlogTalk> rows = articlePage.getRecords();
+        // 获取说说总数
+        long count = articlePage.getTotal();
+
+        // 异步获取图片列表
+        List<CompletableFuture<List<BlogTalkPhoto>>> photoFutures = rows.stream()
+                .map(v -> CompletableFuture.supplyAsync(() -> blogTalkPhotoService.getPhotoByTalkId(v.getId())))
+                .collect(Collectors.toList());
+
+        // 等待所有图片异步任务完成并处理结果
+        CompletableFuture<Void> allPhotos = CompletableFuture.allOf(photoFutures.toArray(new CompletableFuture[0]));
+        allPhotos.join(); // 等待图片异步任务完成
+        // 处理异步任务结果
+        IntStream.range(0, rows.size()).forEach(i -> {
+            List<BlogTalkPhoto> photos = photoFutures.get(i).join();
+            if (!photos.isEmpty()) {
+                List<String> talkImgListResponse = photos.stream()
+                        .map(photo -> {
+                            try {
+                                return qiniu.downloadUrl(photo.getUrl());
+                            } catch (QiniuException e) {
+                                throw new RuntimeException(e);
+                            }
+                        })
+                        .collect(Collectors.toList());
+                rows.get(i).setTalkImgListResponse(talkImgListResponse);
+            }
+        });
+
+        // 异步获取用户信息
+        List<CompletableFuture<BlogUser>> userFutures = rows.stream()
+                .map(row -> CompletableFuture.supplyAsync(() -> blogUserService.getOneUserInfo(row.getUser_id())))
+                .collect(Collectors.toList());
+
+        // 等待所有用户信息异步任务完成并处理结果
+        CompletableFuture<Void> allUsers = CompletableFuture.allOf(userFutures.toArray(new CompletableFuture[0]));
+        allUsers.thenAccept(ignored -> {
+            for (int i = 0; i < rows.size(); i++) {
+                BlogUser user = userFutures.get(i).join();
+                if (user != null) {
+                    rows.get(i).setNick_name(user.getNick_name());
+                    rows.get(i).setAvatar(user.getAvatar());
+                }
+            }
+        }).join(); // 等待用户信息异步任务完成
+
+        // 判断当前登录用户是否点赞了
+        if (user_id != null) {
+            // 异步获取用户点赞信息
+            List<CompletableFuture<Boolean>> likeFutures = rows.stream()
+                    .map(row -> CompletableFuture.supplyAsync(() -> blogLikeService.getIsLikeByIdAndType(row.getId(), 2, user_id)))
+                    .collect(Collectors.toList());
+
+            // 等待所有用户信息异步任务完成并处理结果
+            CompletableFuture<Void> allLikes = CompletableFuture.allOf(likeFutures.toArray(new CompletableFuture[0]));
+            allLikes.thenAccept(ignored -> {
+                for (int i = 0; i < rows.size(); i++) {
+                    try {
+                        Boolean aBoolean = likeFutures.get(i).get();
+                        rows.get(i).setIs_like(aBoolean);
+                    } catch (InterruptedException | ExecutionException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }).join(); // 等待用户信息异步任务完成
+        }
+
+        // 构造返回值 PageInfoResult
+        PageInfoResult<BlogTalk> pageInfoResult = new PageInfoResult<>();
+        pageInfoResult.setSize(size);
+        pageInfoResult.setCurrent(current);
+        pageInfoResult.setTotal(count);
+        pageInfoResult.setList(rows);
+
+        return pageInfoResult;
     }
 }
 

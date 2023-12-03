@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.xc.blogbackend.model.domain.BlogArticle;
 import com.xc.blogbackend.model.domain.request.ArticleRequest;
 import com.xc.blogbackend.model.domain.result.PageInfoResult;
+import com.xc.blogbackend.model.domain.result.RecommendResult;
 
 /**
 * @author XC
@@ -93,4 +94,30 @@ public interface BlogArticleService extends IService<BlogArticle> {
      * @return
      */
     Boolean deleteArticle(Integer id,Integer status);
+
+    /**
+     *博客前台获取文章列表
+     *
+     * @param current
+     * @param size
+     * @return
+     */
+    PageInfoResult<BlogArticle> blogHomeGetArticleList(Integer current,Integer size);
+
+    /**
+     * 根据文章id获取推荐文章
+     *
+     * @param article_id
+     * @return
+     */
+    RecommendResult getRecommendArticleById(Integer article_id);
+
+    /**
+     * 时间轴
+     *
+     * @param current
+     * @param size
+     * @return
+     */
+    PageInfoResult<BlogArticle> blogTimelineGetArticleList(Integer current, Integer size);
 }

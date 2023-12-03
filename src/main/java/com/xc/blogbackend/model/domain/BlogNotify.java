@@ -9,32 +9,14 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 /**
  * 
- * @TableName blog_talk
+ * @TableName blog_notify
  */
-@TableName(value ="blog_talk")
+@TableName(value ="blog_notify")
 @Data
-public class BlogTalk implements Serializable {
-
-    @TableField(exist = false)
-    private Boolean  is_like;
-
-    @TableField(exist = false)
-    private String  avatar;
-
-    @TableField(exist = false)
-    private String nick_name;
-
-    @TableField(exist = false)
-    private List<String> talkImgListResponse;
-
-    @TableField(exist = false)
-    private List<Map<String,String>> talkImgList;   //添加说说时的图片数据列表请求体
-
+public class BlogNotify implements Serializable {
     /**
      * 
      */
@@ -42,40 +24,40 @@ public class BlogTalk implements Serializable {
     private Integer id;
 
     /**
-     * 发布说说的用户id
+     * 通知内容
+     */
+    @TableField(value = "message")
+    private String message;
+
+    /**
+     * 通知给谁
      */
     @TableField(value = "user_id")
     private Integer user_id;
 
     /**
-     * 说说内容
+     * 通知类型 1 文章 2 说说 3 留言 4 友链
      */
-    @TableField(value = "content")
-    private String content;
+    @TableField(value = "type")
+    private Integer type;
 
     /**
-     * 说说状态 1 公开 2 私密 3 回收站
+     * 说说或者是文章的id 用于跳转
      */
-    @TableField(value = "status")
-    private Integer status;
+    @TableField(value = "to_id")
+    private Integer to_id;
 
     /**
-     * 是否置顶 1 置顶 2 不置顶
+     * 是否被查看 1 没有 2 已经查看
      */
-    @TableField(value = "is_top")
-    private Integer is_top;
-
-    /**
-     * 点赞次数
-     */
-    @TableField(value = "like_times")
-    private Integer like_times;
+    @TableField(value = "isView")
+    private Integer isView;
 
     /**
      * 创建时间
      */
     @TableField(value = "createdAt")
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")    //保证在返回 JSON 格式数据时，日期字段按照指定格式展示
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createdAt;
 
     /**
@@ -99,13 +81,13 @@ public class BlogTalk implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        BlogTalk other = (BlogTalk) that;
+        BlogNotify other = (BlogNotify) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
+            && (this.getMessage() == null ? other.getMessage() == null : this.getMessage().equals(other.getMessage()))
             && (this.getUser_id() == null ? other.getUser_id() == null : this.getUser_id().equals(other.getUser_id()))
-            && (this.getContent() == null ? other.getContent() == null : this.getContent().equals(other.getContent()))
-            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
-            && (this.getIs_top() == null ? other.getIs_top() == null : this.getIs_top().equals(other.getIs_top()))
-            && (this.getLike_times() == null ? other.getLike_times() == null : this.getLike_times().equals(other.getLike_times()))
+            && (this.getType() == null ? other.getType() == null : this.getType().equals(other.getType()))
+            && (this.getTo_id() == null ? other.getTo_id() == null : this.getTo_id().equals(other.getTo_id()))
+            && (this.getIsView() == null ? other.getIsView() == null : this.getIsView().equals(other.getIsView()))
             && (this.getCreatedAt() == null ? other.getCreatedAt() == null : this.getCreatedAt().equals(other.getCreatedAt()))
             && (this.getUpdatedAt() == null ? other.getUpdatedAt() == null : this.getUpdatedAt().equals(other.getUpdatedAt()));
     }
@@ -115,11 +97,11 @@ public class BlogTalk implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
+        result = prime * result + ((getMessage() == null) ? 0 : getMessage().hashCode());
         result = prime * result + ((getUser_id() == null) ? 0 : getUser_id().hashCode());
-        result = prime * result + ((getContent() == null) ? 0 : getContent().hashCode());
-        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
-        result = prime * result + ((getIs_top() == null) ? 0 : getIs_top().hashCode());
-        result = prime * result + ((getLike_times() == null) ? 0 : getLike_times().hashCode());
+        result = prime * result + ((getType() == null) ? 0 : getType().hashCode());
+        result = prime * result + ((getTo_id() == null) ? 0 : getTo_id().hashCode());
+        result = prime * result + ((getIsView() == null) ? 0 : getIsView().hashCode());
         result = prime * result + ((getCreatedAt() == null) ? 0 : getCreatedAt().hashCode());
         result = prime * result + ((getUpdatedAt() == null) ? 0 : getUpdatedAt().hashCode());
         return result;
@@ -132,11 +114,11 @@ public class BlogTalk implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
+        sb.append(", message=").append(message);
         sb.append(", user_id=").append(user_id);
-        sb.append(", content=").append(content);
-        sb.append(", status=").append(status);
-        sb.append(", is_top=").append(is_top);
-        sb.append(", like_times=").append(like_times);
+        sb.append(", type=").append(type);
+        sb.append(", to_id=").append(to_id);
+        sb.append(", isView=").append(isView);
         sb.append(", createdAt=").append(createdAt);
         sb.append(", updatedAt=").append(updatedAt);
         sb.append(", serialVersionUID=").append(serialVersionUID);
