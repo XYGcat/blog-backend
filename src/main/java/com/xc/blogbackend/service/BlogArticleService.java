@@ -3,8 +3,11 @@ package com.xc.blogbackend.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xc.blogbackend.model.domain.BlogArticle;
 import com.xc.blogbackend.model.domain.request.ArticleRequest;
+import com.xc.blogbackend.model.domain.result.ArticleListByContent;
 import com.xc.blogbackend.model.domain.result.PageInfoResult;
 import com.xc.blogbackend.model.domain.result.RecommendResult;
+
+import java.util.List;
 
 /**
 * @author XC
@@ -120,4 +123,65 @@ public interface BlogArticleService extends IService<BlogArticle> {
      * @return
      */
     PageInfoResult<BlogArticle> blogTimelineGetArticleList(Integer current, Integer size);
+
+    /**
+     * 通过分类id获取文章列表
+     *
+     * @param current
+     * @param size
+     * @param category_id
+     * @return
+     */
+    PageInfoResult<BlogArticle> getArticleListByCategoryId(Integer current,Integer size,Integer category_id);
+
+    /**
+     * 通过tagId 获取到文章列表
+     *
+     * @param current
+     * @param size
+     * @param tag_id
+     * @return
+     */
+    PageInfoResult<BlogArticle> getArticleListByTagId(Integer current,Integer size,Integer tag_id);
+
+    /**
+     * 获取热门文章
+     *
+     * @return
+     */
+    List<BlogArticle> getHotArticle();
+
+    /**
+     * 根据文章内容搜索文章
+     *
+     * @param content
+     * @return
+     */
+    List<ArticleListByContent> getArticleListByContent(String content);
+
+    /**
+     * 文章点赞
+     *
+     * @param id
+     * @return
+     */
+    Boolean articleLike(Integer id);
+
+    /**
+     * 取消文章点赞
+     *
+     * @param id
+     * @return
+     */
+    Boolean cancelArticleLike(Integer id);
+
+    /**
+     * 文章增加阅读时长
+     *
+     * @param id
+     * @param duration
+     * @return
+     */
+    Boolean addReadingDuration(Integer id,Integer duration);
+
 }

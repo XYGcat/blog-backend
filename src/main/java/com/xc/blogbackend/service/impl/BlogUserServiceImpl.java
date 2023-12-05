@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import static com.xc.blogbackend.contant.BlogUserConstant.USER_LOGIN_STATE;
 
 /**
@@ -225,6 +224,49 @@ public class BlogUserServiceImpl extends ServiceImpl<BlogUserMapper, BlogUser>
         BlogUser blogUser = blogUserMapper.selectById(user_id);
 
         return blogUser != null ? blogUser.getNick_name() : null;
+    }
+
+    @Override
+    public Boolean updateOwnUserInfo(Map<String, Object> request) {
+        Integer id = (Integer) request.get("id");
+        String avatar = (String) request.get("avatar");
+        String nick_name = (String) request.get("nick_name");
+        String qq = (String) request.get("qq");
+
+        BlogUser blogUser = new BlogUser();
+        blogUser.setId(id);
+        blogUser.setAvatar(avatar);
+        blogUser.setNick_name(nick_name);
+        blogUser.setQq(qq);
+
+        int i = blogUserMapper.updateById(blogUser);
+
+        return i > 0;
+    }
+
+    @Override
+    public Boolean updatePassword(Integer id, String password,String password1) {
+        //1.校验
+        //密码不能为空
+        if (StringUtils.isAnyBlank(password1)){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR,"密码不能为空");
+        }
+        //密码不小于8
+        if (password1.length() <8){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR,"密码不小于8位");
+        }
+        //2.加密
+        String encryptPassword = DigestUtils.md5DigestAsHex((BlogUserConstant.SALT + password).getBytes());
+        BlogUser blogUser = blogUserMapper.selectById(id);
+        String oldPassword = blogUser.getPassword();
+        if (oldPassword.equals(encryptPassword)){
+            String newPassword =  DigestUtils.md5DigestAsHex((BlogUserConstant.SALT + password1).getBytes());
+            blogUser.setPassword(newPassword);
+            int i = blogUserMapper.updateById(blogUser);
+            return i > 0;
+        }else {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
     }
 }
 

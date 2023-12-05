@@ -82,6 +82,16 @@ public class BlogPhotoServiceImpl extends ServiceImpl<BlogPhotoMapper, BlogPhoto
     }
 
     @Override
+    public List<BlogPhoto> getAllPhotosByAlbumId(Integer album_id) {
+        QueryWrapper<BlogPhoto> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("album_id",album_id);
+        queryWrapper.eq("status",1);
+        queryWrapper.orderByDesc("createdAt");
+        List<BlogPhoto> blogPhotos = blogPhotoMapper.selectList(queryWrapper);
+        return blogPhotos;
+    }
+
+    @Override
     public Boolean addPhotos(List<BlogPhoto> photoList) {
         boolean saveBatch = this.saveBatch(photoList);
         return saveBatch;

@@ -32,6 +32,26 @@ public class BlogLikeServiceImpl extends ServiceImpl<BlogLikeMapper, BlogLike>
         Long count = blogLikeMapper.selectCount(queryWrapper);
         return count > 0;
     }
+
+    @Override
+    public Boolean addLike(Integer for_id, Integer type, Integer user_id) {
+        BlogLike blogLike = new BlogLike();
+        blogLike.setFor_id(for_id);
+        blogLike.setUser_id(user_id);
+        blogLike.setType(type);
+        int insert = blogLikeMapper.insert(blogLike);
+        return insert > 0;
+    }
+
+    @Override
+    public Boolean cancelLike(Integer for_id, Integer type, Integer user_id) {
+        QueryWrapper<BlogLike> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("for_id",for_id);
+        queryWrapper.eq("type",type);
+        queryWrapper.eq("user_id",user_id);
+        int delete = blogLikeMapper.delete(queryWrapper);
+        return delete > 0;
+    }
 }
 
 

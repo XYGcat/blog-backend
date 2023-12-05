@@ -13,6 +13,7 @@ import com.xc.blogbackend.model.domain.request.AddArticleRequest;
 import com.xc.blogbackend.model.domain.request.ArticleRequest;
 import com.xc.blogbackend.model.domain.request.TitleExistRequest;
 import com.xc.blogbackend.model.domain.request.UpdateArticleRequest;
+import com.xc.blogbackend.model.domain.result.ArticleListByContent;
 import com.xc.blogbackend.model.domain.result.PageInfoResult;
 import com.xc.blogbackend.model.domain.result.RecommendResult;
 import com.xc.blogbackend.service.BlogArticleService;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  *文章接口
@@ -246,7 +248,7 @@ public class ArticleController {
 
 
     /**
-     * 前台 start
+     * 前台
      * 分页获取文章 按照置顶和发布时间倒序排序
      *
      * @param current
@@ -288,6 +290,97 @@ public class ArticleController {
         PageInfoResult<BlogArticle> result = blogArticleService.blogTimelineGetArticleList(current, size);
 
         return ResultUtils.success(result,"获取文章时间轴列表成功");
+    }
+
+    /**
+     * 前台
+     * 分页获取该分类下文章的简略信息
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping("/getArticleListByCategoryId")
+    public BaseResponse<PageInfoResult<BlogArticle>> getArticleListByCategoryId(@RequestBody Map<String,Integer> request){
+        Integer id = request.get("id");
+        Integer current = request.get("current");
+        Integer size = request.get("size");
+        if (id == null) {
+            throw new BusinessException(ErrorCode.NULL_ERROR);
+        }
+        PageInfoResult<BlogArticle> byCategoryId = blogArticleService.getArticleListByCategoryId(current, size, id);
+
+        return ResultUtils.success(byCategoryId,"根据分类获取文章列表成功");
+    }
+
+    /**
+     * 前台
+     * 分页获取该标签下文章的简略信息
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping("/getArticleListByTagId")
+    public BaseResponse<PageInfoResult<BlogArticle>> getArticleListByTagId(@RequestBody Map<String,Integer> request){
+        Integer id = request.get("id");
+        Integer current = request.get("current");
+        Integer size = request.get("size");
+
+        if(id == null){
+            throw new BusinessException(ErrorCode.NULL_ERROR);
+        }
+        PageInfoResult<BlogArticle> articleListByTagId = blogArticleService.getArticleListByTagId(current, size, id);
+
+        return ResultUtils.success(articleListByTagId,"根据分类获取文章列表成功");
+    }
+
+    /**
+     * 前台
+     * 获取热门文章
+     *
+     * @return
+     */
+    @GetMapping("/getHotArticle")
+    public BaseResponse<List<BlogArticle>> getHotArticle(){
+        List<BlogArticle> hotArticle = blogArticleService.getHotArticle();
+        return ResultUtils.success(hotArticle,"获取热门文章成功");
+    }
+
+    /**
+     * 前台
+     * 全局搜索文章
+     *
+     * @param content
+     * @return
+     */
+    @GetMapping("/getArticleListByContent/{content}")
+    public BaseResponse<List<ArticleListByContent>> getArticleListByContent(@PathVariable String content){
+        List<ArticleListByContent> articleListByContent = blogArticleService.getArticleListByContent(content);
+        return ResultUtils.success(articleListByContent,"按照内容搜索文章成功");
+    }
+
+    @PutMapping("/like/{id}")
+    public BaseResponse<Boolean> articleLike(@PathVariable Integer id){
+        Boolean aBoolean = blogArticleService.articleLike(id);
+        return ResultUtils.success(aBoolean,"点赞成功");
+    }
+
+    @PutMapping("/cancelLike/{id}")
+    public BaseResponse<Boolean> cancelArticleLike(@PathVariable Integer id){
+        Boolean aBoolean = blogArticleService.cancelArticleLike(id);
+        return ResultUtils.success(aBoolean,"取消点赞成功");
+    }
+
+    /**
+     * 增加文章阅读时长 毫秒
+     *
+     * @param id
+     * @param duration
+     * @return
+     */
+    @PutMapping("/addReadingDuration/{id}/{duration}")
+    public BaseResponse<Boolean> addReadingDuration(@PathVariable Integer id,@PathVariable Integer duration){
+        Boolean aBoolean = blogArticleService.addReadingDuration(id, duration);
+        return ResultUtils.success(aBoolean,"增加阅读时长成功");
     }
 
 

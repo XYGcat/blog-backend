@@ -20,4 +20,24 @@ public interface BlogLikeService extends IService<BlogLike> {
      */
     Boolean getIsLikeByIdAndType(Integer for_id,Integer type,Integer user_id);
 
+    /**
+     * 点赞
+     *
+     * @param for_id
+     * @param type
+     * @param user_id
+     * @return
+     */
+    Boolean addLike(Integer for_id,Integer type,Integer user_id);
+
+    /**
+     * 取消点赞
+     *
+     * @param for_id
+     * @param type
+     * @param user_id
+     * @return
+     */
+    Boolean cancelLike(Integer for_id,Integer type,Integer user_id);
+
 }

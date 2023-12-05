@@ -48,4 +48,56 @@ public class LikeController {
             return ResultUtils.success(like,"获取用户是否点赞成功");
         }
     }
+
+    /**
+     * 点赞
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping("/addLike")
+    public BaseResponse<Boolean> addLike(@RequestBody Map<String,Integer> request){
+        Integer for_id = request.get("for_id");
+        Integer type = request.get("type");
+        Integer user_id = request.get("user_id");
+
+        if (for_id == null) {
+            return ResultUtils.error(ErrorCode.NULL_ERROR);
+        }
+        if (type == null) {
+            return ResultUtils.error(ErrorCode.NULL_ERROR);
+        }
+        if (user_id == null) {
+            return ResultUtils.success(false, "获取用户是否点赞成功");
+        }else {
+            Boolean aBoolean = blogLikeService.addLike(for_id, type, user_id);
+            return ResultUtils.success(aBoolean,"点赞成功");
+        }
+    }
+
+    /**
+     * 取消点赞
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping("/cancelLike")
+    public BaseResponse<Boolean> cancelLike(@RequestBody Map<String,Integer> request){
+        Integer for_id = request.get("for_id");
+        Integer type = request.get("type");
+        Integer user_id = request.get("user_id");
+
+        if (for_id == null) {
+            return ResultUtils.error(ErrorCode.NULL_ERROR);
+        }
+        if (type == null) {
+            return ResultUtils.error(ErrorCode.NULL_ERROR);
+        }
+        if (user_id == null) {
+            return ResultUtils.success(false, "获取用户是否点赞成功");
+        }else {
+            Boolean aBoolean = blogLikeService.cancelLike(for_id, type, user_id);
+            return ResultUtils.success(aBoolean,"点赞成功");
+        }
+    }
 }

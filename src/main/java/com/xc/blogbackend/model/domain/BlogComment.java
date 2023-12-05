@@ -17,6 +17,25 @@ import java.util.Date;
 @TableName(value ="blog_comment")
 @Data
 public class BlogComment implements Serializable {
+
+    /**
+     * 作者id
+     */
+    @TableField(exist = false)
+    private Integer author_id;
+
+    /**
+     * 是否点赞
+     */
+    @TableField(exist = false)
+    private Boolean is_like;
+
+    /**
+     *地理位置
+     */
+    @TableField(exist = false)
+    private String ipAddress;
+
     /**
      * id
      */
@@ -90,14 +109,14 @@ public class BlogComment implements Serializable {
     private Integer thumbs_up;
 
     /**
-     * 
+     * 创建时间
      */
     @TableField(value = "createdAt")
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createdAt;
 
     /**
-     * 
+     * 更新时间
      */
     @TableField(value = "updatedAt")
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")

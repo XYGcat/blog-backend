@@ -169,4 +169,28 @@ public class TalkController {
         PageInfoResult<BlogTalk> talkPageInfoResult = blogTalkService.blogGetTalkList(current, size, user_id);
         return ResultUtils.success(talkPageInfoResult,"获取说说列表成功");
     }
+
+    /**
+     * 说说点赞
+     *
+     * @param id
+     * @return
+     */
+    @PutMapping("/like/{id}")
+    public BaseResponse<Boolean> talkLike(@PathVariable Integer id){
+        Boolean aBoolean = blogTalkService.talkLike(id);
+        return ResultUtils.success(aBoolean,"点赞成功");
+    }
+
+    /**
+     * 取消点赞
+     *
+     * @param id
+     * @return
+     */
+    @PutMapping("/cancelLike/{id}")
+    public BaseResponse<Boolean> cancelTalkLike(@PathVariable Integer id){
+        Boolean aBoolean = blogTalkService.cancelTalkLike(id);
+        return ResultUtils.success(aBoolean,"取消点赞成功");
+    }
 }

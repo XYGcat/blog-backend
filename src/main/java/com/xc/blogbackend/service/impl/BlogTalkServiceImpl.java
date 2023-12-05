@@ -440,6 +440,32 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
 
         return pageInfoResult;
     }
+
+    @Override
+    public Boolean talkLike(Integer id) {
+        BlogTalk blogTalk = blogTalkMapper.selectById(id);
+        if (blogTalk != null) {
+            Integer like_times = blogTalk.getLike_times();
+            blogTalk.setLike_times(like_times + 1);
+            int i = blogTalkMapper.updateById(blogTalk);
+            return i > 0;
+        }
+
+        return false;
+    }
+
+    @Override
+    public Boolean cancelTalkLike(Integer id) {
+        BlogTalk blogTalk = blogTalkMapper.selectById(id);
+        if (blogTalk != null) {
+            Integer like_times = blogTalk.getLike_times();
+            blogTalk.setLike_times(like_times - 1);
+            int i = blogTalkMapper.updateById(blogTalk);
+            return i > 0;
+        }
+
+        return false;
+    }
 }
 
 

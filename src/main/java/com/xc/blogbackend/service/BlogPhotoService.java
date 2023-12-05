@@ -22,7 +22,8 @@ public interface BlogPhotoService extends IService<BlogPhoto> {
     Boolean deletePhotosByAlbumId(Integer album_id);
 
     /**
-     * 获取图片列表
+     * 后台
+     * 分页获取图片列表
      *
      * @param current
      * @param size
@@ -31,6 +32,15 @@ public interface BlogPhotoService extends IService<BlogPhoto> {
      * @return
      */
     PageInfoResult<BlogPhoto> getPhotosByAlbumId(Integer current, Integer size, Integer id, Integer status);
+
+    /**
+     * 前台
+     * 获取相册的所有照片
+     *
+     * @param album_id
+     * @return
+     */
+    List<BlogPhoto> getAllPhotosByAlbumId(Integer album_id);
 
     /**
      * 批量新增图片

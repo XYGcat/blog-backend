@@ -89,4 +89,20 @@ public interface BlogTalkService extends IService<BlogTalk> {
      * @return
      */
     PageInfoResult<BlogTalk> blogGetTalkList(Integer current,Integer size,Integer user_id);
+
+    /**
+     * 取消点赞
+     *
+     * @param id
+     * @return
+     */
+    Boolean talkLike(Integer id);
+
+    /**
+     * 取消点赞
+     *
+     * @param id
+     * @return
+     */
+    Boolean cancelTalkLike(Integer id);
 }

@@ -11,6 +11,7 @@ import com.xc.blogbackend.mapper.BlogArticleMapper;
 import com.xc.blogbackend.model.domain.ArticleDTO;
 import com.xc.blogbackend.model.domain.BlogArticle;
 import com.xc.blogbackend.model.domain.request.ArticleRequest;
+import com.xc.blogbackend.model.domain.result.ArticleListByContent;
 import com.xc.blogbackend.model.domain.result.PageInfoResult;
 import com.xc.blogbackend.model.domain.result.RecommendResult;
 import com.xc.blogbackend.service.BlogArticleService;
@@ -511,6 +512,166 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
         pageInfoResult.setTotal(count);
         pageInfoResult.setSize(size);
         return pageInfoResult;
+    }
+
+    @Override
+    public PageInfoResult<BlogArticle> getArticleListByCategoryId(Integer current, Integer size, Integer category_id) {
+        // 分页参数处理
+        int offset = (current - 1) * size;
+        int limit = size;
+
+        QueryWrapper<BlogArticle> queryWrapper = new QueryWrapper<>();    // 构建查询条件
+        queryWrapper.eq("status", 1);
+        queryWrapper.eq("category_id",category_id);
+        queryWrapper.select("id","article_title","article_cover","createdAt");
+        queryWrapper.orderByDesc("createdAt");
+        // 创建Page对象，设置当前页和分页大小
+        Page<BlogArticle> page = new Page<>(offset, limit);
+        // 获取通知列表，使用page方法传入Page对象和QueryWrapper对象
+        Page<BlogArticle> articlePage = blogArticleMapper.selectPage(page, queryWrapper);
+        // 获取分页数据
+        List<BlogArticle> rows = articlePage.getRecords();
+        // 获取通知总数
+        long count = articlePage.getTotal();
+
+        for (BlogArticle blogArticle : rows){
+            String article_cover = blogArticle.getArticle_cover();
+            try {
+                blogArticle.setArticle_cover(qiniu.downloadUrl(article_cover));
+            } catch (QiniuException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        PageInfoResult<BlogArticle> pageInfoResult = new PageInfoResult<>();
+        pageInfoResult.setCurrent(current);
+        pageInfoResult.setList(rows);
+        pageInfoResult.setTotal(count);
+        pageInfoResult.setSize(size);
+        return pageInfoResult;
+    }
+
+    @Override
+    public PageInfoResult<BlogArticle> getArticleListByTagId(Integer current, Integer size, Integer tag_id) {
+        List<Integer> tagIdList = blogArticleTagService.getArticleIdListByTagId(tag_id);
+        // 分页参数处理
+        int offset = (current - 1) * size;
+        int limit = size;
+
+        QueryWrapper<BlogArticle> queryWrapper = new QueryWrapper<>();    // 构建查询条件
+        queryWrapper.eq("status", 1);
+        queryWrapper.in("id",tagIdList);
+        queryWrapper.select("id","article_title","article_cover","createdAt");
+        queryWrapper.orderByDesc("createdAt");
+        // 创建Page对象，设置当前页和分页大小
+        Page<BlogArticle> page = new Page<>(offset, limit);
+        // 获取通知列表，使用page方法传入Page对象和QueryWrapper对象
+        Page<BlogArticle> articlePage = blogArticleMapper.selectPage(page, queryWrapper);
+        // 获取分页数据
+        List<BlogArticle> rows = articlePage.getRecords();
+        // 获取通知总数
+        long count = articlePage.getTotal();
+
+        for (BlogArticle blogArticle : rows){
+            String article_cover = blogArticle.getArticle_cover();
+            try {
+                blogArticle.setArticle_cover(qiniu.downloadUrl(article_cover));
+            } catch (QiniuException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        PageInfoResult<BlogArticle> pageInfoResult = new PageInfoResult<>();
+        pageInfoResult.setCurrent(current);
+        pageInfoResult.setList(rows);
+        pageInfoResult.setTotal(count);
+        pageInfoResult.setSize(size);
+        return pageInfoResult;
+    }
+
+    @Override
+    public List<BlogArticle> getHotArticle() {
+        QueryWrapper<BlogArticle> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("status",1);
+        queryWrapper.select("id","article_title","view_times");
+        queryWrapper.last("LIMIT 5");
+        queryWrapper.orderByDesc("view_times");
+        List<BlogArticle> blogArticles = blogArticleMapper.selectList(queryWrapper);
+        return blogArticles;
+    }
+
+    @Override
+    public List<ArticleListByContent> getArticleListByContent(String content) {
+        QueryWrapper<BlogArticle> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("status",1);
+        queryWrapper.like("article_content", "%" + content + "%");
+        queryWrapper.select("id", "article_title", "article_content", "view_times");
+        queryWrapper.last("LIMIT 8");
+        queryWrapper.orderByDesc("view_times");
+        List<BlogArticle> blogArticles = blogArticleMapper.selectList(queryWrapper);
+
+        List<ArticleListByContent> result = new ArrayList<>();
+        String extracted;
+        if (blogArticles != null) {
+            for (BlogArticle r : blogArticles){
+                String article_content = r.getArticle_content();
+                int index = article_content.indexOf(content);
+                if (index != -1) { // 如果找到了指定内容
+                    int previous = index;
+                    int next = index + content.length() + 12;
+                    // 截取文章内容，构建结果对象
+                    if (next <= article_content.length() - previous) {
+                        extracted = article_content.substring(previous, next);
+                        // 处理截取的内容
+                    } else {
+                        extracted = article_content.substring(previous);
+                        // 处理从 previous 到字符串结尾的内容
+                    }
+                    ArticleListByContent resultObject = new ArticleListByContent();
+                    resultObject.setId(r.getId());
+                    resultObject.setArticle_content(extracted);
+                    resultObject.setArticle_title(r.getArticle_title());
+                    result.add(resultObject);
+                }
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public Boolean articleLike(Integer id) {
+        BlogArticle blogArticle = blogArticleMapper.selectById(id);
+        if (blogArticle != null){
+            Integer thumbs_up_times = blogArticle.getThumbs_up_times();
+            blogArticle.setThumbs_up_times(thumbs_up_times + 1);
+            int i = blogArticleMapper.updateById(blogArticle);
+            return i > 0;
+        }
+        return false;
+    }
+
+    @Override
+    public Boolean cancelArticleLike(Integer id) {
+        BlogArticle blogArticle = blogArticleMapper.selectById(id);
+        if (blogArticle != null){
+            Integer thumbs_up_times = blogArticle.getThumbs_up_times();
+            blogArticle.setThumbs_up_times(thumbs_up_times - 1);
+            int i = blogArticleMapper.updateById(blogArticle);
+            return i > 0;
+        }
+        return false;
+    }
+
+    @Override
+    public Boolean addReadingDuration(Integer id, Integer duration) {
+        BlogArticle blogArticle = blogArticleMapper.selectById(id);
+        if (blogArticle != null){
+            Double reading_duration = blogArticle.getReading_duration();
+            blogArticle.setReading_duration(reading_duration + duration);
+            int i = blogArticleMapper.updateById(blogArticle);
+            return i > 0;
+        }
+        return false;
     }
 }
 

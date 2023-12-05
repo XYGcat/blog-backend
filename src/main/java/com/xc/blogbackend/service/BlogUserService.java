@@ -75,4 +75,21 @@ public interface BlogUserService extends IService<BlogUser> {
      * @return
      */
     String getAuthorNameById(Integer user_id);
+
+    /**
+     * 用户自己修改用户信息
+     *
+     * @param request
+     * @return
+     */
+    Boolean updateOwnUserInfo(Map<String,Object> request);
+
+    /**
+     * 修改用户密码
+     *
+     * @param id
+     * @param password
+     * @return
+     */
+    Boolean updatePassword(Integer id,String password,String password1);
 }

@@ -52,4 +52,26 @@ public class StringManipulation {
         SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
         return yearFormat.format(date); // 格式化为年份字符串
     }
+
+    /**
+     * 提取图片链接中最后一个问号之前的内容
+     * 比如“https://pic.imgdb.cn/item/65114060c458853aef1f9fa4.jpg
+     * ?e=1701771553&token=BPdbkan5aZEackrnJm7Bk65a5pYvb0QKEBUsTBG_:nm2-fxOV9o-KYTH6NCv-7res4E8="
+     * 截取“https://pic.imgdb.cn/item/65114060c458853aef1f9fa4.jpg”
+     *
+     * @param imageUrl
+     * @return
+     */
+    public static String extractBaseUrl(String imageUrl) {
+        if (imageUrl == null || imageUrl.isEmpty()) {
+            return null;
+        }
+
+        int lastQuestionMarkIndex = imageUrl.lastIndexOf("?");
+        if (lastQuestionMarkIndex != -1) {
+            return imageUrl.substring(0, lastQuestionMarkIndex);
+        } else {
+            return imageUrl;
+        }
+    }
 }

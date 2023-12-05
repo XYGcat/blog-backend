@@ -1,5 +1,6 @@
 package com.xc.blogbackend.controller;
 
+import com.qiniu.common.QiniuException;
 import com.xc.blogbackend.common.BaseResponse;
 import com.xc.blogbackend.common.ResultUtils;
 import com.xc.blogbackend.model.domain.BlogPhoto;
@@ -33,6 +34,7 @@ public class PhotoController {
     private Qiniu qiniu;
 
     /**
+     * 后台
      * 根据相册id 分页获取图片列表
      *
      * @param request
@@ -48,6 +50,27 @@ public class PhotoController {
         PageInfoResult<BlogPhoto> photosByAlbumId = blogPhotoService.getPhotosByAlbumId(current, size, id, status);
 
         return ResultUtils.success(photosByAlbumId,"获取相册图片成功");
+    }
+
+    /**
+     * 前台
+     * 根据相册id 获取相册的所有图片
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/getAllPhotosByAlbumId/{id}")
+    public BaseResponse<List<BlogPhoto>> getAllPhotosByAlbumId(@PathVariable Integer id){
+        List<BlogPhoto> allPhotosByAlbumId = blogPhotoService.getAllPhotosByAlbumId(id);
+        for (BlogPhoto v : allPhotosByAlbumId){
+            try {
+                String url = qiniu.downloadUrl(v.getUrl());
+                v.setUrl(url);
+            } catch (QiniuException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return ResultUtils.success(allPhotosByAlbumId,"获取相册所有照片成功");
     }
 
     /**
