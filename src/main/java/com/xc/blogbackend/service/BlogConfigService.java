@@ -23,4 +23,12 @@ public interface BlogConfigService extends IService<BlogConfig> {
      * @return
      */
     String addView();
+
+    /**
+     * 修改网站设置
+     *
+     * @param blogConfig
+     * @return
+     */
+    Boolean updateConfig(BlogConfig blogConfig);
 }

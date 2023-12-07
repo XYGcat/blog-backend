@@ -114,6 +114,22 @@ public class BlogLinksServiceImpl extends ServiceImpl<BlogLinksMapper, BlogLinks
 
         return res > 0;
     }
+
+    @Override
+    public Boolean approveLinks(List<Integer> idList) {
+        BlogLinks blogLinks = new BlogLinks();
+        blogLinks.setStatus(2);
+        UpdateWrapper<BlogLinks> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.in("id",idList);
+        int update = blogLinksMapper.update(blogLinks, updateWrapper);
+        return update > 0;
+    }
+
+    @Override
+    public Boolean deleteLinks(List<Integer> idList) {
+        int i = blogLinksMapper.deleteBatchIds(idList);
+        return i > 0;
+    }
 }
 
 

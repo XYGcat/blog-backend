@@ -70,7 +70,6 @@ public class BlogUserServiceImpl extends ServiceImpl<BlogUserMapper, BlogUser>
         BlogUser user = blogUserMapper.selectOne(queryWrapper);
         //用户不存在
         if(user == null){
-            log.info("user login failed,username cannot match password");
             throw new BusinessException(ErrorCode.PARAMS_ERROR,"用户不存在");
         }
         //更新插入ip
@@ -267,6 +266,17 @@ public class BlogUserServiceImpl extends ServiceImpl<BlogUserMapper, BlogUser>
         }else {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
+    }
+
+    @Override
+    public Boolean updateRole(Integer id, Integer role) {
+        BlogUser blogUser = new BlogUser();
+        blogUser.setRole(role);
+        UpdateWrapper<BlogUser> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("id",id);
+        int update = blogUserMapper.update(blogUser, updateWrapper);
+
+        return update > 0;
     }
 }
 

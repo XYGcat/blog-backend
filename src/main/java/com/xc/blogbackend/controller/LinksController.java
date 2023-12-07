@@ -8,12 +8,10 @@ import com.xc.blogbackend.model.domain.request.PageRequest;
 import com.xc.blogbackend.model.domain.result.PageInfoResult;
 import com.xc.blogbackend.service.BlogLinksService;
 import com.xc.blogbackend.service.BlogNotifyService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -72,4 +70,31 @@ public class LinksController {
         return ResultUtils.success(aBoolean,msg + "友链成功");
     }
 
+    /**
+     * 批量审核友链
+     *
+     * @param request
+     * @return
+     */
+    @PutMapping("/approve")
+    public BaseResponse<Boolean> approveLinks(@RequestBody Map<String, List<Integer>> request){
+        List<Integer> idList = request.get("idList");
+        Boolean aBoolean = blogLinksService.approveLinks(idList);
+
+        return ResultUtils.success(aBoolean,"审核友链成功");
+    }
+
+    /**
+     * 批量删除友链
+     *
+     * @param request
+     * @return
+     */
+    @PutMapping("/delete")
+    public BaseResponse<Boolean> deleteLinks(@RequestBody Map<String, List<Integer>> request){
+        List<Integer> idList = request.get("idList");
+        Boolean aBoolean = blogLinksService.deleteLinks(idList);
+
+        return ResultUtils.success(aBoolean,"删除友链成功");
+    }
 }

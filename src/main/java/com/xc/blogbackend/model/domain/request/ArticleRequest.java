@@ -3,6 +3,8 @@ package com.xc.blogbackend.model.domain.request;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 条件分页获取文章请求体 getArticleList()
@@ -20,5 +22,5 @@ public class ArticleRequest implements Serializable {
     private Integer category_id;
     private Integer is_top;
     private Integer status;
-    private String create_time;
+    private List<String> create_time = new ArrayList<>();
 }

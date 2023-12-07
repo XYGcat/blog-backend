@@ -1,7 +1,5 @@
 package com.xc.blogbackend.model.domain.request;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.xc.blogbackend.utils.CustomTimeDeserializer;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -21,7 +19,6 @@ public class PageRequest implements Serializable {
     private Integer current;
     private Integer size;
     private String message;
-    @JsonDeserialize(using = CustomTimeDeserializer.class)
     private List<String> time = new ArrayList<>();
     private String site_name;
     private Integer status;

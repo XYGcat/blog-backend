@@ -1,5 +1,6 @@
 package com.xc.blogbackend.controller;
 
+import com.qiniu.common.QiniuException;
 import com.xc.blogbackend.common.BaseResponse;
 import com.xc.blogbackend.common.ResultUtils;
 import com.xc.blogbackend.model.domain.BlogPhotoAlbum;
@@ -53,7 +54,6 @@ public class PhotoAlbumController {
      * @return
      */
     @PostMapping("/add")
-    @Transactional(rollbackFor = Exception.class)  //Spring 的事务管理，如果发生异常，会自动回滚事务
     public BaseResponse<BlogPhotoAlbum> addAlbum(@RequestBody Map<String,Object> request){
         String album_name = (String) request.get("album_name");
         String album_cover = (String) request.get("album_cover");
@@ -74,7 +74,6 @@ public class PhotoAlbumController {
      * @return
      */
     @PutMapping("/update")
-    @Transactional(rollbackFor = Exception.class)  //Spring 的事务管理，如果发生异常，会自动回滚事务
     public BaseResponse<Boolean> updateAlbum(@RequestBody Map<String,Object> request){
         Integer id = (Integer) request.get("id");
         String album_name = (String) request.get("album_name");
@@ -125,6 +124,16 @@ public class PhotoAlbumController {
     @GetMapping("/getAllAlbumList")
     public BaseResponse<List<BlogPhotoAlbum>> getAllAlbumList(){
         List<BlogPhotoAlbum> allAlbumList = blogPhotoAlbumService.getAllAlbumList();
+        //添加七牛云图片的下载凭证
+        for(BlogPhotoAlbum blogPhotoAlbum : allAlbumList){
+            try {
+                String downloadUrl = qiniu.downloadUrl(blogPhotoAlbum.getAlbum_cover());
+                blogPhotoAlbum.setAlbum_cover(downloadUrl);
+            } catch (QiniuException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
         return ResultUtils.success(allAlbumList,"获取所有相册列表成功");
     }
 }

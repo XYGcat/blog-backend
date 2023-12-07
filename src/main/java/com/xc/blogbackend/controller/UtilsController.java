@@ -1,5 +1,6 @@
 package com.xc.blogbackend.controller;
 
+import com.qiniu.common.QiniuException;
 import com.xc.blogbackend.common.BaseResponse;
 import com.xc.blogbackend.common.ErrorCode;
 import com.xc.blogbackend.common.ResultUtils;
@@ -55,5 +56,19 @@ public class UtilsController {
         }else {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
+    }
+
+    /**
+     *生成七牛云下载图片的token
+     *
+     * @param reqeust
+     * @return
+     */
+    @PostMapping("/downloadUrl")
+    public BaseResponse<String> downloadUrl(@RequestBody Map<String,String> request) throws QiniuException {
+        String imgUrl = request.get("imgUrl");
+        String downloadUrl = qiniu.downloadUrl(imgUrl);
+
+        return ResultUtils.success(downloadUrl);
     }
 }

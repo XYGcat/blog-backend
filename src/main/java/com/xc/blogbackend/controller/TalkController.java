@@ -73,7 +73,6 @@ public class TalkController {
      * @return
      */
     @PutMapping("/toggleTop/{id}/{is_top}")
-    @Transactional(rollbackFor = Exception.class)  //Spring 的事务管理，如果发生异常，会自动回滚事务
     public BaseResponse<Boolean> toggleTop(@PathVariable Integer id,@PathVariable Integer is_top){
         String message;
         if (is_top == 1) {
@@ -93,7 +92,6 @@ public class TalkController {
      * @return
      */
     @PutMapping("/togglePublic/{id}/{status}")
-    @Transactional(rollbackFor = Exception.class)  //Spring 的事务管理，如果发生异常，会自动回滚事务
     public BaseResponse<Boolean> togglePublic(@PathVariable Integer id,@PathVariable Integer status){
         String message;
         if (status == 1) {
@@ -132,7 +130,6 @@ public class TalkController {
      * @return
      */
     @PutMapping("/revertTalk/{id}")
-    @Transactional(rollbackFor = Exception.class)  //Spring 的事务管理，如果发生异常，会自动回滚事务
     public BaseResponse<Boolean> revertTalk(@PathVariable Integer id){
         Boolean aBoolean = blogTalkService.revertTalk(id);
         return ResultUtils.success(aBoolean,"恢复说说成功");

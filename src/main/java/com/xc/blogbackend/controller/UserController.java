@@ -13,10 +13,9 @@ import com.xc.blogbackend.service.BlogUserService;
 import com.xc.blogbackend.utils.IpUtils;
 import com.xc.blogbackend.utils.Qiniu;
 import com.xc.blogbackend.utils.StringManipulation;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -107,7 +106,6 @@ public class UserController {
      * @return
      */
     @PostMapping("/register")
-    @Transactional(rollbackFor = Exception.class)  //Spring 的事务管理，如果发生异常，会自动回滚事务
     public BaseResponse<Map<String,String>> userRegister(@RequestBody UserRegisterRequest userRegisterRequest,HttpServletRequest request) {
         if(userRegisterRequest == null){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
@@ -212,5 +210,19 @@ public class UserController {
         Boolean aBoolean = blogUserService.updatePassword(id, password, password1);
 
         return ResultUtils.success(aBoolean,"修改用户密码成功");
+    }
+
+    /**
+     * 修改用户角色
+     *
+     * @param id
+     * @param role
+     * @return
+     */
+    @PutMapping("/updateRole/{id}/{role}")
+    public BaseResponse<Boolean> updateRole(@PathVariable Integer id,@PathVariable Integer role){
+        Boolean aBoolean = blogUserService.updateRole(id, role);
+
+        return ResultUtils.success(aBoolean,"修改角色成功");
     }
 }

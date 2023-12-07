@@ -2,8 +2,8 @@ package com.xc.blogbackend.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.xc.blogbackend.model.domain.BlogConfig;
 import com.xc.blogbackend.mapper.BlogConfigMapper;
+import com.xc.blogbackend.model.domain.BlogConfig;
 import com.xc.blogbackend.service.BlogConfigService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -50,6 +50,19 @@ public class BlogConfigServiceImpl extends ServiceImpl<BlogConfigMapper, BlogCon
             flag = "需要初始化";
         }
         return flag;
+    }
+
+    @Override
+    public Boolean updateConfig(BlogConfig blogConfig) {
+        Integer id = blogConfig.getId();
+        BlogConfig config = blogConfigMapper.selectById(id);
+        if (config != null) {
+            int i = blogConfigMapper.updateById(blogConfig);
+            return i > 0;
+        }else {
+            int insert = blogConfigMapper.insert(blogConfig);
+            return insert > 0;
+        }
     }
 }
 

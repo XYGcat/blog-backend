@@ -92,4 +92,13 @@ public interface BlogUserService extends IService<BlogUser> {
      * @return
      */
     Boolean updatePassword(Integer id,String password,String password1);
+
+    /**
+     * 修改用户角色
+     *
+     * @param id
+     * @param role
+     * @return
+     */
+    Boolean updateRole(Integer id,Integer role);
 }

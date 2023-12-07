@@ -19,4 +19,28 @@ public interface BlogHeaderService extends IService<BlogHeader> {
      */
     List<BlogHeader> getAllHeader();
 
+    /**
+     *新增 / 修改 背景
+     *
+     * @param blogHeader
+     * @return
+     */
+    Boolean addOrUpdateHeader(BlogHeader blogHeader);
+
+    /**
+     * 根据路由名获取背景信息
+     *
+     * @param route_name
+     * @return
+     */
+    BlogHeader getOneByPath(String route_name);
+
+    /**
+     * 删除背景
+     *
+     * @param id
+     * @return
+     */
+    Boolean deleteHeader(Integer id);
+
 }

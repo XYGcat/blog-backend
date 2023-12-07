@@ -5,7 +5,6 @@ import com.xc.blogbackend.common.ResultUtils;
 import com.xc.blogbackend.model.domain.BlogCategory;
 import com.xc.blogbackend.model.domain.result.PageInfoResult;
 import com.xc.blogbackend.service.BlogCategoryService;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -57,7 +56,6 @@ public class CategoryController {
      * @return
      */
     @PostMapping("/add")
-    @Transactional(rollbackFor = Exception.class)  //Spring 的事务管理，如果发生异常，会自动回滚事务
     public BaseResponse<BlogCategory> addCategory(@RequestBody Map<String,Object> request){
         String category_name = (String) request.get("category_name");
         BlogCategory category = blogCategoryService.createCategory(category_name);
@@ -71,7 +69,6 @@ public class CategoryController {
      * @return
      */
     @PutMapping("/update")
-    @Transactional(rollbackFor = Exception.class)  //Spring 的事务管理，如果发生异常，会自动回滚事务
     public BaseResponse<Boolean> updateCategory(@RequestBody Map<String,Object> request){
         String category_name = (String) request.get("category_name");
         Integer id = (Integer) request.get("id");
@@ -86,7 +83,6 @@ public class CategoryController {
      * @return
      */
     @PostMapping("/delete")
-    @Transactional(rollbackFor = Exception.class)  //Spring 的事务管理，如果发生异常，会自动回滚事务
     public BaseResponse<Boolean> deleteCategories(@RequestBody Map<String,List<Integer>> request){
         List<Integer> categoryIdList = request.get("categoryIdList");
         Boolean aBoolean = blogCategoryService.deleteCategories(categoryIdList);

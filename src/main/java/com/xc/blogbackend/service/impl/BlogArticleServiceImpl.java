@@ -25,7 +25,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.annotation.Resource;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -68,7 +67,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
     public PageInfoResult<BlogArticle> getArticleList(@RequestBody ArticleRequest articleRequest) {
         // 从参数中提取所需的信息
         String article_title = articleRequest.getArticle_title();
-        String create_time = articleRequest.getCreate_time();
+        List<String> create_time = articleRequest.getCreate_time();
         Integer status = articleRequest.getStatus();
         Integer is_top = articleRequest.getIs_top();
         int current = articleRequest.getCurrent();
@@ -87,9 +86,8 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
             queryWrapper.like("article_title", "%" + article_title + "%");
         }
         // 如果创建时间不为空，使用between范围查询
-        if (create_time != null) {
-            // 假设 createdAt 是数据库字段名，需要替换成实际的字段名
-            queryWrapper.between("createdAt", create_time, LocalDateTime.now());
+        if (create_time != null && create_time.size() == 2 && create_time.get(0) != null && create_time.get(1) != null) {
+            queryWrapper.between("createdAt", create_time.get(0), create_time.get(1));
         }
         // 如果是否置顶不为空，使用eq精确查询
         if (is_top != null) {

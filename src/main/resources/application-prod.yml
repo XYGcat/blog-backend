@@ -1,0 +1,7 @@
+spring:
+  # DataSource Config
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://47.96.141.111:3306/blog
+    username: xc
+    password: 318807

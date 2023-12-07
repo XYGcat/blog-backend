@@ -5,6 +5,7 @@ import com.xc.blogbackend.model.domain.BlogLinks;
 import com.xc.blogbackend.model.domain.request.PageRequest;
 import com.xc.blogbackend.model.domain.result.PageInfoResult;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -29,4 +30,20 @@ public interface BlogLinksService extends IService<BlogLinks> {
      * @return
      */
     Boolean addOrUpdateLinks(Map<String,Object> request);
+
+    /**
+     * 审核友链
+     *
+     * @param idList
+     * @return
+     */
+    Boolean approveLinks(List<Integer> idList);
+
+    /**
+     * 批量删除友链
+     *
+     * @param idList
+     * @return
+     */
+    Boolean deleteLinks(List<Integer> idList);
 }

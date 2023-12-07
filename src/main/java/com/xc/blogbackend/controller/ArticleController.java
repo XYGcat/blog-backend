@@ -358,12 +358,24 @@ public class ArticleController {
         return ResultUtils.success(articleListByContent,"按照内容搜索文章成功");
     }
 
+    /**
+     * 文章点赞
+     *
+     * @param id
+     * @return
+     */
     @PutMapping("/like/{id}")
     public BaseResponse<Boolean> articleLike(@PathVariable Integer id){
         Boolean aBoolean = blogArticleService.articleLike(id);
         return ResultUtils.success(aBoolean,"点赞成功");
     }
 
+    /**
+     * 文章取消点赞
+     *
+     * @param id
+     * @return
+     */
     @PutMapping("/cancelLike/{id}")
     public BaseResponse<Boolean> cancelArticleLike(@PathVariable Integer id){
         Boolean aBoolean = blogArticleService.cancelArticleLike(id);
