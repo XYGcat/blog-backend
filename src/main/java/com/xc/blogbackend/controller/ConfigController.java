@@ -89,21 +89,23 @@ public class ConfigController {
         BlogConfig config = blogConfigService.getConfig();
 
         // 如果背景图不一致，删除原来的
-        if (avatar_bg != null && config.getAvatar_bg() != null && avatar_bg != config.getAvatar_bg()){
-            String subString = StringManipulation.subString(config.getAvatar_bg());
-            qiniu.deleteFile(subString);
-        }
-        if (blog_avatar != null && config.getBlog_avatar() != null && blog_avatar != config.getBlog_avatar()){
-            String subString = StringManipulation.subString(config.getBlog_avatar());
-            qiniu.deleteFile(subString);
-        }
-        if (qq_link != null && config.getQq_link() != null && qq_link != config.getQq_link()){
-            String subString = StringManipulation.subString(config.getQq_link());
-            qiniu.deleteFile(subString);
-        }
-        if (we_chat_link != null && config.getWe_chat_link() != null && we_chat_link != config.getWe_chat_link()){
-            String subString = StringManipulation.subString(config.getWe_chat_link());
-            qiniu.deleteFile(subString);
+        if (config != null){
+            if (avatar_bg != null && config.getAvatar_bg() != null && avatar_bg != config.getAvatar_bg()){
+                String subString = StringManipulation.subString(config.getAvatar_bg());
+                qiniu.deleteFile(subString);
+            }
+            if (blog_avatar != null && config.getBlog_avatar() != null && blog_avatar != config.getBlog_avatar()){
+                String subString = StringManipulation.subString(config.getBlog_avatar());
+                qiniu.deleteFile(subString);
+            }
+            if (qq_link != null && config.getQq_link() != null && qq_link != config.getQq_link()){
+                String subString = StringManipulation.subString(config.getQq_link());
+                qiniu.deleteFile(subString);
+            }
+            if (we_chat_link != null && config.getWe_chat_link() != null && we_chat_link != config.getWe_chat_link()){
+                String subString = StringManipulation.subString(config.getWe_chat_link());
+                qiniu.deleteFile(subString);
+            }
         }
 
         Boolean aBoolean = blogConfigService.updateConfig(blogConfig);

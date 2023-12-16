@@ -11,10 +11,9 @@ import com.xc.blogbackend.model.domain.request.UserRegisterRequest;
 import com.xc.blogbackend.model.domain.result.PageInfoResult;
 import com.xc.blogbackend.service.BlogUserService;
 import com.xc.blogbackend.utils.IpUtils;
+import com.xc.blogbackend.utils.JwtGenerator;
 import com.xc.blogbackend.utils.Qiniu;
 import com.xc.blogbackend.utils.StringManipulation;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +23,6 @@ import java.util.Map;
 
 import static com.xc.blogbackend.contant.BlogUserConstant.ADMIN_PASSWORD;
 import static com.xc.blogbackend.contant.BlogUserConstant.USER_LOGIN_STATE;
-import static com.xc.blogbackend.utils.SecretKeyUtil.SECRET_KEY_BYTES;
 
 /**
  *用户接口
@@ -61,20 +59,16 @@ public class UserController {
         }
         if (username.equals("admin")) {
             if (password.equals(ADMIN_PASSWORD)) {
-                // 生成token
-                String token = Jwts.builder()
-                        .claim("nick_name", "超级管理员")
-                        .claim("id", 5201314)
-                        .claim("role", 1)
-                        .claim("username", "admin")
-                        .signWith(Keys.hmacShaKeyFor(SECRET_KEY_BYTES))
-                        .compact();
 
                 BlogUser blogUser = new BlogUser();
-                blogUser.setUsername("超级管理员");
+                blogUser.setUsername("admin");
+                blogUser.setNick_name("超级管理员");
                 blogUser.setRole(1);
                 blogUser.setId(5201314);
                 blogUser.setIp(ipAddress);
+
+                // 生成token
+                String token = JwtGenerator.generateToken(blogUser);
                 blogUser.setToken(token);
 
                 return ResultUtils.success(blogUser);
@@ -84,15 +78,8 @@ public class UserController {
         }else{
             BlogUser blogUser = blogUserService.userLogin(username, password,ipAddress, request);
 
-            // 生成token
-            String token = Jwts.builder()
-                    .claim("nick_name", blogUser.getNick_name())
-                    .claim("id", blogUser.getId())
-                    .claim("role", blogUser.getRole())
-                    .claim("username", blogUser.getUsername())
-                    .signWith(Keys.hmacShaKeyFor(SECRET_KEY_BYTES))
-                    .compact();
-
+            //创建Token
+            String token = JwtGenerator.generateToken(blogUser);
             blogUser.setToken(token);
 
             return ResultUtils.success(blogUser);

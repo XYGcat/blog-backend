@@ -246,6 +246,19 @@ public class ArticleController {
         }
     }
 
+    /**
+     * 修改文章置顶状态
+     *
+     * @param id
+     * @param is_top
+     * @return
+     */
+    @PutMapping("/updateTop/{id}/{is_top}")
+    public BaseResponse<Boolean> updateTop(@PathVariable Integer id,@PathVariable Integer is_top){
+        Boolean aBoolean = blogArticleService.updateTop(id, is_top);
+
+        return ResultUtils.success(aBoolean,"修改文章置顶状态成功");
+    }
 
     /**
      * 前台

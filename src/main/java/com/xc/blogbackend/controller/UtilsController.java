@@ -7,6 +7,7 @@ import com.xc.blogbackend.common.ResultUtils;
 import com.xc.blogbackend.exception.BusinessException;
 import com.xc.blogbackend.utils.ImageNamingUtil;
 import com.xc.blogbackend.utils.Qiniu;
+import com.xc.blogbackend.utils.StringManipulation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -49,8 +50,9 @@ public class UtilsController {
      */
     @PostMapping("/deleteFile")
     public BaseResponse<Boolean> deleteFile(@RequestBody Map<String,String> request){
-        String article_cover = request.get("article_cover");
-        Boolean file = qiniu.deleteFile(article_cover);
+        String imgUrl = request.get("imgUrl");
+        String subString = StringManipulation.subString(imgUrl);
+        Boolean file = qiniu.deleteFile(subString);
         if (file) {
             return ResultUtils.success(true,"删除成功！");
         }else {
@@ -61,7 +63,7 @@ public class UtilsController {
     /**
      *生成七牛云下载图片的token
      *
-     * @param reqeust
+     * @param request
      * @return
      */
     @PostMapping("/downloadUrl")

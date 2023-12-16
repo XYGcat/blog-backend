@@ -299,6 +299,15 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
     }
 
     @Override
+    public Boolean updateTop(Integer id, Integer is_top) {
+        BlogArticle blogArticle = new BlogArticle();
+        blogArticle.setIs_top(is_top);
+        blogArticle.setId(id);
+        int i = blogArticleMapper.updateById(blogArticle);
+        return i > 0;
+    }
+
+    @Override
     public Boolean deleteArticle(Integer id, Integer status) {
         if (status != 3) {
             BlogArticle blogArticle = new BlogArticle();
@@ -410,6 +419,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
         queryWrapper.eq("status",1);
         queryWrapper.select("id","article_title","article_cover");
         queryWrapper.orderByDesc("id");
+        queryWrapper.last("LIMIT 1"); // 添加 LIMIT 条件，只返回一条记录
         BlogArticle contextPrevious = blogArticleMapper.selectOne(queryWrapper);
 
         // 下一篇文章id
@@ -418,6 +428,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
         queryWrapper.eq("status",1);
         queryWrapper.select("id","article_title","article_cover");
         queryWrapper.orderByAsc("id");
+        queryWrapper.last("LIMIT 1"); // 添加 LIMIT 条件，只返回一条记录
         BlogArticle contentNext = blogArticleMapper.selectOne(queryWrapper);
 
         // 上下文不存在的话就取当前的
@@ -435,7 +446,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
         }
         Map<String, Object> tagListByArticleId = blogArticleTagService.getTagListByArticleId(article_id);
         List<Integer> tagIdList = (List<Integer>) tagListByArticleId.get("tagIdList");
-        ArrayList<Integer> articleIdList = new ArrayList<>();
+        List<Integer> articleIdList = new ArrayList<>();
         for (Integer tag_id : tagIdList){
             List<Integer> listByTagId = blogArticleTagService.getArticleIdListByTagId(tag_id);
             if (listByTagId != null) {
@@ -465,7 +476,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
     }
 
     @Override
-    public PageInfoResult<BlogArticle>  blogTimelineGetArticleList(Integer current, Integer size) {
+    public PageInfoResult<BlogArticle> blogTimelineGetArticleList(Integer current, Integer size) {
         // 分页参数处理
         int offset = (current - 1) * size;
         int limit = size;
@@ -486,6 +497,13 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
 
         Map<String, List<BlogArticle>> resultList = new HashMap<>();
         for (BlogArticle v : rows){
+            //添加七牛云下载图片凭证
+            try {
+                String url = qiniu.downloadUrl(v.getArticle_cover());
+                v.setArticle_cover(url);
+            } catch (QiniuException e) {
+                throw new RuntimeException(e);
+            }
             Date createdAt = v.getCreatedAt();
             String year = "year_" + StringManipulation.getYearFromDate(createdAt);
             //如果resultList中已经有了year这个键，它将直接将v添加到对应的列表中；

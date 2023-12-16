@@ -90,6 +90,15 @@ public interface BlogArticleService extends IService<BlogArticle> {
     Boolean revertArticle(Integer id);
 
     /**
+     * 修改文章置顶信息
+     *
+     * @param id
+     * @param is_top
+     * @return
+     */
+    Boolean updateTop(Integer id,Integer is_top);
+
+    /**
      * 删除文章
      *
      * @param id
