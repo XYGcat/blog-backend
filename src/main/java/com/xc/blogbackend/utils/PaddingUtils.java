@@ -13,6 +13,8 @@ public class PaddingUtils {
         BlogArticle blogArticle = new BlogArticle();
         UpdateArticleRequest.ArticleDate articleDate = updateArticleRequest.getArticle();
 
+        String mdImgList = String.valueOf(articleDate.getMdImgList());
+
         blogArticle.setId(articleDate.getId());
         blogArticle.setArticle_title(articleDate.getArticle_title());
         blogArticle.setAuthor_id(articleDate.getAuthor_id());
@@ -30,6 +32,7 @@ public class PaddingUtils {
         blogArticle.setThumbs_up_times(articleDate.getThumbs_up_times());
         blogArticle.setReading_duration(articleDate.getReading_duration());
         blogArticle.setArticle_order(articleDate.getArticle_order());
+        blogArticle.setMdImgList(mdImgList);
 
         // 其他属性的设置
 

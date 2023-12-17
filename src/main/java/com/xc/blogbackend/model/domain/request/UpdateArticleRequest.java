@@ -46,6 +46,7 @@ public class UpdateArticleRequest implements Serializable {
         private Integer thumbs_up_times;
         private Double reading_duration;
         private Integer article_order;
+        private List<String> mdImgList; //文章内容中的图片链接
 
     }
 }

@@ -10,6 +10,7 @@
             <result property="author_id" column="author_id" jdbcType="INTEGER"/>
             <result property="category_id" column="category_id" jdbcType="INTEGER"/>
             <result property="article_content" column="article_content" jdbcType="VARCHAR"/>
+            <result property="mdImgList" column="mdImgList" jdbcType="VARCHAR"/>
             <result property="article_cover" column="article_cover" jdbcType="VARCHAR"/>
             <result property="is_top" column="is_top" jdbcType="INTEGER"/>
             <result property="status" column="status" jdbcType="INTEGER"/>
@@ -26,10 +27,10 @@
 
     <sql id="Base_Column_List">
         id,article_title,author_id,
-        category_id,article_content,article_cover,
-        is_top,status,type,
-        origin_url,createdAt,updatedAt,
-        view_times,article_description,thumbs_up_times,
-        reading_duration,article_order
+        category_id,article_content,mdImgList,
+        article_cover,is_top,status,
+        type,origin_url,createdAt,
+        updatedAt,view_times,article_description,
+        thumbs_up_times,reading_duration,article_order
     </sql>
 </mapper>

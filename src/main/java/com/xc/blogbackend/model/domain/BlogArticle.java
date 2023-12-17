@@ -66,6 +66,12 @@ public class BlogArticle implements Serializable {
     private String article_content;
 
     /**
+     * 文章内容中的图片链接
+     */
+    @TableField(value = "mdImgList")
+    private String mdImgList;
+
+    /**
      * 文章缩略图
      */
     @TableField(value = "article_cover")
@@ -155,22 +161,23 @@ public class BlogArticle implements Serializable {
         }
         BlogArticle other = (BlogArticle) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getArticle_title() == null ? other.getArticle_title() == null : this.getArticle_title().equals(other.getArticle_title()))
-            && (this.getAuthor_id() == null ? other.getAuthor_id() == null : this.getAuthor_id().equals(other.getAuthor_id()))
-            && (this.getCategory_id() == null ? other.getCategory_id() == null : this.getCategory_id().equals(other.getCategory_id()))
-            && (this.getArticle_content() == null ? other.getArticle_content() == null : this.getArticle_content().equals(other.getArticle_content()))
-            && (this.getArticle_cover() == null ? other.getArticle_cover() == null : this.getArticle_cover().equals(other.getArticle_cover()))
-            && (this.getIs_top() == null ? other.getIs_top() == null : this.getIs_top().equals(other.getIs_top()))
-            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
-            && (this.getType() == null ? other.getType() == null : this.getType().equals(other.getType()))
-            && (this.getOrigin_url() == null ? other.getOrigin_url() == null : this.getOrigin_url().equals(other.getOrigin_url()))
-            && (this.getCreatedAt() == null ? other.getCreatedAt() == null : this.getCreatedAt().equals(other.getCreatedAt()))
-            && (this.getUpdatedAt() == null ? other.getUpdatedAt() == null : this.getUpdatedAt().equals(other.getUpdatedAt()))
-            && (this.getView_times() == null ? other.getView_times() == null : this.getView_times().equals(other.getView_times()))
-            && (this.getArticle_description() == null ? other.getArticle_description() == null : this.getArticle_description().equals(other.getArticle_description()))
-            && (this.getThumbs_up_times() == null ? other.getThumbs_up_times() == null : this.getThumbs_up_times().equals(other.getThumbs_up_times()))
-            && (this.getReading_duration() == null ? other.getReading_duration() == null : this.getReading_duration().equals(other.getReading_duration()))
-            && (this.getArticle_order() == null ? other.getArticle_order() == null : this.getArticle_order().equals(other.getArticle_order()));
+                && (this.getArticle_title() == null ? other.getArticle_title() == null : this.getArticle_title().equals(other.getArticle_title()))
+                && (this.getAuthor_id() == null ? other.getAuthor_id() == null : this.getAuthor_id().equals(other.getAuthor_id()))
+                && (this.getCategory_id() == null ? other.getCategory_id() == null : this.getCategory_id().equals(other.getCategory_id()))
+                && (this.getArticle_content() == null ? other.getArticle_content() == null : this.getArticle_content().equals(other.getArticle_content()))
+                && (this.getMdImgList() == null ? other.getMdImgList() == null : this.getMdImgList().equals(other.getMdImgList()))
+                && (this.getArticle_cover() == null ? other.getArticle_cover() == null : this.getArticle_cover().equals(other.getArticle_cover()))
+                && (this.getIs_top() == null ? other.getIs_top() == null : this.getIs_top().equals(other.getIs_top()))
+                && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
+                && (this.getType() == null ? other.getType() == null : this.getType().equals(other.getType()))
+                && (this.getOrigin_url() == null ? other.getOrigin_url() == null : this.getOrigin_url().equals(other.getOrigin_url()))
+                && (this.getCreatedAt() == null ? other.getCreatedAt() == null : this.getCreatedAt().equals(other.getCreatedAt()))
+                && (this.getUpdatedAt() == null ? other.getUpdatedAt() == null : this.getUpdatedAt().equals(other.getUpdatedAt()))
+                && (this.getView_times() == null ? other.getView_times() == null : this.getView_times().equals(other.getView_times()))
+                && (this.getArticle_description() == null ? other.getArticle_description() == null : this.getArticle_description().equals(other.getArticle_description()))
+                && (this.getThumbs_up_times() == null ? other.getThumbs_up_times() == null : this.getThumbs_up_times().equals(other.getThumbs_up_times()))
+                && (this.getReading_duration() == null ? other.getReading_duration() == null : this.getReading_duration().equals(other.getReading_duration()))
+                && (this.getArticle_order() == null ? other.getArticle_order() == null : this.getArticle_order().equals(other.getArticle_order()));
     }
 
     @Override
@@ -182,6 +189,7 @@ public class BlogArticle implements Serializable {
         result = prime * result + ((getAuthor_id() == null) ? 0 : getAuthor_id().hashCode());
         result = prime * result + ((getCategory_id() == null) ? 0 : getCategory_id().hashCode());
         result = prime * result + ((getArticle_content() == null) ? 0 : getArticle_content().hashCode());
+        result = prime * result + ((getMdImgList() == null) ? 0 : getMdImgList().hashCode());
         result = prime * result + ((getArticle_cover() == null) ? 0 : getArticle_cover().hashCode());
         result = prime * result + ((getIs_top() == null) ? 0 : getIs_top().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
@@ -208,6 +216,7 @@ public class BlogArticle implements Serializable {
         sb.append(", author_id=").append(author_id);
         sb.append(", category_id=").append(category_id);
         sb.append(", article_content=").append(article_content);
+        sb.append(", mdImgList=").append(mdImgList);
         sb.append(", article_cover=").append(article_cover);
         sb.append(", is_top=").append(is_top);
         sb.append(", status=").append(status);
@@ -249,7 +258,8 @@ public class BlogArticle implements Serializable {
             Integer status,
             Integer type,
             String origin_url,
-            String article_description
+            String article_description,
+            String mdImgList
     ) {
         this.article_title = article_title;
         this.author_id = author_id;
@@ -261,5 +271,6 @@ public class BlogArticle implements Serializable {
         this.type = type;
         this.origin_url = origin_url;
         this.article_description = article_description;
+        this.mdImgList = mdImgList;
     }
 }

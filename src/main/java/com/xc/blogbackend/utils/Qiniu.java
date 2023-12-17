@@ -130,4 +130,32 @@ public class Qiniu {
 
         return finalUrl;
     }
+
+    /**
+     * 重命名文件
+     *
+     * @param oldKey
+     * @param newKey
+     * @return
+     */
+    public Boolean renameImgKey(String oldKey,String newKey){
+        String accessKey = qiniuConfig.getAccessKey();
+        String secretKey = qiniuConfig.getSecretKey();
+        String bucket = qiniuConfig.getBucketName();
+        Configuration cfg = new Configuration(Region.region0());
+        Auth auth = Auth.create(accessKey, secretKey);
+        BucketManager bucketManager = new BucketManager(auth, cfg);
+
+        try {
+            // 发起重命名操作
+            Response rename = bucketManager.rename(bucket, oldKey, newKey);
+            if (rename.statusCode == 200 ) {
+                return true;
+            }
+        } catch (QiniuException e) {
+            System.err.println("文件重命名失败：" + e.getMessage());
+            // 处理重命名失败的情况，例如输出错误信息或者进行其他处理
+        }
+        return false;
+    }
 }

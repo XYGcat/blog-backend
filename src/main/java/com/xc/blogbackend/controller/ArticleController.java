@@ -20,6 +20,7 @@ import com.xc.blogbackend.service.BlogArticleService;
 import com.xc.blogbackend.service.BlogArticleTagService;
 import com.xc.blogbackend.service.BlogCategoryService;
 import com.xc.blogbackend.service.BlogTagService;
+import com.xc.blogbackend.utils.ImageLinkComparator;
 import com.xc.blogbackend.utils.PaddingUtils;
 import com.xc.blogbackend.utils.Qiniu;
 import com.xc.blogbackend.utils.StringManipulation;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -137,14 +139,27 @@ public class ArticleController {
     @Transactional(rollbackFor = Exception.class)  //Spring 的事务管理，如果发生异常，会自动回滚事务
     public BaseResponse<Boolean> deleteArticle(@PathVariable Integer id,@PathVariable Integer status) throws QiniuException {
         if (status == 3) {
+            // 删除七牛云文章封面图片
             String oldCover = blogArticleService.getArticleCoverById(id);
             if (oldCover != null){
                 String subString = StringManipulation.subString(oldCover);
-                Boolean aBoolean = qiniu.deleteFile(subString);
+                qiniu.deleteFile(subString);
             }else {
                 throw new BusinessException(ErrorCode.PARAMS_ERROR);
             }
-
+            // 删除七牛云文章内容中的图片
+            String mdImg = blogArticleService.getMdImgList(id);
+            // 将字符串转换成字符串数组
+            String[] linksArray = mdImg.substring(1, mdImg.length() - 1).split(", "); // 去除首尾的方括号并按逗号和空格分割
+            List<String> mdImgList = Arrays.asList(linksArray);
+            // 截取图片链接的key
+            for (int i = 0; i < mdImgList.size(); i++) {
+                String v = mdImgList.get(i);
+                String subString = StringManipulation.subString(v); // 假设这个方法用于截取字符串的操作
+                mdImgList.set(i, subString); // 更新原始数组中的元素
+            }
+            // 删除七牛云图片
+            qiniu.deleteFile(mdImgList);
         }
         Boolean aBoolean = blogArticleService.deleteArticle(id, status);
         return ResultUtils.success(aBoolean,"删除文章成功");
@@ -162,17 +177,68 @@ public class ArticleController {
         UpdateArticleRequest.ArticleDate requestArticle = request.getArticle();
         List<BlogTag> tagList = requestArticle.getTagList();
         BlogCategory category = requestArticle.getCategory();
+
         BlogArticle articleRest = PaddingUtils.mapToBlogArticle(request);
         Integer article_id = articleRest.getId();
         String article_title = articleRest.getArticle_title();
+        //根据传入文章id获取数据库中old文章信息
+        BlogArticle oldArticle = blogArticleService.getArticle(article_id);
 
+        // 监测文章内容中图片链接的变化，以此更新数据库信息或删除七牛云图片
+        // 将字符串转换成字符串数组
+        String oldMdImg = oldArticle.getMdImgList();
+        String[] linksArray = oldMdImg.substring(1, oldMdImg.length() - 1).split(", "); // 去除首尾的方括号并按逗号和空格分割
+        List<String> oldMdImgList = Arrays.asList(linksArray);
+        List<String> newMdImgList = requestArticle.getMdImgList();
+        List<String> missingInOldList = ImageLinkComparator.findMissingElements(newMdImgList, oldMdImgList);
+        // 截取图片链接的key
+        for (int i = 0; i < missingInOldList.size(); i++) {
+            String v = missingInOldList.get(i);
+            String subString = StringManipulation.subString(v); // 假设这个方法用于截取字符串的操作
+            missingInOldList.set(i, subString); // 更新原始数组中的元素
+        }
+        // 删除七牛云图片
+        qiniu.deleteFile(missingInOldList);
+
+        // 判断文章标题是否改变，改变则更新七牛云和数据库图片链接
+        String oldArticle_title = oldArticle.getArticle_title();
+        if (!oldArticle_title.equals(article_title)){
+            // 更新数据库文章内容中图片链接
+            String newArticle_content = articleRest.getArticle_content();
+            String replaceContent = newArticle_content.replace("/article/" + oldArticle_title, "/article/" + article_title);
+            articleRest.setArticle_content(replaceContent);
+            // 更新数据库文章内容中图片列表链接
+            String mdImgList = articleRest.getMdImgList();
+            String replaceMdImgList = mdImgList.replace("/article/" + oldArticle_title, "/article/" + article_title);
+            articleRest.setMdImgList(replaceMdImgList);
+            // 更新七牛云中文章内容图片链接
+            List<String> commonElements = ImageLinkComparator.findCommonElements(newMdImgList, oldMdImgList);
+            for (int i = 0;i < commonElements.size();i++){
+                String newMdImg = commonElements.get(i).replace(oldArticle_title, article_title);
+                String newKey = StringManipulation.subString(newMdImg);
+                String oldKey = StringManipulation.subString(commonElements.get(i));
+                qiniu.renameImgKey(oldKey,newKey);
+            }
+
+            // 更新数据库和七牛云文章封面图片链接
+            String oldArticle_cover = oldArticle.getArticle_cover();
+            if (oldArticle_cover.equals(articleRest.getArticle_cover())) {
+                String newArticle_cover = oldArticle_cover.replace(oldArticle_title, article_title);
+                articleRest.setArticle_cover(newArticle_cover);
+                String newKey = StringManipulation.subString(newArticle_cover);
+                String oldKey = StringManipulation.subString(oldArticle_cover);
+                qiniu.renameImgKey(oldKey,newKey);
+            }
+        }
+
+        // 根据文章标题获取文章信息 校验是否可以新增或编辑文章
         Boolean byTitle = blogArticleService.getArticleInfoByTitle(article_id, article_title);
         if (byTitle){
             throw new BusinessException(ErrorCode.PARAMS_ERROR,"已存在相同的文章标题");
         }
 
         String oldCover = blogArticleService.getArticleCoverById(article_id);
-        // 服务器删除图片
+        // 服务器删除文章封面图片
         if (oldCover != null && !oldCover.equals(articleRest.getArticle_cover())) {
             String imgKey = StringManipulation.subString(oldCover);
             qiniu.deleteFile(imgKey);
@@ -213,6 +279,7 @@ public class ArticleController {
 
             List<BlogTag> tagList = finalArticle.getTagList();
             BlogCategory category = finalArticle.getCategory();
+            String mdImgList = String.valueOf(finalArticle.getMdImgList());
             BlogArticle articleRest = new BlogArticle();
             articleRest.setValues(finalArticle.getArticle_title(),
                                   finalArticle.getAuthor_id(),
@@ -223,7 +290,8 @@ public class ArticleController {
                                   finalArticle.getStatus(),
                                   finalArticle.getType(),
                                   finalArticle.getOrigin_url(),
-                                  finalArticle.getArticle_description());
+                                  finalArticle.getArticle_description(),
+                                  mdImgList);
             Integer id = category.getId();
             String category_name = category.getCategory_name();
 

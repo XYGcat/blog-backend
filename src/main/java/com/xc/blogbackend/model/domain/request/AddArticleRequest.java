@@ -35,6 +35,7 @@ public class AddArticleRequest implements Serializable {
         private String origin_url; // 原文链接，翻译或转载时填写
         private List<Map> coverList; // 封面列表
         private String article_description; // 文章描述
+        private List<String> mdImgList; //文章内容中的图片链接
     }
 
 }

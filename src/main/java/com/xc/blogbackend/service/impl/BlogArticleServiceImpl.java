@@ -252,6 +252,19 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
     }
 
     @Override
+    public String getMdImgList(Integer article_id) {
+        BlogArticle blogArticle = blogArticleMapper.selectById(article_id);
+        String mdImgList = blogArticle.getMdImgList();
+        return mdImgList;
+    }
+
+    @Override
+    public BlogArticle getArticle(Integer article_id) {
+        BlogArticle blogArticle = blogArticleMapper.selectById(article_id);
+        return blogArticle;
+    }
+
+    @Override
     public Boolean updateArticle(BlogArticle blogArticle) {
         int res = 0;
         try {

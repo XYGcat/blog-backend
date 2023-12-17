@@ -57,6 +57,22 @@ public interface BlogArticleService extends IService<BlogArticle> {
     BlogArticle getArticleById(Integer article_id);
 
     /**
+     * 根据文章id获取文章内容的图片链接
+     *
+     * @param article_id
+     * @return
+     */
+    String getMdImgList(Integer article_id);
+
+    /**
+     * 根据文章id获取文章信息
+     *
+     * @param article_id
+     * @return
+     */
+    BlogArticle getArticle(Integer article_id);
+
+    /**
      * 修改文章信息
      *
      * @param blogArticle
