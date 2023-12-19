@@ -28,10 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  *文章接口
@@ -149,17 +146,19 @@ public class ArticleController {
             }
             // 删除七牛云文章内容中的图片
             String mdImg = blogArticleService.getMdImgList(id);
-            // 将字符串转换成字符串数组
-            String[] linksArray = mdImg.substring(1, mdImg.length() - 1).split(", "); // 去除首尾的方括号并按逗号和空格分割
-            List<String> mdImgList = Arrays.asList(linksArray);
-            // 截取图片链接的key
-            for (int i = 0; i < mdImgList.size(); i++) {
-                String v = mdImgList.get(i);
-                String subString = StringManipulation.subString(v); // 假设这个方法用于截取字符串的操作
-                mdImgList.set(i, subString); // 更新原始数组中的元素
+            if (mdImg != null){
+                // 将字符串转换成字符串数组
+                String[] linksArray = mdImg.substring(1, mdImg.length() - 1).split(", "); // 去除首尾的方括号并按逗号和空格分割
+                List<String> mdImgList = Arrays.asList(linksArray);
+                // 截取图片链接的key
+                for (int i = 0; i < mdImgList.size(); i++) {
+                    String v = mdImgList.get(i);
+                    String subString = StringManipulation.subString(v); // 假设这个方法用于截取字符串的操作
+                    mdImgList.set(i, subString); // 更新原始数组中的元素
+                }
+                // 删除七牛云图片
+                qiniu.deleteFile(mdImgList);
             }
-            // 删除七牛云图片
-            qiniu.deleteFile(mdImgList);
         }
         Boolean aBoolean = blogArticleService.deleteArticle(id, status);
         return ResultUtils.success(aBoolean,"删除文章成功");
@@ -184,21 +183,32 @@ public class ArticleController {
         //根据传入文章id获取数据库中old文章信息
         BlogArticle oldArticle = blogArticleService.getArticle(article_id);
 
-        // 监测文章内容中图片链接的变化，以此更新数据库信息或删除七牛云图片
-        // 将字符串转换成字符串数组
+        // 监测文章内容中图片链接的变化，以此删除七牛云图片
+        List<String> oldMdImgList = new ArrayList<>();
+        List<String> newMdImgList = new ArrayList<>();
         String oldMdImg = oldArticle.getMdImgList();
-        String[] linksArray = oldMdImg.substring(1, oldMdImg.length() - 1).split(", "); // 去除首尾的方括号并按逗号和空格分割
-        List<String> oldMdImgList = Arrays.asList(linksArray);
-        List<String> newMdImgList = requestArticle.getMdImgList();
-        List<String> missingInOldList = ImageLinkComparator.findMissingElements(newMdImgList, oldMdImgList);
-        // 截取图片链接的key
-        for (int i = 0; i < missingInOldList.size(); i++) {
-            String v = missingInOldList.get(i);
-            String subString = StringManipulation.subString(v); // 假设这个方法用于截取字符串的操作
-            missingInOldList.set(i, subString); // 更新原始数组中的元素
+        if (oldMdImg != null) {
+            // 将字符串转换成字符串数组
+            String[] linksArray = oldMdImg.substring(1, oldMdImg.length() - 1).split(", "); // 去除首尾的方括号并按逗号和空格分割
+            oldMdImgList = Arrays.asList(linksArray);
+            newMdImgList = requestArticle.getMdImgList();
+            List<String> missingInOldList = ImageLinkComparator.findMissingElements(newMdImgList, oldMdImgList);
+            // 截取图片链接的key
+            for (int i = 0; i < missingInOldList.size(); i++) {
+                String v = missingInOldList.get(i);
+                String subString = StringManipulation.subString(v); // 这个方法用于截取字符串的操作
+                missingInOldList.set(i, subString); // 更新原始数组中的元素
+            }
+            // 删除七牛云图片
+            qiniu.deleteFile(missingInOldList);
         }
-        // 删除七牛云图片
-        qiniu.deleteFile(missingInOldList);
+
+        // 如果封面图片改变，删除旧的七牛云文章封面图片
+        String oldArticle_cover = oldArticle.getArticle_cover();
+        if (oldArticle_cover != null && !oldArticle_cover.equals(articleRest.getArticle_cover())) {
+            String imgKey = StringManipulation.subString(oldArticle_cover);
+            qiniu.deleteFile(imgKey);
+        }
 
         // 判断文章标题是否改变，改变则更新七牛云和数据库图片链接
         String oldArticle_title = oldArticle.getArticle_title();
@@ -209,20 +219,23 @@ public class ArticleController {
             articleRest.setArticle_content(replaceContent);
             // 更新数据库文章内容中图片列表链接
             String mdImgList = articleRest.getMdImgList();
-            String replaceMdImgList = mdImgList.replace("/article/" + oldArticle_title, "/article/" + article_title);
-            articleRest.setMdImgList(replaceMdImgList);
-            // 更新七牛云中文章内容图片链接
-            List<String> commonElements = ImageLinkComparator.findCommonElements(newMdImgList, oldMdImgList);
-            for (int i = 0;i < commonElements.size();i++){
-                String newMdImg = commonElements.get(i).replace(oldArticle_title, article_title);
-                String newKey = StringManipulation.subString(newMdImg);
-                String oldKey = StringManipulation.subString(commonElements.get(i));
-                qiniu.renameImgKey(oldKey,newKey);
+            if (mdImgList != null){
+                String replaceMdImgList = mdImgList.replace("/article/" + oldArticle_title, "/article/" + article_title);
+                articleRest.setMdImgList(replaceMdImgList);
             }
-
+            // 更新七牛云中文章内容图片链接
+            if (oldMdImg != null){
+                List<String> commonElements = ImageLinkComparator.findCommonElements(newMdImgList, oldMdImgList);
+                for (String commonElement : commonElements) {
+                    String newMdImg = commonElement.replace(oldArticle_title, article_title);
+                    String newKey = StringManipulation.subString(newMdImg);
+                    String oldKey = StringManipulation.subString(commonElement);
+                    qiniu.renameImgKey(oldKey, newKey);
+                }
+            }
             // 更新数据库和七牛云文章封面图片链接
-            String oldArticle_cover = oldArticle.getArticle_cover();
-            if (oldArticle_cover.equals(articleRest.getArticle_cover())) {
+            if (Objects.equals(oldArticle_cover, articleRest.getArticle_cover())) {
+                assert oldArticle_cover != null;
                 String newArticle_cover = oldArticle_cover.replace(oldArticle_title, article_title);
                 articleRest.setArticle_cover(newArticle_cover);
                 String newKey = StringManipulation.subString(newArticle_cover);
@@ -235,13 +248,6 @@ public class ArticleController {
         Boolean byTitle = blogArticleService.getArticleInfoByTitle(article_id, article_title);
         if (byTitle){
             throw new BusinessException(ErrorCode.PARAMS_ERROR,"已存在相同的文章标题");
-        }
-
-        String oldCover = blogArticleService.getArticleCoverById(article_id);
-        // 服务器删除文章封面图片
-        if (oldCover != null && !oldCover.equals(articleRest.getArticle_cover())) {
-            String imgKey = StringManipulation.subString(oldCover);
-            qiniu.deleteFile(imgKey);
         }
 
         //// TODO: 2023-11-27 修改逻辑，如果标签没变，不修改，如果标签改变，重新生成
@@ -332,8 +338,8 @@ public class ArticleController {
      * 前台
      * 分页获取文章 按照置顶和发布时间倒序排序
      *
-     * @param current
-     * @param size
+     * @param current 页码
+     * @param size  每页数据量
      * @return
      */
     @GetMapping("/blogHomeGetArticleList/{current}/{size}")

@@ -66,9 +66,6 @@ public class BlogTagServiceImpl extends ServiceImpl<BlogTagMapper, BlogTag>
 
     @Override
     public PageInfoResult<BlogTag> getTalkList(Integer current, Integer size, String tag_name) {
-        // 分页参数处理
-        int offset = (current - 1) * size;
-        int limit = size;
 
         // 构建查询条件
         QueryWrapper<BlogTag> queryWrapper = new QueryWrapper<>();
@@ -78,7 +75,7 @@ public class BlogTagServiceImpl extends ServiceImpl<BlogTagMapper, BlogTag>
         }
 
         // 创建Page对象，设置当前页和分页大小
-        Page<BlogTag> page = new Page<>(offset, limit);
+        Page<BlogTag> page = new Page<>(current,size);
         // 获取标签列表，使用page方法传入Page对象和QueryWrapper对象
         Page<BlogTag> tagPage = blogTagMapper.selectPage(page, queryWrapper);
         // 获取分页数据

@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * 配置 MyBatis-Plus 框架的拦截器，其中包括了分页查询的拦截器，并指定了 H2 数据库的分页支持
+ * 配置 MyBatis-Plus 框架的拦截器，其中包括了分页查询的拦截器，并指定了 mysql 数据库的分页支持
  *
  * @author 星尘
  */
@@ -18,7 +18,8 @@ public class MybatisPlusConfig {
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
-        interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.H2));
+        // 使用MySQL作为数据库时，配置PaginationInnerInterceptor，DbType需要设置为MYSQL
+        interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL));
         return interceptor;
     }
 }

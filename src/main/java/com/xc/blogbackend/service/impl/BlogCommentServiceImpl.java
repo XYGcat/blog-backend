@@ -64,10 +64,6 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
         Integer user_id = (Integer) request.get("user_id");
         String order = (String) request.get("order");
 
-        // 分页参数处理
-        int offset = (current - 1) * size;
-        int limit = size;
-
         QueryWrapper<BlogComment> queryWrapper = new QueryWrapper<>();
         if (type != null){
             queryWrapper.eq("type",type);
@@ -82,7 +78,7 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
         }else {
             queryWrapper.orderByDesc("thumbs_up");
         }
-        Page<BlogComment> page = new Page<>(offset,limit);
+        Page<BlogComment> page = new Page<>(current,size);
         Page<BlogComment> commentPage = blogCommentMapper.selectPage(page, queryWrapper);
         List<BlogComment> rows = commentPage.getRecords();
         long count = commentPage.getTotal();
@@ -166,10 +162,6 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
         Integer user_id = (Integer) request.get("user_id");
         Integer parent_id = (Integer) request.get("parent_id");
 
-        // 分页参数处理
-        int offset = (current - 1) * size;
-        int limit = size;
-
         QueryWrapper<BlogComment> queryWrapper = new QueryWrapper<>();
         if (type != null){
             queryWrapper.eq("type",type);
@@ -181,7 +173,7 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
             queryWrapper.eq("parent_id",parent_id);
         }
         queryWrapper.orderByAsc("createdAt");
-        Page<BlogComment> page = new Page<>(offset,limit);
+        Page<BlogComment> page = new Page<>(current,size);
         Page<BlogComment> commentPage = blogCommentMapper.selectPage(page, queryWrapper);
         List<BlogComment> rows = commentPage.getRecords();
         long count = commentPage.getTotal();
@@ -288,10 +280,6 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
         String from_name = (String) request.get("from_name");
         List<String> time = (List<String>) request.get("time");
 
-        // 分页参数处理
-        int offset = (current - 1) * size;
-        int limit = size;
-
         QueryWrapper<BlogComment> queryWrapper = new QueryWrapper<>();
         if (content != null && !content.isEmpty()){
             queryWrapper.like("content","%" + content + "%");
@@ -306,7 +294,7 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
             queryWrapper.between("createdAt", time.get(0), time.get(1));
         }
         queryWrapper.orderByDesc("createdAt");
-        Page<BlogComment> page = new Page<>(offset,limit);
+        Page<BlogComment> page = new Page<>(current,size);
         Page<BlogComment> commentPage = blogCommentMapper.selectPage(page, queryWrapper);
         List<BlogComment> rows = commentPage.getRecords();
         long count = commentPage.getTotal();

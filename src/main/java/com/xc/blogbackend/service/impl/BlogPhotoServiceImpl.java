@@ -42,9 +42,7 @@ public class BlogPhotoServiceImpl extends ServiceImpl<BlogPhotoMapper, BlogPhoto
 
     @Override
     public PageInfoResult<BlogPhoto> getPhotosByAlbumId(Integer current, Integer size, Integer id, Integer status) {
-        // 分页参数处理
-        int offset = (current - 1) * size;
-        int limit = size;
+
         //构建查询条件
         QueryWrapper<BlogPhoto> queryWrapper = new QueryWrapper<>();
         if (id != null) {
@@ -54,7 +52,7 @@ public class BlogPhotoServiceImpl extends ServiceImpl<BlogPhotoMapper, BlogPhoto
             queryWrapper.eq("status",status);
         }
         // 创建Page对象，设置当前页和分页大小
-        Page<BlogPhoto> page = new Page<>(offset, limit);
+        Page<BlogPhoto> page = new Page<>(current,size);
         // 获取说说列表，使用page方法传入Page对象和QueryWrapper对象
         Page<BlogPhoto> photoPage = blogPhotoMapper.selectPage(page, queryWrapper);
         // 获取分页数据

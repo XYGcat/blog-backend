@@ -53,9 +53,6 @@ public class BlogMessageServiceImpl extends ServiceImpl<BlogMessageMapper, BlogM
     @Override
     public PageInfoResult<BlogMessage> getMessageList
             (Integer current, Integer size, String message, List<String> time,String tag,Integer user_id) {
-        // 分页参数处理
-        int offset = (current - 1) * size;
-        int limit = size;
 
         QueryWrapper<BlogMessage> queryWrapper = new QueryWrapper<>();
         if (tag != null && !tag.isEmpty()) {
@@ -69,7 +66,7 @@ public class BlogMessageServiceImpl extends ServiceImpl<BlogMessageMapper, BlogM
         }
         queryWrapper.orderByDesc("createdAt");
         // 创建Page对象，设置当前页和分页大小
-        Page<BlogMessage> page = new Page<>(offset, limit);
+        Page<BlogMessage> page = new Page<>(current, size);
         // 获取说说列表，使用page方法传入Page对象和QueryWrapper对象
         Page<BlogMessage> messagePage = blogMessageMapper.selectPage(page, queryWrapper);
         // 获取分页数据

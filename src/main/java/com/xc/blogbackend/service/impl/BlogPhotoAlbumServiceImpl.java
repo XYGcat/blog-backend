@@ -38,16 +38,14 @@ public class BlogPhotoAlbumServiceImpl extends ServiceImpl<BlogPhotoAlbumMapper,
 
     @Override
     public PageInfoResult<BlogPhotoAlbum> getAlbumList(String album_name, Integer current, Integer size) {
-        // 分页参数处理
-        int offset = (current - 1) * size;
-        int limit = size;
+
         //构建查询条件
         QueryWrapper<BlogPhotoAlbum> queryWrapper = new QueryWrapper<>();
         if (album_name != null && !album_name.isEmpty()) {
             queryWrapper.like("album_name", "%" + album_name + "%");
         }
         // 创建Page对象，设置当前页和分页大小
-        Page<BlogPhotoAlbum> page = new Page<>(offset, limit);
+        Page<BlogPhotoAlbum> page = new Page<>(current,size);
         // 获取说说列表，使用page方法传入Page对象和QueryWrapper对象
         Page<BlogPhotoAlbum> photoAlbumPage = blogPhotoAlbumMapper.selectPage(page, queryWrapper);
         // 获取分页数据

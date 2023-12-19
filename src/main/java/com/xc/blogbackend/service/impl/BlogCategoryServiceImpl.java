@@ -73,9 +73,6 @@ public class BlogCategoryServiceImpl extends ServiceImpl<BlogCategoryMapper, Blo
 
     @Override
     public PageInfoResult<BlogCategory> getCategoryList(String category_name, Integer current, Integer size) {
-        // 分页参数处理
-        int offset = (current - 1) * size;
-        int limit = size;
 
         // 构建查询条件
         QueryWrapper<BlogCategory> queryWrapper = new QueryWrapper<>();
@@ -85,7 +82,7 @@ public class BlogCategoryServiceImpl extends ServiceImpl<BlogCategoryMapper, Blo
         }
 
         // 创建Page对象，设置当前页和分页大小
-        Page<BlogCategory> page = new Page<>(offset, limit);
+        Page<BlogCategory> page = new Page<>(current, size);
         // 获取分类列表，使用page方法传入Page对象和QueryWrapper对象
         Page<BlogCategory> categoryPage = blogCategoryMapper.selectPage(page, queryWrapper);
         // 获取分页数据

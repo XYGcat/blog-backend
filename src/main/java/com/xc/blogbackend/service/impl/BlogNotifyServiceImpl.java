@@ -29,9 +29,6 @@ public class BlogNotifyServiceImpl extends ServiceImpl<BlogNotifyMapper, BlogNot
 
     @Override
     public PageInfoResult<BlogNotify> getNotifyList(Integer current, Integer size, Integer user_id) {
-        // 分页参数处理
-        int offset = (current - 1) * size;
-        int limit = size;
 
         QueryWrapper<BlogNotify> queryWrapper = new QueryWrapper<>();    // 构建查询条件
         if (user_id != null) {
@@ -41,7 +38,7 @@ public class BlogNotifyServiceImpl extends ServiceImpl<BlogNotifyMapper, BlogNot
         queryWrapper.orderByAsc("isView")
                     .orderByDesc("createdAt");
         // 创建Page对象，设置当前页和分页大小
-        Page<BlogNotify> page = new Page<>(offset, limit);
+        Page<BlogNotify> page = new Page<>(current,size);
         // 获取通知列表，使用page方法传入Page对象和QueryWrapper对象
         Page<BlogNotify> notifyPage = blogNotifyMapper.selectPage(page, queryWrapper);
         // 获取分页数据

@@ -75,10 +75,6 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
         Integer tag_id = articleRequest.getTag_id();
         Integer category_id = articleRequest.getCategory_id();
 
-        // 分页参数处理
-        int offset = (current - 1) * size;
-        int limit = size;
-
         // 构建查询条件
         QueryWrapper<BlogArticle> queryWrapper = new QueryWrapper<>();
         // 如果文章标题不为空，使用like模糊查询
@@ -119,7 +115,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
         queryWrapper.orderByDesc("createdAt");
 
         // 创建Page对象，设置当前页和分页大小
-        Page<BlogArticle> page = new Page<>(offset, limit);
+        Page<BlogArticle> page = new Page<>(current, size);
         // 获取文章列表，使用page方法传入Page对象和QueryWrapper对象
         Page<BlogArticle> articlePage = blogArticleMapper.selectPage(page, queryWrapper);
         // 获取分页数据
@@ -341,9 +337,6 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
 
     @Override
     public PageInfoResult<BlogArticle> blogHomeGetArticleList(Integer current, Integer size) {
-        // 分页参数处理
-        int offset = (current - 1) * size;
-        int limit = size;
 
         // 构建查询条件
         QueryWrapper<BlogArticle> queryWrapper = new QueryWrapper<>();
@@ -355,13 +348,9 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
         // 设置属性过滤，排除 articleContent 和 originUrl 属性
         queryWrapper.select(BlogArticle.class, info -> !info.getColumn().equals("article_content")
                 && !info.getColumn().equals("origin_url"));
-//        // 排除文章内容和原始链接属性，使用select方法传入属性名的数组
-//        queryWrapper.select("id","article_title","author_id","category_id","article_cover",
-//                "is_top","status","type","createdAt", "updatedAt","view_times","article_description",
-//                "thumbs_up_times","reading_duration","article_order");
 
         // 创建Page对象，设置当前页和分页大小
-        Page<BlogArticle> page = new Page<>(offset, limit);
+        Page<BlogArticle> page = new Page<>(current, size);
         // 获取文章列表，使用page方法传入Page对象和QueryWrapper对象
         Page<BlogArticle> articlePage = blogArticleMapper.selectPage(page, queryWrapper);
         // 获取分页数据
@@ -490,9 +479,6 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
 
     @Override
     public PageInfoResult<BlogArticle> blogTimelineGetArticleList(Integer current, Integer size) {
-        // 分页参数处理
-        int offset = (current - 1) * size;
-        int limit = size;
 
         QueryWrapper<BlogArticle> queryWrapper = new QueryWrapper<>();    // 构建查询条件
         queryWrapper.eq("status", 1);
@@ -500,7 +486,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
         //按照 createdAt 降序排列
         queryWrapper.orderByDesc("createdAt");
         // 创建Page对象，设置当前页和分页大小
-        Page<BlogArticle> page = new Page<>(offset, limit);
+        Page<BlogArticle> page = new Page<>(current, size);
         // 获取通知列表，使用page方法传入Page对象和QueryWrapper对象
         Page<BlogArticle> articlePage = blogArticleMapper.selectPage(page, queryWrapper);
         // 获取分页数据
@@ -545,9 +531,6 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
 
     @Override
     public PageInfoResult<BlogArticle> getArticleListByCategoryId(Integer current, Integer size, Integer category_id) {
-        // 分页参数处理
-        int offset = (current - 1) * size;
-        int limit = size;
 
         QueryWrapper<BlogArticle> queryWrapper = new QueryWrapper<>();    // 构建查询条件
         queryWrapper.eq("status", 1);
@@ -555,7 +538,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
         queryWrapper.select("id","article_title","article_cover","createdAt");
         queryWrapper.orderByDesc("createdAt");
         // 创建Page对象，设置当前页和分页大小
-        Page<BlogArticle> page = new Page<>(offset, limit);
+        Page<BlogArticle> page = new Page<>(current, size);
         // 获取通知列表，使用page方法传入Page对象和QueryWrapper对象
         Page<BlogArticle> articlePage = blogArticleMapper.selectPage(page, queryWrapper);
         // 获取分页数据
@@ -583,9 +566,6 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
     @Override
     public PageInfoResult<BlogArticle> getArticleListByTagId(Integer current, Integer size, Integer tag_id) {
         List<Integer> tagIdList = blogArticleTagService.getArticleIdListByTagId(tag_id);
-        // 分页参数处理
-        int offset = (current - 1) * size;
-        int limit = size;
 
         QueryWrapper<BlogArticle> queryWrapper = new QueryWrapper<>();    // 构建查询条件
         queryWrapper.eq("status", 1);
@@ -593,7 +573,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
         queryWrapper.select("id","article_title","article_cover","createdAt");
         queryWrapper.orderByDesc("createdAt");
         // 创建Page对象，设置当前页和分页大小
-        Page<BlogArticle> page = new Page<>(offset, limit);
+        Page<BlogArticle> page = new Page<>(current, size);
         // 获取通知列表，使用page方法传入Page对象和QueryWrapper对象
         Page<BlogArticle> articlePage = blogArticleMapper.selectPage(page, queryWrapper);
         // 获取分页数据

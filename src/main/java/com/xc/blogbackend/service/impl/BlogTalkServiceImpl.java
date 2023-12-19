@@ -57,9 +57,6 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
     @Override
     //异步方法实现
     public PageInfoResult<BlogTalk> getTalkList(Integer current, Integer size, Integer status) {
-        // 分页参数处理
-        int offset = (current - 1) * size;
-        int limit = size;
 
         QueryWrapper<BlogTalk> queryWrapper = new QueryWrapper<>();    // 构建查询条件
         // 如果说说状态不为空，使用eq精确查询
@@ -69,7 +66,7 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
         //按照 is_top 升序和 createdAt 降序排列
         queryWrapper.orderByAsc("is_top").orderByDesc("createdAt");
         // 创建Page对象，设置当前页和分页大小
-        Page<BlogTalk> page = new Page<>(offset, limit);
+        Page<BlogTalk> page = new Page<>(current,size);
         // 获取说说列表，使用page方法传入Page对象和QueryWrapper对象
         Page<BlogTalk> articlePage = blogTalkMapper.selectPage(page, queryWrapper);
         // 获取分页数据
@@ -131,10 +128,6 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
 
       //同步实现方法
 //    public PageInfoResult<BlogTalk> getTalkList(Integer current, Integer size, Integer status) {
-//        // 分页参数处理
-//        int offset = (current - 1) * size;
-//        int limit = size;
-//
 //        queryWrapper.clear();
 //        // 如果说说状态不为空，使用eq精确查询
 //        if (status != null) {
@@ -143,7 +136,7 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
 //        //按照 is_top 升序和 createdAt 降序排列
 //        queryWrapper.orderByAsc("is_top").orderByDesc("createdAt");
 //        // 创建Page对象，设置当前页和分页大小
-//        Page<BlogTalk> page = new Page<>(offset, limit);
+//        Page<BlogTalk> page = new Page<>(current,size);
 //        // 获取说说列表，使用page方法传入Page对象和QueryWrapper对象
 //        Page<BlogTalk> articlePage = blogTalkMapper.selectPage(page, queryWrapper);
 //        // 获取分页数据
@@ -350,9 +343,6 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
 
     @Override
     public PageInfoResult<BlogTalk> blogGetTalkList(Integer current, Integer size, Integer user_id) {
-        // 分页参数处理
-        int offset = (current - 1) * size;
-        int limit = size;
 
         QueryWrapper<BlogTalk> queryWrapper = new QueryWrapper<>();    // 构建查询条件
         queryWrapper.eq("status", 1);
@@ -360,7 +350,7 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
         queryWrapper.orderByAsc("is_top")
                     .orderByDesc("createdAt");
         // 创建Page对象，设置当前页和分页大小
-        Page<BlogTalk> page = new Page<>(offset, limit);
+        Page<BlogTalk> page = new Page<>(current,size);
         // 获取说说列表，使用page方法传入Page对象和QueryWrapper对象
         Page<BlogTalk> articlePage = blogTalkMapper.selectPage(page, queryWrapper);
         // 获取分页数据

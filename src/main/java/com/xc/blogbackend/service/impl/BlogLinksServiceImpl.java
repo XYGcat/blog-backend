@@ -42,10 +42,6 @@ public class BlogLinksServiceImpl extends ServiceImpl<BlogLinksMapper, BlogLinks
         Integer status = pageRequest.getStatus();
         List<String> time = pageRequest.getTime();
 
-        // 分页参数处理
-        int offset = (current - 1) * size;
-        int limit = size;
-
         QueryWrapper<BlogLinks> queryWrapper = new QueryWrapper<>();
         if (site_name != null && !site_name.isEmpty()) {
             queryWrapper.like("site_name", "%" + site_name + "%");
@@ -58,7 +54,7 @@ public class BlogLinksServiceImpl extends ServiceImpl<BlogLinksMapper, BlogLinks
         }
         queryWrapper.orderByAsc("createdAt");
         // 创建Page对象，设置当前页和分页大小
-        Page<BlogLinks> page = new Page<>(offset, limit);
+        Page<BlogLinks> page = new Page<>(current,size);
         // 获取说说列表，使用page方法传入Page对象和QueryWrapper对象
         Page<BlogLinks> messagePage = blogLinksMapper.selectPage(page, queryWrapper);
         // 获取分页数据
