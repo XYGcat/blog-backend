@@ -4,7 +4,7 @@
  Source Server         : 云服务器
  Source Server Type    : MySQL
  Source Server Version : 50743 (5.7.43-log)
- Source Host           : 47.96.141.111:3306
+ Source Host           : www.xcwwq.xyz:3306
  Source Schema         : blog
 
  Target Server Type    : MySQL
