@@ -59,6 +59,7 @@
             <version>2.3.1</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
@@ -92,17 +93,13 @@
             <artifactId>qiniu-java-sdk</artifactId>
             <version>7.14.0</version>
         </dependency>
-        <!-- ip2region IP解析 -->
+        <!-- Hutool 是一个 Java 工具库 -->
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
             <version>5.4.2</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.projectlombok</groupId>-->
-<!--            <artifactId>lombok</artifactId>-->
-<!--            <scope>provided</scope>-->
-<!--        </dependency>-->
+        <!-- ip2region IP解析 -->
         <dependency>
             <groupId>org.lionsoul</groupId>
             <artifactId>ip2region</artifactId>

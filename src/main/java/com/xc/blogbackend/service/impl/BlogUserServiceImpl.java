@@ -85,6 +85,7 @@ public class BlogUserServiceImpl extends ServiceImpl<BlogUserMapper, BlogUser>
         BlogUser safetyUser = getSafetyUser(user);
         //4.记录用户的登录态
         request.getSession().setAttribute(USER_LOGIN_STATE,safetyUser);
+
         return safetyUser;
     }
 
@@ -124,14 +125,12 @@ public class BlogUserServiceImpl extends ServiceImpl<BlogUserMapper, BlogUser>
         String encryptPassword = DigestUtils.md5DigestAsHex((BlogUserConstant.SALT + password).getBytes());
         //3.插入数据
         BlogUser blogUser = new BlogUser();
-        Integer id = blogUser.getId();
         blogUser.setUsername(username);
         blogUser.setPassword(encryptPassword);
         blogUser.setAvatar("https://pic.imgdb.cn/item/65114060c458853aef1f9fa4.jpg");
         blogUser.setNick_name(RandomUsernameGenerator.generateRandomUsername());
         blogUser.setIp(ip);
         boolean saveResult = this.save(blogUser);
-        Integer id1 = blogUser.getId();
         if(!saveResult){
             throw new BusinessException(ErrorCode.PARAMS_ERROR,"为空");
         }

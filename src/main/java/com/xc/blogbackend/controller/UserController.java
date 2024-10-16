@@ -16,11 +16,9 @@ import com.xc.blogbackend.utils.Qiniu;
 import com.xc.blogbackend.utils.StringManipulation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
-
 import static com.xc.blogbackend.contant.BlogUserConstant.ADMIN_PASSWORD;
 import static com.xc.blogbackend.contant.BlogUserConstant.USER_LOGIN_STATE;
 
@@ -160,6 +158,12 @@ public class UserController {
         return ResultUtils.success(userList,"分页获取用户列表成功");
     }
 
+    /**
+     * 更新用户信息
+     *
+     * @param request
+     * @return
+     */
     @PutMapping("/updateOwnUserInfo")
     public BaseResponse<Boolean> updateOwnUserInfo(@RequestBody Map<String,Object> request){
         Integer id = (Integer) request.get("id");

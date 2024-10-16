@@ -126,36 +126,36 @@ public interface BlogArticleService extends IService<BlogArticle> {
     /**
      *博客前台获取文章列表
      *
-     * @param current
-     * @param size
-     * @return
+     * @param current 当前页
+     * @param size 每页显示条数
+     * @return 首页文章列表
      */
     PageInfoResult<BlogArticle> blogHomeGetArticleList(Integer current,Integer size);
 
     /**
      * 根据文章id获取推荐文章
      *
-     * @param article_id
-     * @return
+     * @param article_id 文章ID
+     * @return  推荐文章列表
      */
     RecommendResult getRecommendArticleById(Integer article_id);
 
     /**
      * 时间轴
      *
-     * @param current
-     * @param size
-     * @return
+     * @param current 当前页
+     * @param size 每页显示条数
+     * @return 时间轴文章列表
      */
     PageInfoResult<BlogArticle> blogTimelineGetArticleList(Integer current, Integer size);
 
     /**
      * 通过分类id获取文章列表
      *
-     * @param current
-     * @param size
-     * @param category_id
-     * @return
+     * @param current 当前页
+     * @param size 每页显示条数
+     * @param category_id 分类id
+     * @return 文章列表
      */
     PageInfoResult<BlogArticle> getArticleListByCategoryId(Integer current,Integer size,Integer category_id);
 
