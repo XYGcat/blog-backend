@@ -24,6 +24,7 @@ import com.xc.blogbackend.utils.ImageLinkComparator;
 import com.xc.blogbackend.utils.PaddingUtils;
 import com.xc.blogbackend.utils.Qiniu;
 import com.xc.blogbackend.utils.StringManipulation;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
@@ -59,6 +60,7 @@ public class ArticleController {
      * @param id
      * @return
      */
+    @ApiOperation(value = "根据id获取文章信息")
     @GetMapping("/getArticleById/{id}")
     public BaseResponse<BlogArticle> getArticleById(@PathVariable Integer id){
         BlogArticle articleById = blogArticleService.getArticleById(id);
@@ -70,6 +72,7 @@ public class ArticleController {
      *
      * @return
      */
+    @ApiOperation(value = "根据条件分页获取文章")
     @PostMapping("/getArticleList")
     public BaseResponse<PageInfoResult<BlogArticle>> getArticleList(@RequestBody ArticleRequest articleRequest){
         PageInfoResult<BlogArticle> articleList = blogArticleService.getArticleList(articleRequest);
@@ -83,6 +86,7 @@ public class ArticleController {
      * @param titleExistRequest
      * @return
      */
+    @ApiOperation(value = "根据标题获取文章是否已经存在")
     @PostMapping("/titleExist")
     public BaseResponse<Boolean> getArticleInfoByTitle(@RequestBody TitleExistRequest titleExistRequest){
         Integer id = titleExistRequest.getId();
@@ -98,6 +102,7 @@ public class ArticleController {
      * @param status
      * @return
      */
+    @ApiOperation(value = "公开或隐藏文章")
     @PutMapping("/isPublic/{id}/{status}")
     public BaseResponse<Boolean> toggleArticlePublic(@PathVariable Integer id,@PathVariable Integer status){
         String message;
@@ -117,6 +122,7 @@ public class ArticleController {
      * @param id
      * @return
      */
+    @ApiOperation(value = "恢复文章")
     @PutMapping("/revert/{id}")
     public BaseResponse<Boolean> revertArticle(@PathVariable Integer id){
         Boolean aBoolean = blogArticleService.revertArticle(id);
@@ -131,6 +137,7 @@ public class ArticleController {
      * @param status
      * @return
      */
+    @ApiOperation(value = "根据id删除文章")
     @DeleteMapping("/delete/{id}/{status}")
     @Transactional(rollbackFor = Exception.class)  //Spring 的事务管理，如果发生异常，会自动回滚事务
     public BaseResponse<Boolean> deleteArticle(@PathVariable Integer id,@PathVariable Integer status) throws QiniuException {
@@ -169,6 +176,7 @@ public class ArticleController {
      * @param request
      * @return
      */
+    @ApiOperation(value = "编辑更新文章")
     @PutMapping("/update")
     @Transactional(rollbackFor = Exception.class)  //Spring 的事务管理，如果发生异常，会自动回滚事务
     public BaseResponse<Boolean> updateArticle(@RequestBody UpdateArticleRequest request){
@@ -269,6 +277,7 @@ public class ArticleController {
      * @param addArticleRequest
      * @return
      */
+    @ApiOperation(value = "新增文章")
     @PostMapping("/add")
     @Transactional(rollbackFor = Exception.class)  //Spring 的事务管理，如果发生异常，会自动回滚事务
     public BaseResponse<List<BlogArticleTag>> createArticle(@RequestBody AddArticleRequest addArticleRequest){
@@ -326,6 +335,7 @@ public class ArticleController {
      * @param is_top
      * @return
      */
+    @ApiOperation(value = "修改文章置顶状态")
     @PutMapping("/updateTop/{id}/{is_top}")
     public BaseResponse<Boolean> updateTop(@PathVariable Integer id,@PathVariable Integer is_top){
         Boolean aBoolean = blogArticleService.updateTop(id, is_top);
@@ -341,6 +351,7 @@ public class ArticleController {
      * @param size  每页数据量
      * @return
      */
+    @ApiOperation(value = "前台 分页获取文章列表")
     @GetMapping("/blogHomeGetArticleList/{current}/{size}")
     public BaseResponse<PageInfoResult<BlogArticle>> blogHomeGetArticleList(@PathVariable Integer current,
                                                                             @PathVariable  Integer size){
@@ -355,6 +366,7 @@ public class ArticleController {
      * @param id
      * @return
      */
+    @ApiOperation(value = "根据文章获取上下一篇文章 和推荐文章")
     @GetMapping("/getRecommendArticleById/{id}")
     public BaseResponse<RecommendResult> getRecommendArticleById(@PathVariable Integer id){
         if(id == null){
@@ -371,6 +383,7 @@ public class ArticleController {
      * @param size
      * @return
      */
+    @ApiOperation(value = "分页获取时间轴信息")
     @GetMapping("/blogTimelineGetArticleList/{current}/{size}")
     public BaseResponse<PageInfoResult<BlogArticle>> blogTimelineGetArticleList(@PathVariable Integer current, @PathVariable Integer size){
         PageInfoResult<BlogArticle> result = blogArticleService.blogTimelineGetArticleList(current, size);
@@ -385,6 +398,7 @@ public class ArticleController {
      * @param request
      * @return
      */
+    @ApiOperation(value = "前台 分页获取该分类下文章的简略信息")
     @PostMapping("/getArticleListByCategoryId")
     public BaseResponse<PageInfoResult<BlogArticle>> getArticleListByCategoryId(@RequestBody Map<String,Integer> request){
         Integer id = request.get("id");
@@ -405,6 +419,7 @@ public class ArticleController {
      * @param request
      * @return
      */
+    @ApiOperation(value = "前台 分页获取该标签下文章的简略信息")
     @PostMapping("/getArticleListByTagId")
     public BaseResponse<PageInfoResult<BlogArticle>> getArticleListByTagId(@RequestBody Map<String,Integer> request){
         Integer id = request.get("id");
@@ -425,6 +440,7 @@ public class ArticleController {
      *
      * @return
      */
+    @ApiOperation(value = "前台 获取热门文章")
     @GetMapping("/getHotArticle")
     public BaseResponse<List<BlogArticle>> getHotArticle(){
         List<BlogArticle> hotArticle = blogArticleService.getHotArticle();
@@ -438,6 +454,7 @@ public class ArticleController {
      * @param content
      * @return
      */
+    @ApiOperation(value = "前台 全局搜索文章")
     @GetMapping("/getArticleListByContent/{content}")
     public BaseResponse<List<ArticleListByContent>> getArticleListByContent(@PathVariable String content){
         List<ArticleListByContent> articleListByContent = blogArticleService.getArticleListByContent(content);
@@ -450,6 +467,7 @@ public class ArticleController {
      * @param id
      * @return
      */
+    @ApiOperation(value = "文章点赞")
     @PutMapping("/like/{id}")
     public BaseResponse<Boolean> articleLike(@PathVariable Integer id){
         Boolean aBoolean = blogArticleService.articleLike(id);
@@ -462,6 +480,7 @@ public class ArticleController {
      * @param id
      * @return
      */
+    @ApiOperation(value = "取消文章点赞")
     @PutMapping("/cancelLike/{id}")
     public BaseResponse<Boolean> cancelArticleLike(@PathVariable Integer id){
         Boolean aBoolean = blogArticleService.cancelArticleLike(id);
@@ -475,6 +494,7 @@ public class ArticleController {
      * @param duration
      * @return
      */
+    @ApiOperation(value = "增加文章阅读时长")
     @PutMapping("/addReadingDuration/{id}/{duration}")
     public BaseResponse<Boolean> addReadingDuration(@PathVariable Integer id,@PathVariable Integer duration){
         Boolean aBoolean = blogArticleService.addReadingDuration(id, duration);

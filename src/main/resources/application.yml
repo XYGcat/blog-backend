@@ -38,3 +38,21 @@ qiniu:
   UPLOADTYPE: 'qiniu'
   #服务器地址 用于拼接图片显示 可以使用七牛云测试域名 前面请带上http://或者https://根据实际情况带上
   BASEURL: img.xcwwq.xyz
+
+# 接口文档配置
+knife4j:
+  enable: true
+  openapi:
+    title: 博客后台接口文档
+    description: XC的博客后台接口文档
+    version: 1.0
+    group:
+      default:
+        group-name: 博客后台
+        api-rule: package
+        api-rule-resources:
+          - com.xc.blogbackend.controller
+
+logging:
+  level:
+    org.springframework.web: debug
