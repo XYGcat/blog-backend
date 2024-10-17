@@ -6,13 +6,13 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 /**
+ * 文章表
  * 
  * @TableName blog_article
  */
@@ -36,7 +36,7 @@ public class BlogArticle implements Serializable {
     private List<String> tagNameList;   // 标签名列表
 
     /**
-     * 
+     *  文章id 不能为空
      */
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
@@ -102,14 +102,14 @@ public class BlogArticle implements Serializable {
     private String origin_url;
 
     /**
-     * 
+     * 创建时间
      */
     @TableField(value = "createdAt")
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createdAt;
 
     /**
-     * 
+     * 更新时间
      */
     @TableField(value = "updatedAt")
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")

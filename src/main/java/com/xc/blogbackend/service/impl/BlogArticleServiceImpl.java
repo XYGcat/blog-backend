@@ -1,5 +1,6 @@
 package com.xc.blogbackend.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -277,65 +278,70 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
 
         // 获取数据库中的旧文章信息
         BlogArticle oldArticle = this.getArticle(articleId);
+        String oldArticleTitle = oldArticle.getArticle_title();
+        String oldArticleCover = oldArticle.getArticle_cover();
 
         // 监测文章内容中图片链接的变化，以此删除七牛云图片
         List<String> oldMdImgList = new ArrayList<>();
         List<String> newMdImgList = requestArticle.getMdImgList();
         String oldMdImg = oldArticle.getMdImgList();
 
-        if (oldMdImg != null) {
+        // 判断旧文章图片链接是否为空
+        boolean isOldMdImgEmpty = ObjectUtil.isNotEmpty(oldMdImg);
+
+        if (isOldMdImgEmpty) {
             // 去除首尾的方括号并按逗号和空格分割
             String[] linksArray = oldMdImg.substring(1, oldMdImg.length() - 1).split(", ");
             oldMdImgList = Arrays.asList(linksArray);
-
+            // 找出在旧列表中但不在新列表中的元素
             List<String> missingInOldList = ImageLinkComparator.findMissingElements(newMdImgList, oldMdImgList);
             // 截取图片链接的key
             for (int i = 0; i < missingInOldList.size(); i++) {
-                String v = missingInOldList.get(i);
-                String subString = StringManipulation.subString(v); // 这个方法用于截取字符串的操作
-                missingInOldList.set(i, subString); // 更新原始数组中的元素
+                // 截取字符串
+                String subString = StringManipulation.subString(missingInOldList.get(i));
+                // 更新原始数组中的元素
+                missingInOldList.set(i, subString);
             }
             // 删除七牛云图片
             qiniu.deleteFile(missingInOldList);
         }
 
         // 如果封面图片改变，删除旧的七牛云文章封面图片
-        String oldArticle_cover = oldArticle.getArticle_cover();
-        if (oldArticle_cover != null && !oldArticle_cover.equals(articleRest.getArticle_cover())) {
-            String imgKey = StringManipulation.subString(oldArticle_cover);
+        if (oldArticleCover != null && !oldArticleCover.equals(articleRest.getArticle_cover())) {
+            String imgKey = StringManipulation.subString(oldArticleCover);
             qiniu.deleteFile(imgKey);
         }
 
         // 判断文章标题是否改变，改变则更新七牛云和数据库图片链接
-        String oldArticle_title = oldArticle.getArticle_title();
-        if (!oldArticle_title.equals(articleTitle)){
+        if (!oldArticleTitle.equals(articleTitle)){
             // 更新数据库文章内容中图片链接
             String newArticle_content = articleRest.getArticle_content();
-            String replaceContent = newArticle_content.replace("/article/" + oldArticle_title, "/article/" + articleTitle);
+            String replaceContent = newArticle_content.replace("/article/" + oldArticleTitle, "/article/" + articleTitle);
             articleRest.setArticle_content(replaceContent);
             // 更新数据库文章内容中图片列表链接
             String mdImgList = articleRest.getMdImgList();
             if (mdImgList != null){
-                String replaceMdImgList = mdImgList.replace("/article/" + oldArticle_title, "/article/" + articleTitle);
+                String replaceMdImgList = mdImgList.replace("/article/" + oldArticleTitle, "/article/" + articleTitle);
                 articleRest.setMdImgList(replaceMdImgList);
             }
             // 更新七牛云中文章内容图片链接
-            if (oldMdImg != null){
+            if (isOldMdImgEmpty){
+                // 找出在旧列表和新列表中都存在的元素
                 List<String> commonElements = ImageLinkComparator.findCommonElements(newMdImgList, oldMdImgList);
                 for (String commonElement : commonElements) {
-                    String newMdImg = commonElement.replace(oldArticle_title, articleTitle);
+                    String newMdImg = commonElement.replace(oldArticleTitle, articleTitle);
                     String newKey = StringManipulation.subString(newMdImg);
                     String oldKey = StringManipulation.subString(commonElement);
                     qiniu.renameImgKey(oldKey, newKey);
                 }
             }
             // 更新数据库和七牛云文章封面图片链接
-            if (Objects.equals(oldArticle_cover, articleRest.getArticle_cover())) {
-                assert oldArticle_cover != null;
-                String newArticle_cover = oldArticle_cover.replace(oldArticle_title, articleTitle);
+            if (Objects.equals(oldArticleCover, articleRest.getArticle_cover())) {
+                assert oldArticleCover != null;
+                String newArticle_cover = oldArticleCover.replace(oldArticleTitle, articleTitle);
                 articleRest.setArticle_cover(newArticle_cover);
                 String newKey = StringManipulation.subString(newArticle_cover);
-                String oldKey = StringManipulation.subString(oldArticle_cover);
+                String oldKey = StringManipulation.subString(oldArticleCover);
                 qiniu.renameImgKey(oldKey,newKey);
             }
         }
