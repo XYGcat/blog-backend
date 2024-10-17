@@ -14,6 +14,8 @@ import com.xc.blogbackend.utils.IpUtils;
 import com.xc.blogbackend.utils.JwtGenerator;
 import com.xc.blogbackend.utils.Qiniu;
 import com.xc.blogbackend.utils.StringManipulation;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
@@ -27,6 +29,7 @@ import static com.xc.blogbackend.contant.BlogUserConstant.USER_LOGIN_STATE;
  *
  * @author 星尘
  */
+@Api(tags = "用户接口")
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -44,6 +47,7 @@ public class UserController {
      * @param request
      * @return
      */
+    @ApiOperation(value = "登录接口")
     @PostMapping("/login")
     public BaseResponse<BlogUser> userLogin(@RequestBody UserLoginRequest userLoginRequest, HttpServletRequest request){
         String ipAddress = IpUtils.getClientIp(request);
@@ -87,6 +91,7 @@ public class UserController {
      * @param userRegisterRequest
      * @return
      */
+    @ApiOperation(value = "注册接口")
     @PostMapping("/register")
     public BaseResponse<Map<String,String>> userRegister(@RequestBody UserRegisterRequest userRegisterRequest,HttpServletRequest request) {
         if(userRegisterRequest == null){
@@ -110,6 +115,7 @@ public class UserController {
      * @param id
      * @return
      */
+    @ApiOperation(value = "根据用户id获取用户信息")
     @GetMapping("/getUserInfoById/{id}")
     public BaseResponse<BlogUser> getUserInfo(@PathVariable Integer id){
         if (id != null) {
@@ -144,6 +150,7 @@ public class UserController {
      * @param request
      * @return
      */
+    @ApiOperation(value = "分页获取用户列表")
     @PostMapping("/getUserList")
     public BaseResponse<PageInfoResult<BlogUser>> getUserList(@RequestBody Map<String,Object> request){
         Integer current = (Integer) request.get("current");
@@ -161,6 +168,7 @@ public class UserController {
      * @param request
      * @return
      */
+    @ApiOperation(value = "更新用户信息")
     @PutMapping("/updateOwnUserInfo")
     public BaseResponse<Boolean> updateOwnUserInfo(@RequestBody Map<String,Object> request){
         Integer id = (Integer) request.get("id");
@@ -185,6 +193,7 @@ public class UserController {
      * @param request
      * @return
      */
+    @ApiOperation(value = "修改密码")
     @PutMapping("/updatePassword")
     public BaseResponse<Boolean> updatePassword(@RequestBody Map<String, String> request,HttpServletRequest httpServletRequest){
         String password = request.get("password");
@@ -207,6 +216,7 @@ public class UserController {
      * @param role
      * @return
      */
+    @ApiOperation(value = "修改用户角色")
     @PutMapping("/updateRole/{id}/{role}")
     public BaseResponse<Boolean> updateRole(@PathVariable Integer id,@PathVariable Integer role){
         Boolean aBoolean = blogUserService.updateRole(id, role);

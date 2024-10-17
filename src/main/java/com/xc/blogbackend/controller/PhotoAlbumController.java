@@ -8,9 +8,10 @@ import com.xc.blogbackend.model.domain.result.PageInfoResult;
 import com.xc.blogbackend.service.BlogPhotoAlbumService;
 import com.xc.blogbackend.utils.Qiniu;
 import com.xc.blogbackend.utils.StringManipulation;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,7 @@ import java.util.Map;
  *
  * @author 星尘
  */
+@Api(tags = "相册列表接口")
 @RestController
 @RequestMapping("/photoAlbum")
 public class PhotoAlbumController {
@@ -36,6 +38,7 @@ public class PhotoAlbumController {
      * @param request
      * @return
      */
+    @ApiOperation(value = "分页获取相册列表")
     @PostMapping("/getPhotoAlbum")
     public BaseResponse<PageInfoResult<BlogPhotoAlbum>> getAlbumList(@RequestBody Map<String,Object> request){
         String album_name = (String) request.get("album_name");
@@ -53,6 +56,7 @@ public class PhotoAlbumController {
      * @param request
      * @return
      */
+    @ApiOperation(value = "新增相册")
     @PostMapping("/add")
     public BaseResponse<BlogPhotoAlbum> addAlbum(@RequestBody Map<String,Object> request){
         String album_name = (String) request.get("album_name");
@@ -73,6 +77,7 @@ public class PhotoAlbumController {
      * @param request
      * @return
      */
+    @ApiOperation(value = "修改相册")
     @PutMapping("/update")
     public BaseResponse<Boolean> updateAlbum(@RequestBody Map<String,Object> request){
         Integer id = (Integer) request.get("id");
@@ -103,6 +108,7 @@ public class PhotoAlbumController {
      * @param id
      * @return
      */
+    @ApiOperation(value = "删除相册")
     @DeleteMapping("/delete/{id}")
     @Transactional(rollbackFor = Exception.class)  //Spring 的事务管理，如果发生异常，会自动回滚事务
     public BaseResponse<Boolean> deleteAlbum(@PathVariable Integer id){
@@ -121,6 +127,7 @@ public class PhotoAlbumController {
      *
      * @return
      */
+    @ApiOperation(value = "前台 一次性获取所有的相册列表")
     @GetMapping("/getAllAlbumList")
     public BaseResponse<List<BlogPhotoAlbum>> getAllAlbumList(){
         List<BlogPhotoAlbum> allAlbumList = blogPhotoAlbumService.getAllAlbumList();

@@ -9,9 +9,9 @@ import com.xc.blogbackend.model.domain.result.PageInfoResult;
 import com.xc.blogbackend.service.BlogPhotoService;
 import com.xc.blogbackend.utils.Qiniu;
 import com.xc.blogbackend.utils.StringManipulation;
-import org.springframework.transaction.annotation.Transactional;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.Resource;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
  *
  * @author 星尘
  */
+@Api(tags = "相册图片接口")
 @RestController
 @RequestMapping("/photo")
 public class PhotoController {
@@ -40,6 +41,7 @@ public class PhotoController {
      * @param request
      * @return
      */
+    @ApiOperation(value = "后台 根据相册id分页获取图片列表")
     @PostMapping("/getPhotoListByAlbumId")
     public BaseResponse<PageInfoResult<BlogPhoto>> getPhotosByAlbumId(@RequestBody Map<String,Object> request){
         Integer current = (Integer) request.get("current");
@@ -59,6 +61,7 @@ public class PhotoController {
      * @param id
      * @return
      */
+    @ApiOperation(value = "前台 根据相册id获取相册的所有图片")
     @GetMapping("/getAllPhotosByAlbumId/{id}")
     public BaseResponse<List<BlogPhoto>> getAllPhotosByAlbumId(@PathVariable Integer id){
         List<BlogPhoto> allPhotosByAlbumId = blogPhotoService.getAllPhotosByAlbumId(id);
@@ -79,8 +82,8 @@ public class PhotoController {
      * @param request
      * @return
      */
+    @ApiOperation(value = "批量新增图片")
     @PostMapping("/add")
-    @Transactional(rollbackFor = Exception.class)  //Spring 的事务管理，如果发生异常，会自动回滚事务
     public BaseResponse<Boolean> addPhotos(@RequestBody Map<String,Object> request){
         List<BlogPhoto> photoList = (List<BlogPhoto>) request.get("photoList");
         Boolean aBoolean = blogPhotoService.addPhotos(photoList);
@@ -93,8 +96,8 @@ public class PhotoController {
      * @param request
      * @return
      */
+    @ApiOperation(value = "批量删除图片")
     @PutMapping("/delete")
-    @Transactional(rollbackFor = Exception.class)  //Spring 的事务管理，如果发生异常，会自动回滚事务
     public BaseResponse<Boolean> deletePhotos(@RequestBody DelPhotoRequest request) throws UnsupportedEncodingException {
         List<BlogPhoto> imgList = request.getImgList();
         Integer type = request.getType();
@@ -122,8 +125,8 @@ public class PhotoController {
      * @param request
      * @return
      */
+    @ApiOperation(value = "批量恢复图片")
     @PutMapping("/revert")
-    @Transactional(rollbackFor = Exception.class)  //Spring 的事务管理，如果发生异常，会自动回滚事务
     public BaseResponse<Boolean> revertPhotos(@RequestBody Map<String,List<Integer>> request){
         List<Integer> idList = request.get("idList");
         Boolean aBoolean = blogPhotoService.revertPhotos(idList);

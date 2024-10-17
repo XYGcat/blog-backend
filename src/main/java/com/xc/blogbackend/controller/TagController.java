@@ -5,8 +5,9 @@ import com.xc.blogbackend.common.ResultUtils;
 import com.xc.blogbackend.model.domain.BlogTag;
 import com.xc.blogbackend.model.domain.result.PageInfoResult;
 import com.xc.blogbackend.service.BlogTagService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,7 @@ import java.util.Map;
  *
  * @author 星尘
  */
+@Api(tags = "标签接口")
 @RestController
 @RequestMapping("/tag")
 public class TagController {
@@ -28,6 +30,7 @@ public class TagController {
      *
      * @return
      */
+    @ApiOperation(value = "获取标签字典")
     @GetMapping("/getTagDictionary")
     public BaseResponse<List<BlogTag>> getTagDictionary(){
         List<BlogTag> tagDictionary = blogTagService.getTagDictionary();
@@ -40,6 +43,7 @@ public class TagController {
      * @param request
      * @return
      */
+    @ApiOperation(value = "条件分页获取标签")
     @PostMapping("/getTagList")
     public BaseResponse<PageInfoResult<BlogTag>> getTagList(@RequestBody Map<String,Object> request){
         Integer current = (Integer) request.get("current");
@@ -56,6 +60,7 @@ public class TagController {
      * @param request
      * @return
      */
+    @ApiOperation(value = "修改标签")
     @PutMapping("/update")
     public BaseResponse<Boolean> updateTag(@RequestBody Map<String,Object> request){
         Integer id = (Integer) request.get("id");
@@ -70,6 +75,7 @@ public class TagController {
      * @param request
      * @return
      */
+    @ApiOperation(value = "删除标签")
     @PostMapping("/delete")
     public BaseResponse<Boolean> deleteTags(@RequestBody Map<String,List<Integer>> request){
         List<Integer> tagIdList = request.get("tagIdList");
@@ -83,6 +89,7 @@ public class TagController {
      * @param request
      * @return
      */
+    @ApiOperation(value = "新增标签")
     @PostMapping("/add")
     public BaseResponse<BlogTag> addTag(@RequestBody Map<String,Object> request){
         String tag_name = (String) request.get("tag_name");

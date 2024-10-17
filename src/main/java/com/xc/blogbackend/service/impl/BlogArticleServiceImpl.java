@@ -22,8 +22,8 @@ import com.xc.blogbackend.utils.Qiniu;
 import com.xc.blogbackend.utils.StringManipulation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
-
 import javax.annotation.Resource;
 import java.util.*;
 import java.util.concurrent.*;
@@ -262,17 +262,12 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
 
     @Override
     public Boolean updateArticle(BlogArticle blogArticle) {
-        int res = 0;
-        try {
-            UpdateWrapper<BlogArticle> updateWrapper = new UpdateWrapper<>();
-            updateWrapper.eq("id", blogArticle.getId()); // 设置更新条件：ID 等于给定文章的 ID
+        UpdateWrapper<BlogArticle> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("id", blogArticle.getId()); // 设置更新条件：ID 等于给定文章的 ID
 
-            res = blogArticleMapper.update(blogArticle, updateWrapper);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+        int res = blogArticleMapper.update(blogArticle, updateWrapper);
 
-        return res > 0 ? true : false;
+        return res > 0;
     }
 
     @Override
@@ -317,6 +312,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)  //Spring 的事务管理，如果发生异常，会自动回滚事务
     public Boolean deleteArticle(Integer id, Integer status) {
         if (status != 3) {
             BlogArticle blogArticle = new BlogArticle();

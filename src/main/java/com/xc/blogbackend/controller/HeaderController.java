@@ -7,8 +7,9 @@ import com.xc.blogbackend.model.domain.BlogHeader;
 import com.xc.blogbackend.service.BlogHeaderService;
 import com.xc.blogbackend.utils.Qiniu;
 import com.xc.blogbackend.utils.StringManipulation;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,7 @@ import java.util.Map;
  *
  * @author 星尘
  */
+@Api(tags = "头部背景图接口")
 @RestController
 @RequestMapping("/pageHeader")
 public class HeaderController {
@@ -33,6 +35,7 @@ public class HeaderController {
      *
      * @return
      */
+    @ApiOperation(value = "获取所有背景图")
     @GetMapping("/getAll")
     public BaseResponse<List<BlogHeader>> getAllHeader(){
         List<BlogHeader> allHeader = blogHeaderService.getAllHeader();
@@ -45,6 +48,7 @@ public class HeaderController {
      * @param blogHeader
      * @return
      */
+    @ApiOperation(value = "根据是否有id来判断新增/编辑背景")
     @PostMapping("/addOrUpdate")
     public BaseResponse<Boolean> addOrUpdateHeader(@RequestBody BlogHeader blogHeader){
         String msg;
@@ -75,6 +79,7 @@ public class HeaderController {
      * @param request
      * @return
      */
+    @ApiOperation(value = "删除背景")
     @PostMapping("/delete")
     public BaseResponse<Boolean> deleteHeader(@RequestBody Map<String,Object> request){
         Integer id = (Integer) request.get("id");

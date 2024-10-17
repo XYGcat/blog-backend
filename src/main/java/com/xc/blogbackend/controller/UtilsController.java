@@ -8,8 +8,9 @@ import com.xc.blogbackend.exception.BusinessException;
 import com.xc.blogbackend.utils.ImageNamingUtil;
 import com.xc.blogbackend.utils.Qiniu;
 import com.xc.blogbackend.utils.StringManipulation;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.Map;
  *
  * @author 星尘
  */
+@Api(tags = "工具接口")
 @RestController
 @RequestMapping("/upload")
 public class UtilsController {
@@ -32,6 +34,7 @@ public class UtilsController {
      *
      * @return
      */
+    @ApiOperation(value = "生成七牛云上传凭证")
     @GetMapping("/uploadToken")
     public BaseResponse<List<String>> getuploadToken(){
         String uploadToken = qiniu.uploadToken();
@@ -48,6 +51,7 @@ public class UtilsController {
      * @param request
      * @return
      */
+    @ApiOperation(value = "删除七牛云图片")
     @PostMapping("/deleteFile")
     public BaseResponse<Boolean> deleteFile(@RequestBody Map<String,String> request){
         String imgUrl = request.get("imgUrl");
@@ -66,6 +70,7 @@ public class UtilsController {
      * @param request
      * @return
      */
+    @ApiOperation(value = "生成七牛云下载图片的token")
     @PostMapping("/downloadUrl")
     public BaseResponse<String> downloadUrl(@RequestBody Map<String,String> request) throws QiniuException {
         String imgUrl = request.get("imgUrl");

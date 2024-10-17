@@ -4,6 +4,8 @@ import com.xc.blogbackend.common.BaseResponse;
 import com.xc.blogbackend.common.ErrorCode;
 import com.xc.blogbackend.common.ResultUtils;
 import com.xc.blogbackend.service.BlogLikeService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +19,7 @@ import java.util.Map;
  *
  * @author 星尘
  */
+@Api(tags = "点赞接口")
 @RestController
 @RequestMapping("/like")
 public class LikeController {
@@ -30,6 +33,7 @@ public class LikeController {
      * @param request
      * @return
      */
+    @ApiOperation(value = "获取当前用户对当前文章/说说/留言 是否点赞")
     @PostMapping("/getIsLikeByIdAndType")
     public BaseResponse<Boolean> getIsLikeByIdAndType(@RequestBody Map<String,Integer> request){
         Integer for_id = request.get("for_id");
@@ -55,6 +59,7 @@ public class LikeController {
      * @param request
      * @return
      */
+    @ApiOperation(value = "点赞")
     @PostMapping("/addLike")
     public BaseResponse<Boolean> addLike(@RequestBody Map<String,Integer> request){
         Integer for_id = request.get("for_id");
@@ -81,6 +86,7 @@ public class LikeController {
      * @param request
      * @return
      */
+    @ApiOperation(value = "取消点赞")
     @PostMapping("/cancelLike")
     public BaseResponse<Boolean> cancelLike(@RequestBody Map<String,Integer> request){
         Integer for_id = request.get("for_id");

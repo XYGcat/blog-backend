@@ -5,8 +5,9 @@ import com.xc.blogbackend.common.ResultUtils;
 import com.xc.blogbackend.model.domain.BlogNotify;
 import com.xc.blogbackend.model.domain.result.PageInfoResult;
 import com.xc.blogbackend.service.BlogNotifyService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.Resource;
 import java.util.Map;
 
@@ -15,6 +16,7 @@ import java.util.Map;
  *
  * @author 星尘
  */
+@Api(tags = "通知接口")
 @RestController
 @RequestMapping("/notify")
 public class NotifyController {
@@ -28,6 +30,7 @@ public class NotifyController {
      * @param request
      * @return
      */
+    @ApiOperation(value = "条件分页获取消息推送")
     @PostMapping("/getNotifyList")
     public BaseResponse<PageInfoResult<BlogNotify>> getNotifyList(@RequestBody Map<String,Integer> request){
         Integer current = request.get("current");
@@ -43,6 +46,7 @@ public class NotifyController {
      * @param id
      * @return
      */
+    @ApiOperation(value = "修改消息推送")
     @PutMapping("/update/{id}")
     public BaseResponse<Boolean> updateNotify(@PathVariable Integer id){
         Boolean aBoolean = blogNotifyService.updateNotify(id);
@@ -55,6 +59,7 @@ public class NotifyController {
      * @param id
      * @return
      */
+    @ApiOperation(value = "删除消息推送")
     @PutMapping("/delete/{id}")
     public BaseResponse<Boolean> deleteNotifys(@PathVariable Integer id){
         Boolean aBoolean = blogNotifyService.deleteNotifys(id);

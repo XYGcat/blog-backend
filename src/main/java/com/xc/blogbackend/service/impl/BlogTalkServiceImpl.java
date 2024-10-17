@@ -19,7 +19,7 @@ import com.xc.blogbackend.service.BlogUserService;
 import com.xc.blogbackend.utils.Qiniu;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
@@ -238,6 +238,7 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
 //    }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)  //Spring 的事务管理，如果发生异常，会自动回滚事务
     public BlogTalk publishTalk(BlogTalk blogTalk) {
         List<Map<String, String>> talkImgList = blogTalk.getTalkImgList();
         blogTalkMapper.insert(blogTalk);
@@ -269,6 +270,7 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)  //Spring 的事务管理，如果发生异常，会自动回滚事务
     public Boolean updateTalk(BlogTalk blogTalk) {
         Integer id = blogTalk.getId();
         List<Map<String, String>> talkImgList = blogTalk.getTalkImgList();
@@ -316,6 +318,7 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)  //Spring 的事务管理，如果发生异常，会自动回滚事务
     public Boolean deleteTalkById(Integer id, Integer status) {
         int res;
         if (status == 1 || status == 2) {

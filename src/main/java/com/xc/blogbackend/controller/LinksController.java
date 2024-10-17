@@ -8,8 +8,9 @@ import com.xc.blogbackend.model.domain.request.PageRequest;
 import com.xc.blogbackend.model.domain.result.PageInfoResult;
 import com.xc.blogbackend.service.BlogLinksService;
 import com.xc.blogbackend.service.BlogNotifyService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,7 @@ import java.util.Map;
  *
  * @author 星尘
  */
+@Api(tags = "友链接口")
 @RestController
 @RequestMapping("/links")
 public class LinksController {
@@ -35,6 +37,7 @@ public class LinksController {
      * @param pageRequest
      * @return
      */
+    @ApiOperation(value = "分页获取友链")
     @PostMapping("/getLinksList")
     public BaseResponse<PageInfoResult<BlogLinks>> getLinksList(@RequestBody PageRequest pageRequest){
         PageInfoResult<BlogLinks> linksList = blogLinksService.getLinksList(pageRequest);
@@ -48,6 +51,7 @@ public class LinksController {
      * @param request
      * @return
      */
+    @ApiOperation(value = "新增/修改友链")
     @PostMapping("/addOrUpdate")
     public BaseResponse<Boolean> addOrUpdateLinks(@RequestBody Map<String,Object> request){
         Integer id = (Integer) request.get("id");
@@ -76,6 +80,7 @@ public class LinksController {
      * @param request
      * @return
      */
+    @ApiOperation(value = "批量审核友链")
     @PutMapping("/approve")
     public BaseResponse<Boolean> approveLinks(@RequestBody Map<String, List<Integer>> request){
         List<Integer> idList = request.get("idList");
@@ -90,6 +95,7 @@ public class LinksController {
      * @param request
      * @return
      */
+    @ApiOperation(value = "批量删除友链")
     @PutMapping("/delete")
     public BaseResponse<Boolean> deleteLinks(@RequestBody Map<String, List<Integer>> request){
         List<Integer> idList = request.get("idList");

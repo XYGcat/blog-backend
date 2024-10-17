@@ -12,7 +12,7 @@ import com.xc.blogbackend.service.BlogPhotoService;
 import com.xc.blogbackend.utils.Qiniu;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.List;
 
@@ -90,12 +90,14 @@ public class BlogPhotoServiceImpl extends ServiceImpl<BlogPhotoMapper, BlogPhoto
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)  //Spring 的事务管理，如果发生异常，会自动回滚事务
     public Boolean addPhotos(List<BlogPhoto> photoList) {
         boolean saveBatch = this.saveBatch(photoList);
         return saveBatch;
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)  //Spring 的事务管理，如果发生异常，会自动回滚事务
     public Boolean deletePhotos(List<Integer> idList, Integer type) {
         if (type == 1) {
             BlogPhoto blogPhoto = new BlogPhoto();
@@ -111,6 +113,7 @@ public class BlogPhotoServiceImpl extends ServiceImpl<BlogPhotoMapper, BlogPhoto
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)  //Spring 的事务管理，如果发生异常，会自动回滚事务
     public Boolean revertPhotos(List<Integer> idList) {
         BlogPhoto blogPhoto = new BlogPhoto();
         blogPhoto.setStatus(1);

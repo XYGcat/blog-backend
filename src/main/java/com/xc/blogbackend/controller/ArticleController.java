@@ -24,6 +24,7 @@ import com.xc.blogbackend.utils.ImageLinkComparator;
 import com.xc.blogbackend.utils.PaddingUtils;
 import com.xc.blogbackend.utils.Qiniu;
 import com.xc.blogbackend.utils.StringManipulation;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +36,7 @@ import java.util.*;
  *
  * @author 星尘
  */
+@Api(tags = "文章接口")
 @RestController
 @RequestMapping("/article")
 public class ArticleController {
@@ -139,7 +141,6 @@ public class ArticleController {
      */
     @ApiOperation(value = "根据id删除文章")
     @DeleteMapping("/delete/{id}/{status}")
-    @Transactional(rollbackFor = Exception.class)  //Spring 的事务管理，如果发生异常，会自动回滚事务
     public BaseResponse<Boolean> deleteArticle(@PathVariable Integer id,@PathVariable Integer status) throws QiniuException {
         if (status == 3) {
             // 删除七牛云文章封面图片

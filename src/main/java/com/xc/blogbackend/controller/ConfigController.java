@@ -9,8 +9,9 @@ import com.xc.blogbackend.model.domain.BlogConfig;
 import com.xc.blogbackend.service.BlogConfigService;
 import com.xc.blogbackend.utils.Qiniu;
 import com.xc.blogbackend.utils.StringManipulation;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.Resource;
 
 /**
@@ -18,6 +19,7 @@ import javax.annotation.Resource;
  *
  * @author 星尘
  */
+@Api(tags = "网站设置接口")
 @RestController
 @RequestMapping("/config")
 public class ConfigController {
@@ -33,6 +35,7 @@ public class ConfigController {
      *
      * @return
      */
+    @ApiOperation(value = "获取网站设置")
     @GetMapping("/getdata")
     public BaseResponse<BlogConfig> getConfig(){
         BlogConfig config = blogConfigService.getConfig();
@@ -61,6 +64,7 @@ public class ConfigController {
      *
      * @return
      */
+    @ApiOperation(value = "增加网站访问次数")
     @PutMapping("/addView")
     public BaseResponse<String> addView(){
         String res = blogConfigService.addView();
@@ -77,6 +81,7 @@ public class ConfigController {
      * @param blogConfig
      * @return
      */
+    @ApiOperation(value = "修改网站设置")
     @PostMapping("/updata")
     public BaseResponse<Boolean> updateConfig(@RequestBody BlogConfig blogConfig){
 

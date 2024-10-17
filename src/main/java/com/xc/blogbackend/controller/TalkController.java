@@ -5,9 +5,9 @@ import com.xc.blogbackend.common.ResultUtils;
 import com.xc.blogbackend.model.domain.BlogTalk;
 import com.xc.blogbackend.model.domain.result.PageInfoResult;
 import com.xc.blogbackend.service.BlogTalkService;
-import org.springframework.transaction.annotation.Transactional;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,6 +17,7 @@ import java.util.Map;
  *
  * @author 星尘
  */
+@Api(tags = "说说接口")
 @RestController
 @RequestMapping("/talk")
 public class TalkController {
@@ -30,6 +31,7 @@ public class TalkController {
      * @param requestData
      * @return
      */
+    @ApiOperation(value = "分页获取说说")
     @PostMapping("/getTalkList")
     public BaseResponse<PageInfoResult<BlogTalk>> getTalkList(@RequestBody Map<String,Integer> requestData){
         Integer current = requestData.get("current");
@@ -46,6 +48,7 @@ public class TalkController {
      * @param id
      * @return
      */
+    @ApiOperation(value = "根据id 获取说说详情")
     @GetMapping("/getTalkById/{id}")
     public BaseResponse<BlogTalk> getTalkById(@PathVariable Integer id){
         BlogTalk talkById = blogTalkService.getTalkById(id);
@@ -58,8 +61,8 @@ public class TalkController {
      * @param blogTalk
      * @return
      */
+    @ApiOperation(value = "修改说说")
     @PutMapping("/updateTalk")
-    @Transactional(rollbackFor = Exception.class)  //Spring 的事务管理，如果发生异常，会自动回滚事务
     public BaseResponse<Boolean> updateTalk(@RequestBody BlogTalk blogTalk){
         Boolean aBoolean = blogTalkService.updateTalk(blogTalk);
         return ResultUtils.success(aBoolean,"修改说说成功");
@@ -72,6 +75,7 @@ public class TalkController {
      * @param is_top
      * @return
      */
+    @ApiOperation(value = "修改说说公开置顶状态")
     @PutMapping("/toggleTop/{id}/{is_top}")
     public BaseResponse<Boolean> toggleTop(@PathVariable Integer id,@PathVariable Integer is_top){
         String message;
@@ -91,6 +95,7 @@ public class TalkController {
      * @param status
      * @return
      */
+    @ApiOperation(value = "修改说说公开私密状态")
     @PutMapping("/togglePublic/{id}/{status}")
     public BaseResponse<Boolean> togglePublic(@PathVariable Integer id,@PathVariable Integer status){
         String message;
@@ -110,8 +115,8 @@ public class TalkController {
      * @param status
      * @return
      */
+    @ApiOperation(value = "删除说说")
     @DeleteMapping("/deleteTalkById/{id}/{status}")
-    @Transactional(rollbackFor = Exception.class)  //Spring 的事务管理，如果发生异常，会自动回滚事务
     public BaseResponse<Boolean> deleteTalkById(@PathVariable Integer id,@PathVariable Integer status){
         String message;
         if (status == 3) {
@@ -129,6 +134,7 @@ public class TalkController {
      * @param id
      * @return
      */
+    @ApiOperation(value = "恢复说说")
     @PutMapping("/revertTalk/{id}")
     public BaseResponse<Boolean> revertTalk(@PathVariable Integer id){
         Boolean aBoolean = blogTalkService.revertTalk(id);
@@ -142,8 +148,8 @@ public class TalkController {
      * @param blogTalk
      * @return
      */
+    @ApiOperation(value = "发布说说")
     @PostMapping("/publishTalk")
-    @Transactional(rollbackFor = Exception.class)  //Spring 的事务管理，如果发生异常，会自动回滚事务
     public BaseResponse<Map<String,Integer>> publishTalk(@RequestBody BlogTalk blogTalk){
         BlogTalk publishTalk = blogTalkService.publishTalk(blogTalk);
         HashMap<String, Integer> hashMap = new HashMap<>();
@@ -158,6 +164,7 @@ public class TalkController {
      * @param request
      * @return
      */
+    @ApiOperation(value = "前台 获取说说列表")
     @PostMapping("/blogGetTalkList")
     public BaseResponse<PageInfoResult<BlogTalk>> blogGetTalkList(@RequestBody Map<String,Integer> request){
         Integer current = request.get("current");
@@ -173,6 +180,7 @@ public class TalkController {
      * @param id
      * @return
      */
+    @ApiOperation(value = "说说点赞")
     @PutMapping("/like/{id}")
     public BaseResponse<Boolean> talkLike(@PathVariable Integer id){
         Boolean aBoolean = blogTalkService.talkLike(id);
@@ -185,6 +193,7 @@ public class TalkController {
      * @param id
      * @return
      */
+    @ApiOperation(value = "取消点赞")
     @PutMapping("/cancelLike/{id}")
     public BaseResponse<Boolean> cancelTalkLike(@PathVariable Integer id){
         Boolean aBoolean = blogTalkService.cancelTalkLike(id);
