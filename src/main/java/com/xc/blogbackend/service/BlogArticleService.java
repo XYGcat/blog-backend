@@ -3,6 +3,7 @@ package com.xc.blogbackend.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xc.blogbackend.model.domain.BlogArticle;
 import com.xc.blogbackend.model.domain.request.ArticleRequest;
+import com.xc.blogbackend.model.domain.request.UpdateArticleRequest;
 import com.xc.blogbackend.model.domain.result.ArticleListByContent;
 import com.xc.blogbackend.model.domain.result.PageInfoResult;
 import com.xc.blogbackend.model.domain.result.RecommendResult;
@@ -75,10 +76,10 @@ public interface BlogArticleService extends IService<BlogArticle> {
     /**
      * 修改文章信息
      *
-     * @param blogArticle
+     * @param request
      * @return
      */
-    Boolean updateArticle(BlogArticle blogArticle);
+    Boolean updateArticle(UpdateArticleRequest request);
 
     /**
      * 根据文章获取文章封面

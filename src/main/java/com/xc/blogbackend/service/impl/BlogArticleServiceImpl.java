@@ -8,16 +8,15 @@ import com.qiniu.common.QiniuException;
 import com.xc.blogbackend.common.ErrorCode;
 import com.xc.blogbackend.exception.BusinessException;
 import com.xc.blogbackend.mapper.BlogArticleMapper;
-import com.xc.blogbackend.model.domain.ArticleDTO;
-import com.xc.blogbackend.model.domain.BlogArticle;
+import com.xc.blogbackend.model.domain.*;
 import com.xc.blogbackend.model.domain.request.ArticleRequest;
+import com.xc.blogbackend.model.domain.request.UpdateArticleRequest;
 import com.xc.blogbackend.model.domain.result.ArticleListByContent;
 import com.xc.blogbackend.model.domain.result.PageInfoResult;
 import com.xc.blogbackend.model.domain.result.RecommendResult;
-import com.xc.blogbackend.service.BlogArticleService;
-import com.xc.blogbackend.service.BlogArticleTagService;
-import com.xc.blogbackend.service.BlogCategoryService;
-import com.xc.blogbackend.service.BlogUserService;
+import com.xc.blogbackend.service.*;
+import com.xc.blogbackend.utils.ImageLinkComparator;
+import com.xc.blogbackend.utils.PaddingUtils;
 import com.xc.blogbackend.utils.Qiniu;
 import com.xc.blogbackend.utils.StringManipulation;
 import lombok.extern.slf4j.Slf4j;
@@ -49,6 +48,9 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
 
     @Resource
     private BlogUserService blogUserService;
+
+    @Resource
+    private BlogTagService blogTagService;
 
     @Resource
     private Qiniu qiniu;
@@ -261,11 +263,103 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
     }
 
     @Override
-    public Boolean updateArticle(BlogArticle blogArticle) {
-        UpdateWrapper<BlogArticle> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.eq("id", blogArticle.getId()); // 设置更新条件：ID 等于给定文章的 ID
+    @Transactional(rollbackFor = Exception.class)  //Spring 的事务管理，如果发生异常，会自动回滚事务
+    public Boolean updateArticle(UpdateArticleRequest request) {
+        // 提取前端传入的数据
+        UpdateArticleRequest.ArticleDate requestArticle = request.getArticle();
+        List<BlogTag> tagList = requestArticle.getTagList();
+        BlogCategory category = requestArticle.getCategory();
 
-        int res = blogArticleMapper.update(blogArticle, updateWrapper);
+        // 转换为BlogArticle对象
+        BlogArticle articleRest = PaddingUtils.mapToBlogArticle(request);
+        Integer articleId = articleRest.getId();
+        String articleTitle = articleRest.getArticle_title();
+
+        // 获取数据库中的旧文章信息
+        BlogArticle oldArticle = this.getArticle(articleId);
+
+        // 监测文章内容中图片链接的变化，以此删除七牛云图片
+        List<String> oldMdImgList = new ArrayList<>();
+        List<String> newMdImgList = requestArticle.getMdImgList();
+        String oldMdImg = oldArticle.getMdImgList();
+
+        if (oldMdImg != null) {
+            // 去除首尾的方括号并按逗号和空格分割
+            String[] linksArray = oldMdImg.substring(1, oldMdImg.length() - 1).split(", ");
+            oldMdImgList = Arrays.asList(linksArray);
+
+            List<String> missingInOldList = ImageLinkComparator.findMissingElements(newMdImgList, oldMdImgList);
+            // 截取图片链接的key
+            for (int i = 0; i < missingInOldList.size(); i++) {
+                String v = missingInOldList.get(i);
+                String subString = StringManipulation.subString(v); // 这个方法用于截取字符串的操作
+                missingInOldList.set(i, subString); // 更新原始数组中的元素
+            }
+            // 删除七牛云图片
+            qiniu.deleteFile(missingInOldList);
+        }
+
+        // 如果封面图片改变，删除旧的七牛云文章封面图片
+        String oldArticle_cover = oldArticle.getArticle_cover();
+        if (oldArticle_cover != null && !oldArticle_cover.equals(articleRest.getArticle_cover())) {
+            String imgKey = StringManipulation.subString(oldArticle_cover);
+            qiniu.deleteFile(imgKey);
+        }
+
+        // 判断文章标题是否改变，改变则更新七牛云和数据库图片链接
+        String oldArticle_title = oldArticle.getArticle_title();
+        if (!oldArticle_title.equals(articleTitle)){
+            // 更新数据库文章内容中图片链接
+            String newArticle_content = articleRest.getArticle_content();
+            String replaceContent = newArticle_content.replace("/article/" + oldArticle_title, "/article/" + articleTitle);
+            articleRest.setArticle_content(replaceContent);
+            // 更新数据库文章内容中图片列表链接
+            String mdImgList = articleRest.getMdImgList();
+            if (mdImgList != null){
+                String replaceMdImgList = mdImgList.replace("/article/" + oldArticle_title, "/article/" + articleTitle);
+                articleRest.setMdImgList(replaceMdImgList);
+            }
+            // 更新七牛云中文章内容图片链接
+            if (oldMdImg != null){
+                List<String> commonElements = ImageLinkComparator.findCommonElements(newMdImgList, oldMdImgList);
+                for (String commonElement : commonElements) {
+                    String newMdImg = commonElement.replace(oldArticle_title, articleTitle);
+                    String newKey = StringManipulation.subString(newMdImg);
+                    String oldKey = StringManipulation.subString(commonElement);
+                    qiniu.renameImgKey(oldKey, newKey);
+                }
+            }
+            // 更新数据库和七牛云文章封面图片链接
+            if (Objects.equals(oldArticle_cover, articleRest.getArticle_cover())) {
+                assert oldArticle_cover != null;
+                String newArticle_cover = oldArticle_cover.replace(oldArticle_title, articleTitle);
+                articleRest.setArticle_cover(newArticle_cover);
+                String newKey = StringManipulation.subString(newArticle_cover);
+                String oldKey = StringManipulation.subString(oldArticle_cover);
+                qiniu.renameImgKey(oldKey,newKey);
+            }
+        }
+
+        // 根据文章标题获取文章信息 校验是否可以新增或编辑文章
+        Boolean byTitle = this.getArticleInfoByTitle(articleId, articleTitle);
+        if (byTitle){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR,"已存在相同的文章标题");
+        }
+
+        //// TODO: 2023-11-27 修改逻辑，如果标签没变，不修改，如果标签改变，重新生成
+        // 先删除这个文章与标签之前的关联
+        blogArticleTagService.deleteArticleTag(articleRest.getId());
+
+        // 判断新的分类是新增的还是已经存在的 并且返回分类id
+        Integer categoryOrReturn = createCategoryOrReturn(category.getId(),category.getCategory_name());
+        articleRest.setCategory_id(categoryOrReturn);
+
+        // 创建新的标签和文章关联
+        createArticleTagByArticleId(articleRest.getId(), tagList);
+
+        UpdateWrapper<BlogArticle> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("id", articleRest.getId()); // 设置更新条件：ID 等于给定文章的 ID
+        int res = blogArticleMapper.update(articleRest, updateWrapper);
 
         return res > 0;
     }
@@ -677,6 +771,85 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
             return i > 0;
         }
         return false;
+    }
+
+    /**
+     * 新增和编辑文章关于分类的公共方法
+     *
+     * @param id
+     * @param category_name
+     * @return
+     */
+    public Integer createCategoryOrReturn(Integer id,String category_name){
+        Integer finalId;
+        if (id != null) {
+            finalId = id;
+        } else {
+//            BlogCategoryServiceImpl blogCategoryService = new BlogCategoryServiceImpl();
+            BlogCategory oneCategory = blogCategoryService.getOneCategory(category_name);
+            if (oneCategory != null) {
+                finalId = oneCategory.getId();
+            } else {
+                BlogCategory createCategory = blogCategoryService.createCategory(category_name);
+                finalId = createCategory.getId();
+            }
+        }
+        return finalId;
+    }
+
+    /**
+     *进行添加文章分类与标签关联的公共方法
+     *
+     * @param article_id
+     * @param tagList
+     * @return
+     */
+    public List<BlogArticleTag> createArticleTagByArticleId(Integer article_id, List<BlogTag> tagList){
+        List<BlogArticleTag> articleTags = null;
+
+        //// TODO: 2023-11-19 实现异步操作
+        // 先将新增的tag进行保存，拿到tag的id，再进行标签 文章关联
+        BlogTag res = null;
+        ArrayList<BlogTag> promiseList = new ArrayList<>();
+//        BlogTagServiceImpl blogTagService = new BlogTagServiceImpl();
+        for (BlogTag blogTag : tagList){
+            if (blogTag.getId() == null) {
+                BlogTag oneTag = blogTagService.getOneTag(blogTag.getTag_name());
+                if (oneTag != null) {
+                    res = oneTag;
+                }else {
+                    res = blogTagService.createTag(blogTag.getTag_name());
+                }
+            }
+            promiseList.add(res);
+        }
+
+        // 组装添加了标签id后的标签列表
+        for(BlogTag blogTag : promiseList){
+            if (blogTag != null) {
+                for (int index = 0;index < tagList.size();index ++){
+                    if (tagList.get(index).getTag_name().equals(blogTag.getTag_name())){
+                        tagList.get(index).setId(blogTag.getId());
+                    }
+                }
+            }
+        }
+
+        // 文章id和标签id 关联
+        if (article_id != null) {
+            ArrayList<BlogArticleTag> articleTagList = new ArrayList<>();
+            for (BlogTag blogTag : tagList){
+                BlogArticleTag articleTag = new BlogArticleTag();
+                articleTag.setArticle_id(Integer.valueOf(article_id));
+                articleTag.setTag_id(blogTag.getId());
+                articleTagList.add(articleTag);
+            }
+            // 批量新增文章标签关联
+//            BlogArticleTagServiceImpl blogArticleTagService = new BlogArticleTagServiceImpl();
+            articleTags = blogArticleTagService.createArticleTags(articleTagList);
+        }
+
+        return articleTags;
     }
 }
 
