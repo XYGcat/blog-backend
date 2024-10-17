@@ -31,7 +31,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         BlogUser user = (BlogUser) request.getAttribute("user");
 
         if (user.getRole() != 1) {
-            throw new BusinessException("普通用户仅限查看",401,"");
+            throw new BusinessException(401,"普通用户仅限查看");
         }
 
         return true;

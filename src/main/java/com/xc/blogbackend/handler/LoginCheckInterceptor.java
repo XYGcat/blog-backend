@@ -1,11 +1,11 @@
 package com.xc.blogbackend.handler;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.xc.blogbackend.exception.BusinessException;
 import com.xc.blogbackend.model.domain.BlogUser;
 import com.xc.blogbackend.utils.JwtGenerator;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -33,7 +33,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
 
         if (authorization == null) {
             // 验证失败
-            throw new BusinessException("您没有权限访问，请先登录",401,"");
+            throw new BusinessException(401,"您没有权限访问，请先登录");
         }
 
         //检查并提取了有效的 JWT 令牌内容，去掉了 "Bearer " 前缀，以便后续的验证和处理
@@ -42,7 +42,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
                 : authorization;
 
         BlogUser blogUser = JwtGenerator.parseToken(token);
-        if (blogUser != null) {
+        if (ObjectUtil.isNotEmpty(blogUser)) {
             request.setAttribute("user", blogUser);
             return true;
         }

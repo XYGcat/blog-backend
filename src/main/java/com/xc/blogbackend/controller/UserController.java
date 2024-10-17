@@ -47,13 +47,10 @@ public class UserController {
     @PostMapping("/login")
     public BaseResponse<BlogUser> userLogin(@RequestBody UserLoginRequest userLoginRequest, HttpServletRequest request){
         String ipAddress = IpUtils.getClientIp(request);
-        if(userLoginRequest == null){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
         String username = userLoginRequest.getUsername();
         String password = userLoginRequest.getPassword();
         if(StringUtils.isAnyBlank(username,password)){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+            throw new BusinessException(ErrorCode.PARAMS_ERROR,"请输入账号密码！");
         }
         if (username.equals("admin")) {
             if (password.equals(ADMIN_PASSWORD)) {
@@ -71,7 +68,7 @@ public class UserController {
 
                 return ResultUtils.success(blogUser);
             } else {
-                throw new BusinessException(ErrorCode.PARAMS_ERROR);
+                throw new BusinessException(ErrorCode.PARAMS_ERROR,"管理员账号/密码错误！");
             }
         }else{
             BlogUser blogUser = blogUserService.userLogin(username, password,ipAddress, request);
@@ -93,7 +90,7 @@ public class UserController {
     @PostMapping("/register")
     public BaseResponse<Map<String,String>> userRegister(@RequestBody UserRegisterRequest userRegisterRequest,HttpServletRequest request) {
         if(userRegisterRequest == null){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+            throw new BusinessException(ErrorCode.PARAMS_ERROR,"请输入账号密码！");
         }
         String username = userRegisterRequest.getUsername();
         String password = userRegisterRequest.getPassword();

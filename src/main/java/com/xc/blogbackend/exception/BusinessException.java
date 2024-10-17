@@ -1,39 +1,34 @@
 package com.xc.blogbackend.exception;
 
 import com.xc.blogbackend.common.ErrorCode;
+import lombok.Getter;
 
 /**
  * 自定义异常类
  *
  * @author 星尘
  */
-public class BusinessException extends RuntimeException {
-    private final int code;
-    private final String description;
+@Getter
+public class BusinessException extends RuntimeException{
 
-    public BusinessException(String message,int code,String description){
+    private static final long serialVersionUID = -4390225209525539319L;
+    /**
+     * 错误码
+     */
+    private final int code;
+
+    public BusinessException(int code, String message) {
         super(message);
         this.code = code;
-        this.description = description;
     }
 
-    public BusinessException(ErrorCode errorCode){
+    public BusinessException(ErrorCode errorCode) {
         super(errorCode.getMessage());
         this.code = errorCode.getCode();
-        this.description = errorCode.getDescription();
     }
 
-    public BusinessException(ErrorCode errorCode,String description){
-        super(errorCode.getMessage());
+    public BusinessException(ErrorCode errorCode, String message) {
+        super(message);
         this.code = errorCode.getCode();
-        this.description = description;
-    }
-
-    public int getCode() {
-        return code;
-    }
-
-    public String getDescription() {
-        return description;
     }
 }
