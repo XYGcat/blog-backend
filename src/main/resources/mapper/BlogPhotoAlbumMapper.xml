@@ -8,13 +8,13 @@
             <id property="id" column="id" jdbcType="INTEGER"/>
             <result property="album_name" column="album_name" jdbcType="VARCHAR"/>
             <result property="description" column="description" jdbcType="VARCHAR"/>
-            <result property="createdAt" column="createdAt" jdbcType="TIMESTAMP"/>
-            <result property="updatedAt" column="updatedAt" jdbcType="TIMESTAMP"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
             <result property="album_cover" column="album_cover" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,album_name,description,
-        createdAt,updatedAt,album_cover
+        created_at,updated_at,album_cover
     </sql>
 </mapper>

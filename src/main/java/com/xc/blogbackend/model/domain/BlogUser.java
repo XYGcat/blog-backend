@@ -69,14 +69,14 @@ public class BlogUser implements Serializable {
     /**
      * 
      */
-    @TableField(value = "createdAt")
+    @TableField(value = "created_at")
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createdAt;
 
     /**
      * 
      */
-    @TableField(value = "updatedAt")
+    @TableField(value = "updated_at")
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date updatedAt;
 

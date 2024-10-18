@@ -37,13 +37,13 @@ public class BlogRecommend implements Serializable {
     /**
      * 
      */
-    @TableField(value = "createdAt")
+    @TableField(value = "created_at")
     private Date createdAt;
 
     /**
      * 
      */
-    @TableField(value = "updatedAt")
+    @TableField(value = "updated_at")
     private Date updatedAt;
 
     @TableField(exist = false)

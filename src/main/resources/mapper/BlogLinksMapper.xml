@@ -11,13 +11,13 @@
             <result property="site_avatar" column="site_avatar" jdbcType="VARCHAR"/>
             <result property="url" column="url" jdbcType="VARCHAR"/>
             <result property="status" column="status" jdbcType="INTEGER"/>
-            <result property="createdAt" column="createdAt" jdbcType="TIMESTAMP"/>
-            <result property="updatedAt" column="updatedAt" jdbcType="TIMESTAMP"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,site_name,site_desc,
         site_avatar,url,status,
-        createdAt,updatedAt
+        created_at,updated_at
     </sql>
 </mapper>

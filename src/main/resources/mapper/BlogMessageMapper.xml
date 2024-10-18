@@ -14,8 +14,8 @@
             <result property="bg_url" column="bg_url" jdbcType="VARCHAR"/>
             <result property="user_id" column="user_id" jdbcType="INTEGER"/>
             <result property="like_times" column="like_times" jdbcType="INTEGER"/>
-            <result property="createdAt" column="createdAt" jdbcType="TIMESTAMP"/>
-            <result property="updatedAt" column="updatedAt" jdbcType="TIMESTAMP"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
             <result property="font_weight" column="font_weight" jdbcType="INTEGER"/>
             <result property="nick_name" column="nick_name" jdbcType="VARCHAR"/>
     </resultMap>
@@ -24,7 +24,7 @@
         id,tag,message,
         color,font_size,bg_color,
         bg_url,user_id,like_times,
-        createdAt,updatedAt,font_weight,
+        created_at,updated_at,font_weight,
         nick_name
     </sql>
 </mapper>

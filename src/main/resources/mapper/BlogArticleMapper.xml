@@ -16,8 +16,8 @@
             <result property="status" column="status" jdbcType="INTEGER"/>
             <result property="type" column="type" jdbcType="INTEGER"/>
             <result property="origin_url" column="origin_url" jdbcType="VARCHAR"/>
-            <result property="createdAt" column="createdAt" jdbcType="TIMESTAMP"/>
-            <result property="updatedAt" column="updatedAt" jdbcType="TIMESTAMP"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
             <result property="view_times" column="view_times" jdbcType="INTEGER"/>
             <result property="article_description" column="article_description" jdbcType="VARCHAR"/>
             <result property="thumbs_up_times" column="thumbs_up_times" jdbcType="INTEGER"/>
@@ -29,8 +29,8 @@
         id,article_title,author_id,
         category_id,article_content,mdImgList,
         article_cover,is_top,status,
-        type,origin_url,createdAt,
-        updatedAt,view_times,article_description,
+        type,origin_url,created_at,
+        updated_at,view_times,article_description,
         thumbs_up_times,reading_duration,article_order
     </sql>
 </mapper>

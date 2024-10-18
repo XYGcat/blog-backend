@@ -7,12 +7,12 @@
     <resultMap id="BaseResultMap" type="com.xc.blogbackend.model.domain.BlogTag">
             <id property="id" column="id" jdbcType="INTEGER"/>
             <result property="tag_name" column="tag_name" jdbcType="VARCHAR"/>
-            <result property="createdAt" column="createdAt" jdbcType="TIMESTAMP"/>
-            <result property="updatedAt" column="updatedAt" jdbcType="TIMESTAMP"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,tag_name,createdAt,
-        updatedAt
+        id,tag_name,created_at,
+        updated_at
     </sql>
 </mapper>

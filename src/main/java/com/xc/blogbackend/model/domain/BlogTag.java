@@ -32,14 +32,14 @@ public class BlogTag implements Serializable {
     /**
      * 创建时间
      */
-    @TableField(value = "createdAt")
+    @TableField(value = "created_at")
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createdAt;
 
     /**
      * 更新时间
      */
-    @TableField(value = "updatedAt")
+    @TableField(value = "updated_at")
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date updatedAt;
 

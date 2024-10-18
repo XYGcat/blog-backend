@@ -9,12 +9,12 @@
             <result property="type" column="type" jdbcType="INTEGER"/>
             <result property="for_id" column="for_id" jdbcType="INTEGER"/>
             <result property="user_id" column="user_id" jdbcType="INTEGER"/>
-            <result property="createdAt" column="createdAt" jdbcType="TIMESTAMP"/>
-            <result property="updatedAt" column="updatedAt" jdbcType="TIMESTAMP"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,type,for_id,
-        user_id,createdAt,updatedAt
+        user_id,created_at,updated_at
     </sql>
 </mapper>

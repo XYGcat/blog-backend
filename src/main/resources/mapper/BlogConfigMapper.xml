@@ -17,8 +17,8 @@
             <result property="git_ee_link" column="git_ee_link" jdbcType="VARCHAR"/>
             <result property="bilibili_link" column="bilibili_link" jdbcType="VARCHAR"/>
             <result property="view_time" column="view_time" jdbcType="BIGINT"/>
-            <result property="createdAt" column="createdAt" jdbcType="TIMESTAMP"/>
-            <result property="updatedAt" column="updatedAt" jdbcType="TIMESTAMP"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -26,6 +26,6 @@
         avatar_bg,personal_say,blog_notice,
         qq_link,we_chat_link,github_link,
         git_ee_link,bilibili_link,view_time,
-        createdAt,updatedAt
+        created_at,updated_at
     </sql>
 </mapper>
