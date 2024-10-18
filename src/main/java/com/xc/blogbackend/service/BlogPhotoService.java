@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
 * @author XC
-* @description 针对表【blog_photo】的数据库操作Service
+* @description 针对表【bg_photo】的数据库操作Service
 * @createDate 2023-11-30 13:53:22
 */
 public interface BlogPhotoService extends IService<BlogPhoto> {

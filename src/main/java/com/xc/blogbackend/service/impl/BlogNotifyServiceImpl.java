@@ -16,7 +16,7 @@ import java.util.List;
 
 /**
 * @author XC
-* @description 针对表【blog_notify】的数据库操作Service实现
+* @description 针对表【bg_notify】的数据库操作Service实现
 * @createDate 2023-12-01 17:26:20
 */
 @Service
@@ -36,7 +36,7 @@ public class BlogNotifyServiceImpl extends ServiceImpl<BlogNotifyMapper, BlogNot
         }
         //按照 isView 升序和 createdAt 降序排列
         queryWrapper.orderByAsc("isView")
-                    .orderByDesc("createdAt");
+                    .orderByDesc("created_at");
         // 创建Page对象，设置当前页和分页大小
         Page<BlogNotify> page = new Page<>(current,size);
         // 获取通知列表，使用page方法传入Page对象和QueryWrapper对象

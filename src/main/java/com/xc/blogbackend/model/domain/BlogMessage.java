@@ -12,9 +12,9 @@ import java.util.Date;
 
 /**
  * 
- * @TableName blog_message
+ * @TableName bg_message
  */
-@TableName(value ="blog_message")
+@TableName(value ="bg_message")
 @Data
 public class BlogMessage implements Serializable {
 

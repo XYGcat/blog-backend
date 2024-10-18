@@ -6,7 +6,7 @@ import com.xc.blogbackend.model.domain.result.PageInfoResult;
 
 /**
 * @author XC
-* @description 针对表【blog_notify】的数据库操作Service
+* @description 针对表【bg_notify】的数据库操作Service
 * @createDate 2023-12-01 17:26:20
 */
 public interface BlogNotifyService extends IService<BlogNotify> {

@@ -14,9 +14,9 @@ import java.util.Map;
 
 /**
  * 
- * @TableName blog_talk
+ * @TableName bg_talk
  */
-@TableName(value ="blog_talk")
+@TableName(value ="bg_talk")
 @Data
 public class BlogTalk implements Serializable {
 

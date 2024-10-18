@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
 * @author XC
-* @description 针对表【blog_config】的数据库操作Service实现
+* @description 针对表【bg_config】的数据库操作Service实现
 * @createDate 2023-11-23 14:04:12
 */
 @Service

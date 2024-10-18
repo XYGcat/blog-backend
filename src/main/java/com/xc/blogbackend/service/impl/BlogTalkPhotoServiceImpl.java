@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 /**
 * @author XC
-* @description 针对表【blog_talk_photo】的数据库操作Service实现
+* @description 针对表【bg_talk_photo】的数据库操作Service实现
 * @createDate 2023-11-20 15:28:02
 */
 @Service

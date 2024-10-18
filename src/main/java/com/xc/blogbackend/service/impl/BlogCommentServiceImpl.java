@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 
 /**
 * @author XC
-* @description 针对表【blog_comment】的数据库操作Service实现
+* @description 针对表【bg_comment】的数据库操作Service实现
 * @createDate 2023-11-23 18:17:54
 */
 @Service
@@ -74,7 +74,7 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
         // 模拟添加 { parent_id: null } 条件
         queryWrapper.isNull("parent_id");
         if(order == "new"){
-            queryWrapper.orderByDesc("createdAt");
+            queryWrapper.orderByDesc("created_at");
         }else {
             queryWrapper.orderByDesc("thumbs_up");
         }
@@ -172,7 +172,7 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
         if (parent_id != null){
             queryWrapper.eq("parent_id",parent_id);
         }
-        queryWrapper.orderByAsc("createdAt");
+        queryWrapper.orderByAsc("created_at");
         Page<BlogComment> page = new Page<>(current,size);
         Page<BlogComment> commentPage = blogCommentMapper.selectPage(page, queryWrapper);
         List<BlogComment> rows = commentPage.getRecords();
@@ -291,9 +291,9 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
             queryWrapper.like("from_name","%" + from_name + "%");
         }
         if (time != null && time.size() == 2 && time.get(0) != null && time.get(1) != null) {
-            queryWrapper.between("createdAt", time.get(0), time.get(1));
+            queryWrapper.between("created_at", time.get(0), time.get(1));
         }
-        queryWrapper.orderByDesc("createdAt");
+        queryWrapper.orderByDesc("created_at");
         Page<BlogComment> page = new Page<>(current,size);
         Page<BlogComment> commentPage = blogCommentMapper.selectPage(page, queryWrapper);
         List<BlogComment> rows = commentPage.getRecords();

@@ -12,7 +12,7 @@ import javax.annotation.Resource;
 
 /**
 * @author XC
-* @description 针对表【blog_like】的数据库操作Service实现
+* @description 针对表【bg_like】的数据库操作Service实现
 * @createDate 2023-11-30 18:39:18
 */
 @Service

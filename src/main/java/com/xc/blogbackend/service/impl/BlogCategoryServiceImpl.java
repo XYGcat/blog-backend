@@ -16,7 +16,7 @@ import java.util.List;
 
 /**
 * @author XC
-* @description 针对表【blog_category】的数据库操作Service实现
+* @description 针对表【bg_category】的数据库操作Service实现
 * @createDate 2023-11-16 16:54:23
 */
 @Service

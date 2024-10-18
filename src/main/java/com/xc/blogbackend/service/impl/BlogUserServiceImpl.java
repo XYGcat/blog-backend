@@ -29,7 +29,7 @@ import static com.xc.blogbackend.contant.BlogUserConstant.USER_LOGIN_STATE;
 
 /**
 * @author XC
-* @description 针对表【blog_user】的数据库操作Service实现
+* @description 针对表【bg_user】的数据库操作Service实现
 * @createDate 2023-11-10 18:27:39
 */
 @Service

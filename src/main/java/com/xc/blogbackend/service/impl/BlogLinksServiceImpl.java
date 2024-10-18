@@ -20,7 +20,7 @@ import java.util.Map;
 
 /**
 * @author XC
-* @description 针对表【blog_links】的数据库操作Service实现
+* @description 针对表【bg_links】的数据库操作Service实现
 * @createDate 2023-11-23 20:12:24
 */
 @Service
@@ -50,9 +50,9 @@ public class BlogLinksServiceImpl extends ServiceImpl<BlogLinksMapper, BlogLinks
             queryWrapper.eq("status",status);
         }
         if (time != null && time.size() == 2 && time.get(0) != null && time.get(1) != null) {
-            queryWrapper.between("createdAt", time.get(0), time.get(1));
+            queryWrapper.between("created_at", time.get(0), time.get(1));
         }
-        queryWrapper.orderByAsc("createdAt");
+        queryWrapper.orderByAsc("created_at");
         // 创建Page对象，设置当前页和分页大小
         Page<BlogLinks> page = new Page<>(current,size);
         // 获取说说列表，使用page方法传入Page对象和QueryWrapper对象

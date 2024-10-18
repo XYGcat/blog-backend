@@ -11,9 +11,9 @@ import java.util.Date;
 
 /**
  * 
- * @TableName blog_recommend
+ * @TableName bg_recommend
  */
-@TableName(value ="blog_recommend")
+@TableName(value ="bg_recommend")
 @Data
 public class BlogRecommend implements Serializable {
     /**

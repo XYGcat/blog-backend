@@ -43,11 +43,11 @@ public class ConfigController {
         if (config != null) {
             try {
                 String avatar_bg = qiniu.downloadUrl(config.getAvatar_bg());
-                String blog_avatar = qiniu.downloadUrl(config.getBlog_avatar());
+                String bg_avatar = qiniu.downloadUrl(config.getBg_avatar());
                 String qq_link = qiniu.downloadUrl(config.getQq_link());
                 String we_chat_link = qiniu.downloadUrl(config.getWe_chat_link());
                 config.setAvatar_bg(avatar_bg);
-                config.setBlog_avatar(blog_avatar);
+                config.setBg_avatar(bg_avatar);
                 config.setQq_link(qq_link);
                 config.setWe_chat_link(we_chat_link);
             } catch (QiniuException e) {
@@ -87,7 +87,7 @@ public class ConfigController {
 
         //// TODO: 2023-12-07 该页面头像和用户界面头像应该一致
         String avatar_bg = blogConfig.getAvatar_bg();
-        String blog_avatar = blogConfig.getBlog_avatar();
+        String bg_avatar = blogConfig.getBg_avatar();
         String qq_link = blogConfig.getQq_link();
         String we_chat_link = blogConfig.getWe_chat_link();
 
@@ -99,8 +99,8 @@ public class ConfigController {
                 String subString = StringManipulation.subString(config.getAvatar_bg());
                 qiniu.deleteFile(subString);
             }
-            if (blog_avatar != null && config.getBlog_avatar() != null && blog_avatar != config.getBlog_avatar()){
-                String subString = StringManipulation.subString(config.getBlog_avatar());
+            if (bg_avatar != null && config.getBg_avatar() != null && bg_avatar != config.getBg_avatar()){
+                String subString = StringManipulation.subString(config.getBg_avatar());
                 qiniu.deleteFile(subString);
             }
             if (qq_link != null && config.getQq_link() != null && qq_link != config.getQq_link()){
