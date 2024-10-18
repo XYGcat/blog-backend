@@ -5,7 +5,7 @@ import com.xc.blogbackend.model.domain.BlogHeader;
 
 /**
 * @author XC
-* @description 针对表【blog_header】的数据库操作Mapper
+* @description 针对表【bg_header】的数据库操作Mapper
 * @createDate 2023-11-23 16:14:16
 * @Entity generator.domain.BlogHeader
 */

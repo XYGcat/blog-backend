@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 /**
 * @author XC
-* @description 针对表【blog_article_tag】的数据库操作Service实现
+* @description 针对表【bg_article_tag】的数据库操作Service实现
 * @createDate 2023-11-16 16:08:15
 */
 @Service

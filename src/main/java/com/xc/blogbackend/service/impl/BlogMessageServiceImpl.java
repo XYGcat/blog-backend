@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 
 /**
 * @author XC
-* @description 针对表【blog_message】的数据库操作Service实现
+* @description 针对表【bg_message】的数据库操作Service实现
 * @createDate 2023-11-23 16:35:28
 */
 @Service
@@ -62,9 +62,9 @@ public class BlogMessageServiceImpl extends ServiceImpl<BlogMessageMapper, BlogM
             queryWrapper.like("message", "%" + message + "%");
         }
         if (time != null && time.size() == 2 && time.get(0) != null && time.get(1) != null) {
-            queryWrapper.between("createdAt", time.get(0), time.get(1));
+            queryWrapper.between("created_at", time.get(0), time.get(1));
         }
-        queryWrapper.orderByDesc("createdAt");
+        queryWrapper.orderByDesc("created_at");
         // 创建Page对象，设置当前页和分页大小
         Page<BlogMessage> page = new Page<>(current, size);
         // 获取说说列表，使用page方法传入Page对象和QueryWrapper对象

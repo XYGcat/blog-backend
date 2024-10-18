@@ -9,7 +9,7 @@ import java.util.Map;
 
 /**
 * @author XC
-* @description 针对表【blog_user】的数据库操作Service
+* @description 针对表【bg_user】的数据库操作Service
 * @createDate 2023-11-10 18:27:39
 */
 public interface BlogUserService extends IService<BlogUser> {

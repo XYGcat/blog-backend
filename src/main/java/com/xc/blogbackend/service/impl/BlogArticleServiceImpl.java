@@ -30,7 +30,7 @@ import java.util.concurrent.*;
 
 /**
 * @author XC
-* @description 针对表【blog_article】的数据库操作Service实现
+* @description 针对表【bg_article】的数据库操作Service实现
 * @createDate 2023-11-16 01:29:08
 */
 @Service
@@ -86,7 +86,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
         }
         // 如果创建时间不为空，使用between范围查询
         if (create_time != null && create_time.size() == 2 && create_time.get(0) != null && create_time.get(1) != null) {
-            queryWrapper.between("createdAt", create_time.get(0), create_time.get(1));
+            queryWrapper.between("created_at", create_time.get(0), create_time.get(1));
         }
         // 如果是否置顶不为空，使用eq精确查询
         if (is_top != null) {
@@ -112,10 +112,10 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
         }
         // 排除文章内容和原始链接属性，使用select方法传入属性名的数组
         queryWrapper.select("id","article_title","author_id","category_id","article_cover",
-                "is_top","status","type","createdAt", "updatedAt","view_times","article_description",
+                "is_top","status","type","created_at", "updated_at","view_times","article_description",
                 "thumbs_up_times","reading_duration","article_order");
         // 按照创建时间降序排序，使用orderByDesc方法传入属性名
-        queryWrapper.orderByDesc("createdAt");
+        queryWrapper.orderByDesc("created_at");
 
         // 创建Page对象，设置当前页和分页大小
         Page<BlogArticle> page = new Page<>(current, size);
@@ -443,7 +443,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
         // 设置排序规则
         queryWrapper.orderByAsc("is_top")
                 .orderByAsc("article_order")
-                .orderByDesc("createdAt");
+                .orderByDesc("created_at");
         // 设置属性过滤，排除 articleContent 和 originUrl 属性
         queryWrapper.select(BlogArticle.class, info -> !info.getColumn().equals("article_content")
                 && !info.getColumn().equals("origin_url"));
@@ -560,9 +560,9 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
         queryWrapper.in("id", articleIdList)
                     .eq("status", 1);
         // 设置返回结果中包含的属性
-        queryWrapper.select("id", "article_title", "article_cover", "createdAt");
+        queryWrapper.select("id", "article_title", "article_cover", "created_at");
         // 设置排序规则，按 createdAt 降序排列
-        queryWrapper.orderByDesc("createdAt");
+        queryWrapper.orderByDesc("created_at");
         // 设置查询结果数量限制为 6 条记录
         queryWrapper.last("LIMIT 6");
 
@@ -581,9 +581,9 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
 
         QueryWrapper<BlogArticle> queryWrapper = new QueryWrapper<>();    // 构建查询条件
         queryWrapper.eq("status", 1);
-        queryWrapper.select("id","article_title","article_cover","createdAt");
+        queryWrapper.select("id","article_title","article_cover","created_at as createdAt" );
         //按照 createdAt 降序排列
-        queryWrapper.orderByDesc("createdAt");
+        queryWrapper.orderByDesc("created_at");
         // 创建Page对象，设置当前页和分页大小
         Page<BlogArticle> page = new Page<>(current, size);
         // 获取通知列表，使用page方法传入Page对象和QueryWrapper对象
@@ -634,8 +634,8 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
         QueryWrapper<BlogArticle> queryWrapper = new QueryWrapper<>();    // 构建查询条件
         queryWrapper.eq("status", 1);
         queryWrapper.eq("category_id",category_id);
-        queryWrapper.select("id","article_title","article_cover","createdAt");
-        queryWrapper.orderByDesc("createdAt");
+        queryWrapper.select("id","article_title","article_cover","created_at");
+        queryWrapper.orderByDesc("created_at");
         // 创建Page对象，设置当前页和分页大小
         Page<BlogArticle> page = new Page<>(current, size);
         // 获取通知列表，使用page方法传入Page对象和QueryWrapper对象
@@ -669,8 +669,8 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
         QueryWrapper<BlogArticle> queryWrapper = new QueryWrapper<>();    // 构建查询条件
         queryWrapper.eq("status", 1);
         queryWrapper.in("id",tagIdList);
-        queryWrapper.select("id","article_title","article_cover","createdAt");
-        queryWrapper.orderByDesc("createdAt");
+        queryWrapper.select("id","article_title","article_cover","created_at");
+        queryWrapper.orderByDesc("created_at");
         // 创建Page对象，设置当前页和分页大小
         Page<BlogArticle> page = new Page<>(current, size);
         // 获取通知列表，使用page方法传入Page对象和QueryWrapper对象

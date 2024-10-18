@@ -31,7 +31,7 @@ import java.util.stream.IntStream;
 
 /**
 * @author XC
-* @description 针对表【blog_talk】的数据库操作Service实现
+* @description 针对表【bg_talk】的数据库操作Service实现
 * @createDate 2023-11-20 14:28:11
 */
 @Service
@@ -64,7 +64,7 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
             queryWrapper.eq("status", status);
         }
         //按照 is_top 升序和 createdAt 降序排列
-        queryWrapper.orderByAsc("is_top").orderByDesc("createdAt");
+        queryWrapper.orderByAsc("is_top").orderByDesc("created_at");
         // 创建Page对象，设置当前页和分页大小
         Page<BlogTalk> page = new Page<>(current,size);
         // 获取说说列表，使用page方法传入Page对象和QueryWrapper对象
@@ -134,7 +134,7 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
 //            queryWrapper.eq("status", status);
 //        }
 //        //按照 is_top 升序和 createdAt 降序排列
-//        queryWrapper.orderByAsc("is_top").orderByDesc("createdAt");
+//        queryWrapper.orderByAsc("is_top").orderByDesc("created_at");
 //        // 创建Page对象，设置当前页和分页大小
 //        Page<BlogTalk> page = new Page<>(current,size);
 //        // 获取说说列表，使用page方法传入Page对象和QueryWrapper对象
@@ -351,7 +351,7 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
         queryWrapper.eq("status", 1);
         //按照 is_top 升序和 createdAt 降序排列
         queryWrapper.orderByAsc("is_top")
-                    .orderByDesc("createdAt");
+                    .orderByDesc("created_at");
         // 创建Page对象，设置当前页和分页大小
         Page<BlogTalk> page = new Page<>(current,size);
         // 获取说说列表，使用page方法传入Page对象和QueryWrapper对象

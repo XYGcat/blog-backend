@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
 * @author XC
-* @description 针对表【blog_tag】的数据库操作Service
+* @description 针对表【bg_tag】的数据库操作Service
 * @createDate 2023-11-16 11:55:15
 */
 public interface BlogTagService extends IService<BlogTag> {

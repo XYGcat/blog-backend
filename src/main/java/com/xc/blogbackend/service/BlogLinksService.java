@@ -10,7 +10,7 @@ import java.util.Map;
 
 /**
 * @author XC
-* @description 针对表【blog_links】的数据库操作Service
+* @description 针对表【bg_links】的数据库操作Service
 * @createDate 2023-11-23 20:12:24
 */
 public interface BlogLinksService extends IService<BlogLinks> {

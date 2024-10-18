@@ -16,7 +16,7 @@ import java.util.List;
 
 /**
 * @author XC
-* @description 针对表【blog_tag】的数据库操作Service实现
+* @description 针对表【bg_tag】的数据库操作Service实现
 * @createDate 2023-11-16 11:55:15
 */
 @Service
@@ -30,7 +30,7 @@ public class BlogTagServiceImpl extends ServiceImpl<BlogTagMapper, BlogTag>
     @Override
     public List<BlogTag> getTagDictionary() {
         QueryWrapper<BlogTag> queryWrapper = new QueryWrapper<>();
-        queryWrapper.select("id","tag_name", "createdAt", "updatedAt");
+        queryWrapper.select("id","tag_name", "created_at", "updated_at");
         return blogTagMapper.selectList(queryWrapper);
     }
 

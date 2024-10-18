@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
 * @author XC
-* @description 针对表【blog_article】的数据库操作Service
+* @description 针对表【bg_article】的数据库操作Service
 * @createDate 2023-11-16 01:29:08
 */
 public interface BlogArticleService extends IService<BlogArticle> {

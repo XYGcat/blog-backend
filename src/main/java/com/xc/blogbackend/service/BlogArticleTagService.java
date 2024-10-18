@@ -8,7 +8,7 @@ import java.util.Map;
 
 /**
 * @author XC
-* @description 针对表【blog_article_tag】的数据库操作Service
+* @description 针对表【bg_article_tag】的数据库操作Service
 * @createDate 2023-11-16 16:08:15
 */
 public interface BlogArticleTagService extends IService<BlogArticleTag> {

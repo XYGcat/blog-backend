@@ -19,7 +19,7 @@ import java.util.List;
 
 /**
 * @author XC
-* @description 针对表【blog_photo_album】的数据库操作Service实现
+* @description 针对表【bg_photo_album】的数据库操作Service实现
 * @createDate 2023-11-22 16:10:53
 */
 @Service
@@ -122,7 +122,7 @@ public class BlogPhotoAlbumServiceImpl extends ServiceImpl<BlogPhotoAlbumMapper,
     @Override
     public List<BlogPhotoAlbum> getAllAlbumList() {
         QueryWrapper<BlogPhotoAlbum> queryWrapper = new QueryWrapper<>();
-        queryWrapper.orderByDesc("createdAt");
+        queryWrapper.orderByDesc("created_at");
         List<BlogPhotoAlbum> blogPhotoAlbums = blogPhotoAlbumMapper.selectList(queryWrapper);
 
         return blogPhotoAlbums;

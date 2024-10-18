@@ -5,7 +5,7 @@ import com.xc.blogbackend.model.domain.BlogArticleTag;
 
 /**
 * @author XC
-* @description 针对表【blog_article_tag】的数据库操作Mapper
+* @description 针对表【bg_article_tag】的数据库操作Mapper
 * @createDate 2023-11-16 16:08:15
 * @Entity generator.domain.BlogArticleTag
 */

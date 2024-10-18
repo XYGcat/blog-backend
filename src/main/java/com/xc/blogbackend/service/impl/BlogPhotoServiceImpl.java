@@ -18,7 +18,7 @@ import java.util.List;
 
 /**
 * @author XC
-* @description 针对表【blog_photo】的数据库操作Service实现
+* @description 针对表【bg_photo】的数据库操作Service实现
 * @createDate 2023-11-30 13:53:22
 */
 @Service
@@ -84,7 +84,7 @@ public class BlogPhotoServiceImpl extends ServiceImpl<BlogPhotoMapper, BlogPhoto
         QueryWrapper<BlogPhoto> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("album_id",album_id);
         queryWrapper.eq("status",1);
-        queryWrapper.orderByDesc("createdAt");
+        queryWrapper.orderByDesc("created_at");
         List<BlogPhoto> blogPhotos = blogPhotoMapper.selectList(queryWrapper);
         return blogPhotos;
     }

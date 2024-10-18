@@ -5,7 +5,7 @@ import com.xc.blogbackend.model.domain.BlogComment;
 
 /**
 * @author XC
-* @description 针对表【blog_comment】的数据库操作Mapper
+* @description 针对表【bg_comment】的数据库操作Mapper
 * @createDate 2023-11-23 18:17:54
 * @Entity generator.domain.BlogComment
 */

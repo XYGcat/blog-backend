@@ -11,9 +11,9 @@ import java.util.Date;
 
 /**
  * 
- * @TableName blog_photo_album
+ * @TableName bg_photo_album
  */
-@TableName(value ="blog_photo_album")
+@TableName(value ="bg_photo_album")
 @Data
 public class BlogPhotoAlbum implements Serializable {
     /**

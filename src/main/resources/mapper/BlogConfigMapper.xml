@@ -6,11 +6,11 @@
 
     <resultMap id="BaseResultMap" type="com.xc.blogbackend.model.domain.BlogConfig">
             <id property="id" column="id" jdbcType="INTEGER"/>
-            <result property="blog_name" column="blog_name" jdbcType="VARCHAR"/>
-            <result property="blog_avatar" column="blog_avatar" jdbcType="VARCHAR"/>
+            <result property="bg_name" column="bg_name" jdbcType="VARCHAR"/>
+            <result property="bg_avatar" column="bg_avatar" jdbcType="VARCHAR"/>
             <result property="avatar_bg" column="avatar_bg" jdbcType="VARCHAR"/>
             <result property="personal_say" column="personal_say" jdbcType="VARCHAR"/>
-            <result property="blog_notice" column="blog_notice" jdbcType="VARCHAR"/>
+            <result property="bg_notice" column="bg_notice" jdbcType="VARCHAR"/>
             <result property="qq_link" column="qq_link" jdbcType="VARCHAR"/>
             <result property="we_chat_link" column="we_chat_link" jdbcType="VARCHAR"/>
             <result property="github_link" column="github_link" jdbcType="VARCHAR"/>
@@ -22,8 +22,8 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,blog_name,blog_avatar,
-        avatar_bg,personal_say,blog_notice,
+        id,bg_name,bg_avatar,
+        avatar_bg,personal_say,bg_notice,
         qq_link,we_chat_link,github_link,
         git_ee_link,bilibili_link,view_time,
         created_at,updated_at
