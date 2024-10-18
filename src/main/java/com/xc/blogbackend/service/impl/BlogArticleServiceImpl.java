@@ -281,6 +281,12 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
         String oldArticleTitle = oldArticle.getArticle_title();
         String oldArticleCover = oldArticle.getArticle_cover();
 
+        // 如果封面图片改变，删除旧的七牛云文章封面图片
+        if (oldArticleCover != null && !oldArticleCover.equals(articleRest.getArticle_cover())) {
+            String imgKey = StringManipulation.subString(oldArticleCover);
+            qiniu.deleteFile(imgKey);
+        }
+
         // 监测文章内容中图片链接的变化，以此删除七牛云图片
         List<String> oldMdImgList = new ArrayList<>();
         List<String> newMdImgList = requestArticle.getMdImgList();
@@ -288,29 +294,6 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
 
         // 判断旧文章图片链接是否为空
         boolean isOldMdImgEmpty = ObjectUtil.isNotEmpty(oldMdImg);
-
-        if (isOldMdImgEmpty) {
-            // 去除首尾的方括号并按逗号和空格分割
-            String[] linksArray = oldMdImg.substring(1, oldMdImg.length() - 1).split(", ");
-            oldMdImgList = Arrays.asList(linksArray);
-            // 找出在旧列表中但不在新列表中的元素
-            List<String> missingInOldList = ImageLinkComparator.findMissingElements(newMdImgList, oldMdImgList);
-            // 截取图片链接的key
-            for (int i = 0; i < missingInOldList.size(); i++) {
-                // 截取字符串
-                String subString = StringManipulation.subString(missingInOldList.get(i));
-                // 更新原始数组中的元素
-                missingInOldList.set(i, subString);
-            }
-            // 删除七牛云图片
-            qiniu.deleteFile(missingInOldList);
-        }
-
-        // 如果封面图片改变，删除旧的七牛云文章封面图片
-        if (oldArticleCover != null && !oldArticleCover.equals(articleRest.getArticle_cover())) {
-            String imgKey = StringManipulation.subString(oldArticleCover);
-            qiniu.deleteFile(imgKey);
-        }
 
         // 判断文章标题是否改变，改变则更新七牛云和数据库图片链接
         if (!oldArticleTitle.equals(articleTitle)){
@@ -326,13 +309,33 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
             }
             // 更新七牛云中文章内容图片链接
             if (isOldMdImgEmpty){
-                // 找出在旧列表和新列表中都存在的元素
-                List<String> commonElements = ImageLinkComparator.findCommonElements(newMdImgList, oldMdImgList);
-                for (String commonElement : commonElements) {
-                    String newMdImg = commonElement.replace(oldArticleTitle, articleTitle);
-                    String newKey = StringManipulation.subString(newMdImg);
-                    String oldKey = StringManipulation.subString(commonElement);
-                    qiniu.renameImgKey(oldKey, newKey);
+                {
+                    // 去除首尾的方括号并按逗号和空格分割
+                    String[] linksArray = oldMdImg.substring(1, oldMdImg.length() - 1).split(", ");
+                    oldMdImgList = Arrays.asList(linksArray);
+
+                    // 找出在旧列表中但不在新列表中的元素
+                    List<String> missingInOldList = ImageLinkComparator.findMissingElements(newMdImgList, oldMdImgList);
+                    // 截取图片链接的key
+                    for (int i = 0; i < missingInOldList.size(); i++) {
+                        // 截取字符串
+                        String subString = StringManipulation.subString(missingInOldList.get(i));
+                        // 更新原始数组中的元素
+                        missingInOldList.set(i, subString);
+                    }
+                    // 删除七牛云图片
+                    qiniu.deleteFile(missingInOldList);
+                }
+
+                {
+                    // 找出在旧列表和新列表中都存在的元素
+                    List<String> commonElements = ImageLinkComparator.findCommonElements(newMdImgList, oldMdImgList);
+                    for (String commonElement : commonElements) {
+                        String newMdImg = commonElement.replace(oldArticleTitle, articleTitle);
+                        String newKey = StringManipulation.subString(newMdImg);
+                        String oldKey = StringManipulation.subString(commonElement);
+                        qiniu.renameImgKey(oldKey, newKey);
+                    }
                 }
             }
             // 更新数据库和七牛云文章封面图片链接
@@ -352,7 +355,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
             throw new BusinessException(ErrorCode.PARAMS_ERROR,"已存在相同的文章标题");
         }
 
-        //// TODO: 2023-11-27 修改逻辑，如果标签没变，不修改，如果标签改变，重新生成
+        // TODO: 2023-11-27 修改逻辑，如果标签没变，不修改，如果标签改变，重新生成
         // 先删除这个文章与标签之前的关联
         blogArticleTagService.deleteArticleTag(articleRest.getId());
 
