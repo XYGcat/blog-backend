@@ -37,12 +37,12 @@ public class BlogPhotoAlbumServiceImpl extends ServiceImpl<BlogPhotoAlbumMapper,
     private Qiniu qiniu;
 
     @Override
-    public PageInfoResult<BlogPhotoAlbum> getAlbumList(String album_name, Integer current, Integer size) {
+    public PageInfoResult<BlogPhotoAlbum> getAlbumList(String albumName, Integer current, Integer size) {
 
         //构建查询条件
         QueryWrapper<BlogPhotoAlbum> queryWrapper = new QueryWrapper<>();
-        if (album_name != null && !album_name.isEmpty()) {
-            queryWrapper.like("album_name", "%" + album_name + "%");
+        if (albumName != null && !albumName.isEmpty()) {
+            queryWrapper.like("album_name", "%" + albumName + "%");
         }
         // 创建Page对象，设置当前页和分页大小
         Page<BlogPhotoAlbum> page = new Page<>(current,size);
@@ -56,8 +56,8 @@ public class BlogPhotoAlbumServiceImpl extends ServiceImpl<BlogPhotoAlbumMapper,
         //添加七牛云图片的下载凭证
         for(BlogPhotoAlbum blogPhotoAlbum : rows){
             try {
-                String downloadUrl = qiniu.downloadUrl(blogPhotoAlbum.getAlbum_cover());
-                blogPhotoAlbum.setAlbum_cover(downloadUrl);
+                String downloadUrl = qiniu.downloadUrl(blogPhotoAlbum.getAlbumCover());
+                blogPhotoAlbum.setAlbumCover(downloadUrl);
             } catch (QiniuException e) {
                 throw new RuntimeException(e);
             }
@@ -74,33 +74,33 @@ public class BlogPhotoAlbumServiceImpl extends ServiceImpl<BlogPhotoAlbumMapper,
     }
 
     @Override
-    public BlogPhotoAlbum addAlbum(String album_name, String album_cover, String description) {
+    public BlogPhotoAlbum addAlbum(String albumName, String albumCover, String description) {
         BlogPhotoAlbum blogPhotoAlbum = new BlogPhotoAlbum();
-        blogPhotoAlbum.setAlbum_cover(album_cover);
-        blogPhotoAlbum.setAlbum_name(album_name);
+        blogPhotoAlbum.setAlbumCover(albumCover);
+        blogPhotoAlbum.setAlbumName(albumName);
         blogPhotoAlbum.setDescription(description);
         int insert = blogPhotoAlbumMapper.insert(blogPhotoAlbum);
         return blogPhotoAlbum;
     }
 
     @Override
-    public BlogPhotoAlbum getOneAlbum(Integer id, String album_name) {
+    public BlogPhotoAlbum getOneAlbum(Integer id, String albumName) {
         QueryWrapper<BlogPhotoAlbum> queryWrapper = new QueryWrapper<>();
         if (id != null) {
             queryWrapper.eq("id",id);
         }
-        if (album_name != null && !album_name.isEmpty()) {
-            queryWrapper.eq("album_name",album_name);
+        if (albumName != null && !albumName.isEmpty()) {
+            queryWrapper.eq("album_name",albumName);
         }
         BlogPhotoAlbum blogPhotoAlbum = blogPhotoAlbumMapper.selectOne(queryWrapper);
         return blogPhotoAlbum;
     }
 
     @Override
-    public Boolean updateAlbum(Integer id, String album_name, String album_cover, String description) {
+    public Boolean updateAlbum(Integer id, String albumName, String albumCover, String description) {
         BlogPhotoAlbum blogPhotoAlbum = new BlogPhotoAlbum();
-        blogPhotoAlbum.setAlbum_cover(album_cover);
-        blogPhotoAlbum.setAlbum_name(album_name);
+        blogPhotoAlbum.setAlbumCover(albumCover);
+        blogPhotoAlbum.setAlbumName(albumName);
         blogPhotoAlbum.setDescription(description);
 
         UpdateWrapper<BlogPhotoAlbum> updateWrapper = new UpdateWrapper<>();

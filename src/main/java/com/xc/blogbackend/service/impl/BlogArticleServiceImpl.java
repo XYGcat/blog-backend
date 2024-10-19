@@ -362,7 +362,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
         blogArticleTagService.deleteArticleTag(articleRest.getId());
 
         // 判断新的分类是新增的还是已经存在的 并且返回分类id
-        Integer categoryOrReturn = createCategoryOrReturn(category.getId(),category.getCategory_name());
+        Integer categoryOrReturn = createCategoryOrReturn(category.getId(),category.getCategoryName());
         articleRest.setCategory_id(categoryOrReturn);
 
         // 创建新的标签和文章关联
@@ -788,20 +788,20 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
      * 新增和编辑文章关于分类的公共方法
      *
      * @param id
-     * @param category_name
+     * @param categoryName
      * @return
      */
-    public Integer createCategoryOrReturn(Integer id,String category_name){
+    public Integer createCategoryOrReturn(Integer id,String categoryName){
         Integer finalId;
         if (id != null) {
             finalId = id;
         } else {
 //            BlogCategoryServiceImpl blogCategoryService = new BlogCategoryServiceImpl();
-            BlogCategory oneCategory = blogCategoryService.getOneCategory(category_name);
+            BlogCategory oneCategory = blogCategoryService.getOneCategory(categoryName);
             if (oneCategory != null) {
                 finalId = oneCategory.getId();
             } else {
-                BlogCategory createCategory = blogCategoryService.createCategory(category_name, CategoryEnum.ARTICLE.getCode());
+                BlogCategory createCategory = blogCategoryService.createCategory(categoryName, CategoryEnum.ARTICLE.getCode());
                 finalId = createCategory.getId();
             }
         }

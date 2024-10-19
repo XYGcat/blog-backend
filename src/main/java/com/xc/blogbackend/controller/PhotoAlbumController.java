@@ -12,6 +12,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
@@ -41,11 +42,11 @@ public class PhotoAlbumController {
     @ApiOperation(value = "分页获取相册列表")
     @PostMapping("/getPhotoAlbum")
     public BaseResponse<PageInfoResult<BlogPhotoAlbum>> getAlbumList(@RequestBody Map<String,Object> request){
-        String album_name = (String) request.get("album_name");
+        String albumName = (String) request.get("album_name");
         Integer current = (Integer) request.get("current");
         Integer size = (Integer) request.get("size");
 
-        PageInfoResult<BlogPhotoAlbum> albumList = blogPhotoAlbumService.getAlbumList(album_name, current, size);
+        PageInfoResult<BlogPhotoAlbum> albumList = blogPhotoAlbumService.getAlbumList(albumName, current, size);
 
         return ResultUtils.success(albumList,"获取相册列表成功");
     }
@@ -59,15 +60,15 @@ public class PhotoAlbumController {
     @ApiOperation(value = "新增相册")
     @PostMapping("/add")
     public BaseResponse<BlogPhotoAlbum> addAlbum(@RequestBody Map<String,Object> request){
-        String album_name = (String) request.get("album_name");
-        String album_cover = (String) request.get("album_cover");
+        String albumName = (String) request.get("album_name");
+        String albumCover = (String) request.get("album_cover");
         String description = (String) request.get("description");
 
-        BlogPhotoAlbum oneAlbum = blogPhotoAlbumService.getOneAlbum(null, album_name);
+        BlogPhotoAlbum oneAlbum = blogPhotoAlbumService.getOneAlbum(null, albumName);
         if (oneAlbum != null) {
             return ResultUtils.error(400,"已经存在相同的相册名称，换一个试试",null);
         }
-        BlogPhotoAlbum blogPhotoAlbum = blogPhotoAlbumService.addAlbum(album_name, album_cover, description);
+        BlogPhotoAlbum blogPhotoAlbum = blogPhotoAlbumService.addAlbum(albumName, albumCover, description);
         return ResultUtils.success(blogPhotoAlbum,"创建相册成功");
     }
 
@@ -81,11 +82,11 @@ public class PhotoAlbumController {
     @PutMapping("/update")
     public BaseResponse<Boolean> updateAlbum(@RequestBody Map<String,Object> request){
         Integer id = (Integer) request.get("id");
-        String album_name = (String) request.get("album_name");
-        String album_cover = (String) request.get("album_cover");
+        String albumName = (String) request.get("album_name");
+        String albumCover = (String) request.get("album_cover");
         String description = (String) request.get("description");
 
-        BlogPhotoAlbum oneAlbum = blogPhotoAlbumService.getOneAlbum(null, album_name);
+        BlogPhotoAlbum oneAlbum = blogPhotoAlbumService.getOneAlbum(null, albumName);
         if (oneAlbum != null && oneAlbum.getId() != id) {
             return ResultUtils.error(400,"已经存在相同的相册名称，换一个试试",null);
         }
@@ -93,11 +94,11 @@ public class PhotoAlbumController {
         BlogPhotoAlbum album = blogPhotoAlbumService.getOneAlbum(id, null);
 
         // 删除原来存储的照片
-        if (album_cover != album.getAlbum_cover()) {
-            Boolean aBoolean = qiniu.deleteFile(StringManipulation.subString(album.getAlbum_cover()));
+        if (albumCover != album.getAlbumCover()) {
+            Boolean aBoolean = qiniu.deleteFile(StringManipulation.subString(album.getAlbumCover()));
         }
 
-        Boolean aBoolean = blogPhotoAlbumService.updateAlbum(id, album_name, album_cover, description);
+        Boolean aBoolean = blogPhotoAlbumService.updateAlbum(id, albumName, albumCover, description);
 
         return ResultUtils.success(aBoolean,"修改相册成功");
     }
@@ -114,7 +115,7 @@ public class PhotoAlbumController {
     public BaseResponse<Boolean> deleteAlbum(@PathVariable Integer id){
         BlogPhotoAlbum oneAlbum = blogPhotoAlbumService.getOneAlbum(id, null);
 
-        Boolean aBoolean = qiniu.deleteFile(StringManipulation.subString(oneAlbum.getAlbum_cover()));
+        Boolean aBoolean = qiniu.deleteFile(StringManipulation.subString(oneAlbum.getAlbumCover()));
 
         Boolean deleteAlbum = blogPhotoAlbumService.deleteAlbum(id);
 
@@ -133,9 +134,10 @@ public class PhotoAlbumController {
         List<BlogPhotoAlbum> allAlbumList = blogPhotoAlbumService.getAllAlbumList();
         //添加七牛云图片的下载凭证
         for(BlogPhotoAlbum blogPhotoAlbum : allAlbumList){
+
             try {
-                String downloadUrl = qiniu.downloadUrl(blogPhotoAlbum.getAlbum_cover());
-                blogPhotoAlbum.setAlbum_cover(downloadUrl);
+                String downloadUrl = qiniu.downloadUrl(blogPhotoAlbum.getAlbumCover());
+                blogPhotoAlbum.setAlbumCover(downloadUrl);
             } catch (QiniuException e) {
                 throw new RuntimeException(e);
             }

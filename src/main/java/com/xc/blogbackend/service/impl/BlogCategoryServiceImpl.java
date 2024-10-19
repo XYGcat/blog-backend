@@ -30,23 +30,23 @@ public class BlogCategoryServiceImpl extends ServiceImpl<BlogCategoryMapper, Blo
     @Override
     public String getCategoryNameById(Integer category_id) {
         BlogCategory category = blogCategoryMapper.selectById(category_id);
-        return category != null ? category.getCategory_name() : null;
+        return category != null ? category.getCategoryName() : null;
     }
 
     @Override
     public List<BlogCategory> getCategoryDictionary(Integer type) {
         QueryWrapper<BlogCategory> queryWrapper = new QueryWrapper<>();
-        queryWrapper.select("id","category_name");
+        queryWrapper.select("id","category_name","category_type");
         queryWrapper.eq("category_type",type);
         List<BlogCategory> categories = blogCategoryMapper.selectList(queryWrapper);
         return categories;
     }
 
     @Override
-    public BlogCategory getOneCategory(String category_name) {
+    public BlogCategory getOneCategory(String categoryName) {
         QueryWrapper<BlogCategory> queryWrapper = new QueryWrapper<>();
-        if (category_name != null) {
-            queryWrapper.eq("category_name", category_name);
+        if (categoryName != null) {
+            queryWrapper.eq("category_name", categoryName);
         }
         queryWrapper.select("id", "category_name"); // 指定返回的列
         BlogCategory category = blogCategoryMapper.selectOne(queryWrapper);
@@ -54,9 +54,9 @@ public class BlogCategoryServiceImpl extends ServiceImpl<BlogCategoryMapper, Blo
     }
 
     @Override
-    public BlogCategory createCategory(String category_name, Integer type) {
+    public BlogCategory createCategory(String categoryName, Integer type) {
         BlogCategory category = new BlogCategory();
-        category.setCategory_name(category_name);
+        category.setCategoryName(categoryName);
         category.setCategoryType(type);
         blogCategoryMapper.insert(category);
 
@@ -74,13 +74,13 @@ public class BlogCategoryServiceImpl extends ServiceImpl<BlogCategoryMapper, Blo
     }
 
     @Override
-    public PageInfoResult<BlogCategory> getCategoryList(String category_name, Integer current, Integer size) {
+    public PageInfoResult<BlogCategory> getCategoryList(String categoryName, Integer current, Integer size) {
 
         // 构建查询条件
         QueryWrapper<BlogCategory> queryWrapper = new QueryWrapper<>();
         // 如果分类名不为空，使用like模糊查询
-        if (category_name != null && !category_name.isEmpty()) {
-            queryWrapper.like("category_name", "%" + category_name + "%");
+        if (categoryName != null && !categoryName.isEmpty()) {
+            queryWrapper.like("category_name", "%" + categoryName + "%");
         }
 
         // 创建Page对象，设置当前页和分页大小
@@ -102,9 +102,9 @@ public class BlogCategoryServiceImpl extends ServiceImpl<BlogCategoryMapper, Blo
     }
 
     @Override
-    public Boolean updateCategory(Integer id, String category_name) {
+    public Boolean updateCategory(Integer id, String categoryName) {
         BlogCategory blogCategory = new BlogCategory();
-        blogCategory.setCategory_name(category_name);
+        blogCategory.setCategoryName(categoryName);
         UpdateWrapper<BlogCategory> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("id",id);
         int update = blogCategoryMapper.update(blogCategory, updateWrapper);

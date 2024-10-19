@@ -28,13 +28,18 @@ public class BlogCategory implements Serializable {
      * 分类名称 唯一
      */
     @TableField(value = "category_name")
-    private String category_name;
+    private String categoryName;
 
     /**
      * 分类类型 1:文章分类 2:资源导航分类
      */
     @TableField(value = "category_type")
     private Integer categoryType;
+
+    /**
+     * 排序
+     */
+    private Integer sort;
 
     /**
      * 

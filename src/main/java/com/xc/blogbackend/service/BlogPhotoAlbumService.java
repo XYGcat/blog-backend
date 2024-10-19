@@ -21,7 +21,7 @@ public interface BlogPhotoAlbumService extends IService<BlogPhotoAlbum> {
      * @param size
      * @return
      */
-    PageInfoResult<BlogPhotoAlbum> getAlbumList(String album_name,Integer current,Integer size);
+    PageInfoResult<BlogPhotoAlbum> getAlbumList(String albumName,Integer current,Integer size);
 
     /**
      * 新增相册
@@ -31,7 +31,7 @@ public interface BlogPhotoAlbumService extends IService<BlogPhotoAlbum> {
      * @param description
      * @return
      */
-    BlogPhotoAlbum addAlbum(String album_name,String album_cover,String description);
+    BlogPhotoAlbum addAlbum(String albumName,String albumCover,String description);
 
     /**
      * 根据id 或 相册名称获取相册信息
@@ -40,7 +40,7 @@ public interface BlogPhotoAlbumService extends IService<BlogPhotoAlbum> {
      * @param album_name
      * @return
      */
-    BlogPhotoAlbum getOneAlbum(Integer id,String album_name);
+    BlogPhotoAlbum getOneAlbum(Integer id,String albumName);
 
     /**
      * 编辑相册
@@ -51,7 +51,7 @@ public interface BlogPhotoAlbumService extends IService<BlogPhotoAlbum> {
      * @param description
      * @return
      */
-    Boolean updateAlbum(Integer id,String album_name,String album_cover,String description);
+    Boolean updateAlbum(Integer id,String albumName,String albumCover,String description);
 
     /**
      * 根据id删除相册

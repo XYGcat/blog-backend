@@ -224,10 +224,10 @@ public class ArticleController {
                                   finalArticle.getArticle_description(),
                                   mdImgList);
             Integer id = category.getId();
-            String category_name = category.getCategory_name();
+            String categoryName = category.getCategoryName();
 
             // 如果分类不存在，则先创建分类
-            Integer categoryOrReturn = createCategoryOrReturn(id, category_name);
+            Integer categoryOrReturn = createCategoryOrReturn(id, categoryName);
             articleRest.setCategory_id(categoryOrReturn);
 
             // 先创建文章 拿到文章的id
@@ -422,20 +422,20 @@ public class ArticleController {
      * 新增和编辑文章关于分类的公共方法
      *
      * @param id
-     * @param category_name
+     * @param categoryName
      * @return
      */
-    public Integer createCategoryOrReturn(Integer id,String category_name){
+    public Integer createCategoryOrReturn(Integer id,String categoryName){
         Integer finalId;
         if (id != null) {
             finalId = id;
         } else {
 //            BlogCategoryServiceImpl blogCategoryService = new BlogCategoryServiceImpl();
-            BlogCategory oneCategory = blogCategoryService.getOneCategory(category_name);
+            BlogCategory oneCategory = blogCategoryService.getOneCategory(categoryName);
             if (oneCategory != null) {
                 finalId = oneCategory.getId();
             } else {
-                BlogCategory createCategory = blogCategoryService.createCategory(category_name, CategoryEnum.ARTICLE.getCode());
+                BlogCategory createCategory = blogCategoryService.createCategory(categoryName, CategoryEnum.ARTICLE.getCode());
                 finalId = createCategory.getId();
             }
         }

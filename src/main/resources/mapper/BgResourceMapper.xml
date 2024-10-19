@@ -6,15 +6,18 @@
 
     <resultMap id="BaseResultMap" type="com.xc.blogbackend.model.domain.BgResource">
             <id property="id" column="id" jdbcType="INTEGER"/>
-            <result property="resource_name" column="resource_name" jdbcType="VARCHAR"/>
-            <result property="resource_img" column="resource_img" jdbcType="VARCHAR"/>
+            <result property="categoryId" column="category_id" jdbcType="INTEGER"></result>
+            <result property="siteUrl" column="site_url" jdbcType="VARCHAR"/>
+            <result property="siteName" column="site_name" jdbcType="VARCHAR"/>
+            <result property="siteImg" column="site_img" jdbcType="VARCHAR"/>
             <result property="description" column="description" jdbcType="VARCHAR"/>
-            <result property="created_at" column="created_at" jdbcType="TIMESTAMP"/>
-            <result property="updated_at" column="updated_at" jdbcType="TIMESTAMP"/>
+            <result property="sort" column="sort" jdbcType="INTEGER"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,resource_name,resource_img,
-        description,created_at,updated_at
+        id,category_id,site_name,site_url,site_img,
+        description,sort,created_at,updated_at
     </sql>
 </mapper>

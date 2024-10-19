@@ -6,11 +6,11 @@
 
     <resultMap id="BaseResultMap" type="com.xc.blogbackend.model.domain.BlogPhotoAlbum">
             <id property="id" column="id" jdbcType="INTEGER"/>
-            <result property="album_name" column="album_name" jdbcType="VARCHAR"/>
+            <result property="albumName" column="album_name" jdbcType="VARCHAR"/>
             <result property="description" column="description" jdbcType="VARCHAR"/>
             <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
             <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
-            <result property="album_cover" column="album_cover" jdbcType="VARCHAR"/>
+            <result property="albumCover" column="album_cover" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">

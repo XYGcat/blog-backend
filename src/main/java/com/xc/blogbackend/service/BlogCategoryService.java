@@ -31,18 +31,18 @@ public interface BlogCategoryService extends IService<BlogCategory> {
     /**
      * 根据id或者分类名称获取分类信息
      *
-     * @param category_name
+     * @param categoryName
      * @return
      */
-    BlogCategory getOneCategory(String category_name);
+    BlogCategory getOneCategory(String categoryName);
 
     /**
      * 新增分类
      *
-     * @param category_name
+     * @param categoryName
      * @return
      */
-    BlogCategory createCategory(String category_name, Integer type);
+    BlogCategory createCategory(String categoryName, Integer type);
 
     /**
      *获取分类总数
@@ -54,21 +54,21 @@ public interface BlogCategoryService extends IService<BlogCategory> {
     /**
      * 分页获取分类列表
      *
-     * @param category_name
+     * @param categoryName
      * @param current
      * @param size
      * @return
      */
-    PageInfoResult<BlogCategory> getCategoryList(String category_name,Integer current,Integer size);
+    PageInfoResult<BlogCategory> getCategoryList(String categoryName,Integer current,Integer size);
 
     /**
      * 修改分类
      *
      * @param id
-     * @param category_name
+     * @param categoryName
      * @return
      */
-    Boolean updateCategory(Integer id,String category_name);
+    Boolean updateCategory(Integer id,String categoryName);
 
     /**
      * 删除分类

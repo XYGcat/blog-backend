@@ -15,17 +15,17 @@ class BlogCategoryServiceTest {
         BlogCategoryServiceImpl blogCategoryService = new BlogCategoryServiceImpl();
 
         // 创建一个测试用的分类名称
-        String category_name = "后端";
+        String categoryName = "后端";
 
         // 创建一个 BlogCategory 对象，用于存储查询结果
-        BlogCategory category = blogCategoryService.getOneCategory(category_name);
+        BlogCategory category = blogCategoryService.getOneCategory(categoryName);
 
         // 断言查询结果是否为空
         assertNotNull(category);
-        assertEquals(category_name, category.getCategory_name());
+        assertEquals(categoryName, category.getCategoryName());
 
         // 打印查询结果
         System.out.println("Category ID: " + category.getId());
-        System.out.println("Category Name: " + category.getCategory_name());
+        System.out.println("Category Name: " + category.getCategoryName());
     }
 }

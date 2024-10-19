@@ -14,11 +14,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 文章分类接口
+ * 分类接口
  *
  * @author 星尘
  */
-@Api(tags = "文章分类接口")
+@Api(tags = "分类接口")
 @RestController
 @RequestMapping("/category")
 public class CategoryController {
@@ -47,10 +47,10 @@ public class CategoryController {
     @ApiOperation(value = "条件分页查找分类列表")
     @PostMapping("/getCategoryList")
     public BaseResponse<PageInfoResult<BlogCategory>> getCategoryList(@RequestBody Map<String,Object> request){
-        String category_name = (String) request.get("category_name");
+        String categoryName = (String) request.get("category_name");
         Integer current = (Integer) request.get("current");
         Integer size = (Integer) request.get("size");
-        PageInfoResult<BlogCategory> categoryList = blogCategoryService.getCategoryList(category_name, current, size);
+        PageInfoResult<BlogCategory> categoryList = blogCategoryService.getCategoryList(categoryName, current, size);
         return ResultUtils.success(categoryList,"分页查找分类成功");
     }
 
@@ -63,9 +63,9 @@ public class CategoryController {
     @ApiOperation(value = "新增分类")
     @PostMapping("/add")
     public BaseResponse<BlogCategory> addCategory(@RequestBody Map<String,Object> request){
-        String category_name = (String) request.get("category_name");
+        String categoryName = (String) request.get("category_name");
         Integer type = (Integer) request.get("type");
-        BlogCategory category = blogCategoryService.createCategory(category_name, type);
+        BlogCategory category = blogCategoryService.createCategory(categoryName, type);
         return ResultUtils.success(category,"新增分类成功");
     }
 
@@ -78,9 +78,9 @@ public class CategoryController {
     @ApiOperation(value = "修改分类")
     @PutMapping("/update")
     public BaseResponse<Boolean> updateCategory(@RequestBody Map<String,Object> request){
-        String category_name = (String) request.get("category_name");
+        String categoryName = (String) request.get("category_name");
         Integer id = (Integer) request.get("id");
-        Boolean aBoolean = blogCategoryService.updateCategory(id, category_name);
+        Boolean aBoolean = blogCategoryService.updateCategory(id, categoryName);
         return ResultUtils.success(aBoolean,"修改分类成功");
     }
 
