@@ -4,6 +4,7 @@ import com.qiniu.common.QiniuException;
 import com.xc.blogbackend.common.BaseResponse;
 import com.xc.blogbackend.common.ErrorCode;
 import com.xc.blogbackend.common.ResultUtils;
+import com.xc.blogbackend.enums.CategoryEnum;
 import com.xc.blogbackend.exception.BusinessException;
 import com.xc.blogbackend.model.domain.BlogArticle;
 import com.xc.blogbackend.model.domain.BlogArticleTag;
@@ -26,6 +27,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -225,7 +227,6 @@ public class ArticleController {
             String category_name = category.getCategory_name();
 
             // 如果分类不存在，则先创建分类
-//            ArticleCommon articleCommon = new ArticleCommon();
             Integer categoryOrReturn = createCategoryOrReturn(id, category_name);
             articleRest.setCategory_id(categoryOrReturn);
 
@@ -434,7 +435,7 @@ public class ArticleController {
             if (oneCategory != null) {
                 finalId = oneCategory.getId();
             } else {
-                BlogCategory createCategory = blogCategoryService.createCategory(category_name);
+                BlogCategory createCategory = blogCategoryService.createCategory(category_name, CategoryEnum.ARTICLE.getCode());
                 finalId = createCategory.getId();
             }
         }

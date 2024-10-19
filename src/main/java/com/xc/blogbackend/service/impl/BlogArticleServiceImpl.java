@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qiniu.common.QiniuException;
 import com.xc.blogbackend.common.ErrorCode;
+import com.xc.blogbackend.enums.CategoryEnum;
 import com.xc.blogbackend.exception.BusinessException;
 import com.xc.blogbackend.mapper.BlogArticleMapper;
 import com.xc.blogbackend.model.domain.*;
@@ -24,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
+
 import javax.annotation.Resource;
 import java.util.*;
 import java.util.concurrent.*;
@@ -799,7 +801,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
             if (oneCategory != null) {
                 finalId = oneCategory.getId();
             } else {
-                BlogCategory createCategory = blogCategoryService.createCategory(category_name);
+                BlogCategory createCategory = blogCategoryService.createCategory(category_name, CategoryEnum.ARTICLE.getCode());
                 finalId = createCategory.getId();
             }
         }

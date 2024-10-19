@@ -34,9 +34,10 @@ public class BlogCategoryServiceImpl extends ServiceImpl<BlogCategoryMapper, Blo
     }
 
     @Override
-    public List<BlogCategory> getCategoryDictionary() {
+    public List<BlogCategory> getCategoryDictionary(Integer type) {
         QueryWrapper<BlogCategory> queryWrapper = new QueryWrapper<>();
         queryWrapper.select("id","category_name");
+        queryWrapper.eq("category_type",type);
         List<BlogCategory> categories = blogCategoryMapper.selectList(queryWrapper);
         return categories;
     }
@@ -53,9 +54,10 @@ public class BlogCategoryServiceImpl extends ServiceImpl<BlogCategoryMapper, Blo
     }
 
     @Override
-    public BlogCategory createCategory(String category_name) {
+    public BlogCategory createCategory(String category_name, Integer type) {
         BlogCategory category = new BlogCategory();
         category.setCategory_name(category_name);
+        category.setCategoryType(type);
         blogCategoryMapper.insert(category);
 
         Integer id = category.getId();

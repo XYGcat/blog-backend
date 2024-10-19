@@ -8,6 +8,7 @@ import com.xc.blogbackend.service.BlogCategoryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
+
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
@@ -30,10 +31,10 @@ public class CategoryController {
      *
      * @return
      */
-    @ApiOperation(value = "获取分类字典")
-    @GetMapping("/getCategoryDictionary")
-    public BaseResponse<List<BlogCategory>> getCategoryDictionary(){
-        List<BlogCategory> categoryDictionary = blogCategoryService.getCategoryDictionary();
+    @ApiOperation(value = "根据类型获取分类字典")
+    @GetMapping("/getCategoryDictionary/{type}")
+    public BaseResponse<List<BlogCategory>> getCategoryDictionary(@PathVariable Integer type){
+        List<BlogCategory> categoryDictionary = blogCategoryService.getCategoryDictionary(type);
         return ResultUtils.success(categoryDictionary);
     }
 
@@ -63,7 +64,8 @@ public class CategoryController {
     @PostMapping("/add")
     public BaseResponse<BlogCategory> addCategory(@RequestBody Map<String,Object> request){
         String category_name = (String) request.get("category_name");
-        BlogCategory category = blogCategoryService.createCategory(category_name);
+        Integer type = (Integer) request.get("type");
+        BlogCategory category = blogCategoryService.createCategory(category_name, type);
         return ResultUtils.success(category,"新增分类成功");
     }
 
