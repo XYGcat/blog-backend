@@ -3,7 +3,6 @@ package com.xc.blogbackend.config;
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,12 +12,12 @@ import org.springframework.context.annotation.Configuration;
  * @author 星尘
  */
 @Configuration
-@MapperScan("com.baomidou.cloud.service.*.mapper*")
 public class MybatisPlusConfig {
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
         // 使用MySQL作为数据库时，配置PaginationInnerInterceptor，DbType需要设置为MYSQL
+        // 添加分页拦截器
         interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL));
         return interceptor;
     }
