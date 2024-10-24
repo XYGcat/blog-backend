@@ -12,6 +12,7 @@ import com.xc.blogbackend.utils.StringManipulation;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
+
 import javax.annotation.Resource;
 
 /**
@@ -42,14 +43,14 @@ public class ConfigController {
 
         if (config != null) {
             try {
-                String avatar_bg = qiniu.downloadUrl(config.getAvatar_bg());
-                String bg_avatar = qiniu.downloadUrl(config.getBg_avatar());
-                String qq_link = qiniu.downloadUrl(config.getQq_link());
-                String we_chat_link = qiniu.downloadUrl(config.getWe_chat_link());
-                config.setAvatar_bg(avatar_bg);
-                config.setBg_avatar(bg_avatar);
-                config.setQq_link(qq_link);
-                config.setWe_chat_link(we_chat_link);
+                String avatar_bg = qiniu.downloadUrl(config.getAvatarBg());
+                String bg_avatar = qiniu.downloadUrl(config.getBgAvatar());
+                String qq_link = qiniu.downloadUrl(config.getQqLink());
+                String we_chat_link = qiniu.downloadUrl(config.getWeChatLink());
+                config.setAvatarBg(avatar_bg);
+                config.setBgAvatar(bg_avatar);
+                config.setQqLink(qq_link);
+                config.setWeChatLink(we_chat_link);
             } catch (QiniuException e) {
                 throw new RuntimeException(e);
             }
@@ -86,29 +87,29 @@ public class ConfigController {
     public BaseResponse<Boolean> updateConfig(@RequestBody BlogConfig blogConfig){
 
         //// TODO: 2023-12-07 该页面头像和用户界面头像应该一致
-        String avatar_bg = blogConfig.getAvatar_bg();
-        String bg_avatar = blogConfig.getBg_avatar();
-        String qq_link = blogConfig.getQq_link();
-        String we_chat_link = blogConfig.getWe_chat_link();
+        String avatar_bg = blogConfig.getAvatarBg();
+        String bg_avatar = blogConfig.getBgAvatar();
+        String qq_link = blogConfig.getQqLink();
+        String we_chat_link = blogConfig.getWeChatLink();
 
         BlogConfig config = blogConfigService.getConfig();
 
         // 如果背景图不一致，删除原来的
         if (config != null){
-            if (avatar_bg != null && config.getAvatar_bg() != null && avatar_bg != config.getAvatar_bg()){
-                String subString = StringManipulation.subString(config.getAvatar_bg());
+            if (avatar_bg != null && config.getAvatarBg() != null && avatar_bg != config.getAvatarBg()){
+                String subString = StringManipulation.subString(config.getAvatarBg());
                 qiniu.deleteFile(subString);
             }
-            if (bg_avatar != null && config.getBg_avatar() != null && bg_avatar != config.getBg_avatar()){
-                String subString = StringManipulation.subString(config.getBg_avatar());
+            if (bg_avatar != null && config.getBgAvatar() != null && bg_avatar != config.getBgAvatar()){
+                String subString = StringManipulation.subString(config.getBgAvatar());
                 qiniu.deleteFile(subString);
             }
-            if (qq_link != null && config.getQq_link() != null && qq_link != config.getQq_link()){
-                String subString = StringManipulation.subString(config.getQq_link());
+            if (qq_link != null && config.getQqLink() != null && qq_link != config.getQqLink()){
+                String subString = StringManipulation.subString(config.getQqLink());
                 qiniu.deleteFile(subString);
             }
-            if (we_chat_link != null && config.getWe_chat_link() != null && we_chat_link != config.getWe_chat_link()){
-                String subString = StringManipulation.subString(config.getWe_chat_link());
+            if (we_chat_link != null && config.getWeChatLink() != null && we_chat_link != config.getWeChatLink()){
+                String subString = StringManipulation.subString(config.getWeChatLink());
                 qiniu.deleteFile(subString);
             }
         }

@@ -6,17 +6,17 @@
 
     <resultMap id="BaseResultMap" type="com.xc.blogbackend.model.domain.BlogConfig">
             <id property="id" column="id" jdbcType="INTEGER"/>
-            <result property="bg_name" column="bg_name" jdbcType="VARCHAR"/>
-            <result property="bg_avatar" column="bg_avatar" jdbcType="VARCHAR"/>
-            <result property="avatar_bg" column="avatar_bg" jdbcType="VARCHAR"/>
-            <result property="personal_say" column="personal_say" jdbcType="VARCHAR"/>
-            <result property="bg_notice" column="bg_notice" jdbcType="VARCHAR"/>
-            <result property="qq_link" column="qq_link" jdbcType="VARCHAR"/>
-            <result property="we_chat_link" column="we_chat_link" jdbcType="VARCHAR"/>
-            <result property="github_link" column="github_link" jdbcType="VARCHAR"/>
-            <result property="git_ee_link" column="git_ee_link" jdbcType="VARCHAR"/>
-            <result property="bilibili_link" column="bilibili_link" jdbcType="VARCHAR"/>
-            <result property="view_time" column="view_time" jdbcType="BIGINT"/>
+            <result property="bgName" column="bg_name" jdbcType="VARCHAR"/>
+            <result property="bgAvatar" column="bg_avatar" jdbcType="VARCHAR"/>
+            <result property="avatarBg" column="avatar_bg" jdbcType="VARCHAR"/>
+            <result property="personalSay" column="personal_say" jdbcType="VARCHAR"/>
+            <result property="bgNotice" column="bg_notice" jdbcType="VARCHAR"/>
+            <result property="qqLink" column="qq_link" jdbcType="VARCHAR"/>
+            <result property="weChatLink" column="we_chat_link" jdbcType="VARCHAR"/>
+            <result property="githubLink" column="github_link" jdbcType="VARCHAR"/>
+            <result property="giteeLink" column="gitee_link" jdbcType="VARCHAR"/>
+            <result property="biliLink" column="bili_link" jdbcType="VARCHAR"/>
+            <result property="viewTime" column="view_time" jdbcType="BIGINT"/>
             <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
             <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
     </resultMap>
@@ -25,7 +25,7 @@
         id,bg_name,bg_avatar,
         avatar_bg,personal_say,bg_notice,
         qq_link,we_chat_link,github_link,
-        git_ee_link,bilibili_link,view_time,
+        gitee_link,bili_link,view_time,
         created_at,updated_at
     </sql>
 </mapper>

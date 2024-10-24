@@ -24,67 +24,67 @@ public class BlogConfig implements Serializable {
      * 博客名称
      */
     @TableField(value = "bg_name")
-    private String bg_name;
+    private String bgName;
 
     /**
      * 博客头像
      */
     @TableField(value = "bg_avatar")
-    private String bg_avatar;
+    private String bgAvatar;
 
     /**
      * 博客头像背景图
      */
     @TableField(value = "avatar_bg")
-    private String avatar_bg;
+    private String avatarBg;
 
     /**
      * 个人签名
      */
     @TableField(value = "personal_say")
-    private String personal_say;
+    private String personalSay;
 
     /**
      * 博客公告
      */
     @TableField(value = "bg_notice")
-    private String bg_notice;
+    private String bgNotice;
 
     /**
      * qq链接
      */
     @TableField(value = "qq_link")
-    private String qq_link;
+    private String qqLink;
 
     /**
      * 微信链接
      */
     @TableField(value = "we_chat_link")
-    private String we_chat_link;
+    private String weChatLink;
 
     /**
      * github链接
      */
     @TableField(value = "github_link")
-    private String github_link;
+    private String githubLink;
 
     /**
-     * git_ee链接
+     * gitee链接
      */
-    @TableField(value = "git_ee_link")
-    private String git_ee_link;
+    @TableField(value = "gitee_link")
+    private String giteeLink;
 
     /**
      * bilibili链接
      */
-    @TableField(value = "bilibili_link")
-    private String bilibili_link;
+    @TableField(value = "bili_link")
+    private String biliLink;
 
     /**
      * 博客被访问的次数
      */
     @TableField(value = "view_time")
-    private Long view_time;
+    private Long viewTime;
 
     /**
      * 创建时间，插入时自动填充

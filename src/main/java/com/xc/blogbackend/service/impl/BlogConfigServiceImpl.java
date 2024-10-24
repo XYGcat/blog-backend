@@ -43,7 +43,7 @@ public class BlogConfigServiceImpl extends ServiceImpl<BlogConfigMapper, BlogCon
         List<BlogConfig> blogConfigs = blogConfigMapper.selectList(null);
         if (!blogConfigs.isEmpty()) {
             BlogConfig blogConfig = blogConfigs.get(0);
-            blogConfig.setView_time(blogConfig.getView_time() + 1);
+            blogConfig.setViewTime(blogConfig.getViewTime() + 1);
             boolean byId = this.updateById(blogConfig);
             flag = "添加成功";
         }else {
