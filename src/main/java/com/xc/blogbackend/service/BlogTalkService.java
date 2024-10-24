@@ -49,10 +49,10 @@ public interface BlogTalkService extends IService<BlogTalk> {
      * 置顶/取消置顶 说说
      *
      * @param id
-     * @param is_top
+     * @param isTop
      * @return
      */
-    Boolean toggleTop(Integer id,Integer is_top);
+    Boolean toggleTop(Integer id,Integer isTop);
 
     /**
      * 切换说说公开性

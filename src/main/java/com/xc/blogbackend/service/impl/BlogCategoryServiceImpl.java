@@ -28,8 +28,8 @@ public class BlogCategoryServiceImpl extends ServiceImpl<BlogCategoryMapper, Blo
     private BlogCategoryMapper blogCategoryMapper;
 
     @Override
-    public String getCategoryNameById(Integer category_id) {
-        BlogCategory category = blogCategoryMapper.selectById(category_id);
+    public String getCategoryNameById(Integer categoryId) {
+        BlogCategory category = blogCategoryMapper.selectById(categoryId);
         return category != null ? category.getCategoryName() : null;
     }
 

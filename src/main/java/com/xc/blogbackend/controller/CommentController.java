@@ -11,6 +11,7 @@ import com.xc.blogbackend.utils.IpUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -103,15 +104,15 @@ public class CommentController {
         BlogComment comment = blogCommentService.createComment(blogComment, clientIp);
         // from_id表示当前登陆人id 发表评论的人和当前登录人不一样才进行消息提示 author_id表示当前被评论的作者的id
         Integer from_id = blogComment.getFrom_id();
-        Integer author_id = blogComment.getAuthor_id();
+        Integer authorId = blogComment.getAuthorId();
         Integer type = blogComment.getType();
         Integer for_id = blogComment.getFor_id();
         String from_name = blogComment.getFrom_name();
         String content = blogComment.getContent();
         String typeName = CurrentTypeName.getCurrentTypeName(blogComment.getType());
         // 不是作者自己评论的才给作者消息提示
-        if (from_id != author_id) {
-            blogNotifyService.addNotify(author_id,type,for_id,
+        if (from_id != authorId) {
+            blogNotifyService.addNotify(authorId,type,for_id,
                     "您的" + typeName  + "收到了来自于：" + from_name + "的评论:" + content);
         }
         return ResultUtils.success(comment,"新增评论成功");
@@ -132,7 +133,7 @@ public class CommentController {
         BlogComment comment = blogCommentService.applyComment(blogComment, clientIp);
 
         Integer from_id = blogComment.getFrom_id();
-        Integer author_id = blogComment.getAuthor_id();
+        Integer authorId = blogComment.getAuthorId();
         Integer type = blogComment.getType();
         Integer for_id = blogComment.getFor_id();
         String from_name = blogComment.getFrom_name();

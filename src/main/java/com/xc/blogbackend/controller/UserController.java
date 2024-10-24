@@ -18,9 +18,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
+
 import static com.xc.blogbackend.contant.BlogUserConstant.ADMIN_PASSWORD;
 import static com.xc.blogbackend.contant.BlogUserConstant.USER_LOGIN_STATE;
 
@@ -61,7 +63,7 @@ public class UserController {
 
                 BlogUser blogUser = new BlogUser();
                 blogUser.setUsername("admin");
-                blogUser.setNick_name("超级管理员");
+                blogUser.setNickName("超级管理员");
                 blogUser.setRole(1);
                 blogUser.setId(5201314);
                 blogUser.setIp(ipAddress);
@@ -123,7 +125,7 @@ public class UserController {
                 BlogUser blogUser = new BlogUser();
                 blogUser.setId(5201314);
                 blogUser.setRole(1);
-                blogUser.setNick_name("超级管理员");
+                blogUser.setNickName("超级管理员");
                 return ResultUtils.success(blogUser);
             } else {
                 //// TODO: 2023-11-20 过滤返回值
@@ -154,10 +156,10 @@ public class UserController {
     @PostMapping("/getUserList")
     public BaseResponse<PageInfoResult<BlogUser>> getUserList(@RequestBody Map<String,Object> request){
         Integer current = (Integer) request.get("current");
-        String nick_name = (String) request.get("nick_name");
+        String nickName = (String) request.get("nick_name");
         Integer role = (Integer) request.get("role");
         Integer size = (Integer) request.get("size");
-        PageInfoResult<BlogUser> userList = blogUserService.getUserList(current, nick_name, role, size);
+        PageInfoResult<BlogUser> userList = blogUserService.getUserList(current, nickName, role, size);
 
         return ResultUtils.success(userList,"分页获取用户列表成功");
     }

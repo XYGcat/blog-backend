@@ -20,6 +20,7 @@ import com.xc.blogbackend.utils.Qiniu;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +64,7 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
         if (status != null) {
             queryWrapper.eq("status", status);
         }
-        //按照 is_top 升序和 createdAt 降序排列
+        //按照 isTop 升序和 createdAt 降序排列
         queryWrapper.orderByAsc("is_top").orderByDesc("created_at");
         // 创建Page对象，设置当前页和分页大小
         Page<BlogTalk> page = new Page<>(current,size);
@@ -110,7 +111,7 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
             for (int i = 0; i < rows.size(); i++) {
                 BlogUser user = userFutures.get(i).join();
                 if (user != null) {
-                    rows.get(i).setNick_name(user.getNick_name());
+                    rows.get(i).setNickName(user.getNickName());
                     rows.get(i).setAvatar(user.getAvatar());
                 }
             }
@@ -133,7 +134,7 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
 //        if (status != null) {
 //            queryWrapper.eq("status", status);
 //        }
-//        //按照 is_top 升序和 createdAt 降序排列
+//        //按照 isTop 升序和 createdAt 降序排列
 //        queryWrapper.orderByAsc("is_top").orderByDesc("created_at");
 //        // 创建Page对象，设置当前页和分页大小
 //        Page<BlogTalk> page = new Page<>(current,size);
@@ -215,7 +216,7 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
 //            try {
 //                BlogUser r = future.get();
 //                if (r != null) {
-//                    rows.get(index).setNick_name(r.getNick_name());
+//                    rows.get(index).setNickName(r.getNickName());
 //                    rows.get(index).setAvatar(r.getAvatar());
 //                }
 //            }catch (InterruptedException | ExecutionException e){
@@ -298,9 +299,9 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
     }
 
     @Override
-    public Boolean toggleTop(Integer id, Integer is_top) {
+    public Boolean toggleTop(Integer id, Integer isTop) {
         BlogTalk blogTalk = new BlogTalk();
-        blogTalk.setIs_top(is_top);
+        blogTalk.setIsTop(isTop);
         UpdateWrapper<BlogTalk> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("id",id);
         int update = blogTalkMapper.update(blogTalk, updateWrapper);
@@ -349,7 +350,7 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
 
         QueryWrapper<BlogTalk> queryWrapper = new QueryWrapper<>();    // 构建查询条件
         queryWrapper.eq("status", 1);
-        //按照 is_top 升序和 createdAt 降序排列
+        //按照 isTop 升序和 createdAt 降序排列
         queryWrapper.orderByAsc("is_top")
                     .orderByDesc("created_at");
         // 创建Page对象，设置当前页和分页大小
@@ -397,7 +398,7 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
             for (int i = 0; i < rows.size(); i++) {
                 BlogUser user = userFutures.get(i).join();
                 if (user != null) {
-                    rows.get(i).setNick_name(user.getNick_name());
+                    rows.get(i).setNickName(user.getNickName());
                     rows.get(i).setAvatar(user.getAvatar());
                 }
             }

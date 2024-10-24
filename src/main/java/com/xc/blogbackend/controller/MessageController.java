@@ -11,6 +11,7 @@ import com.xc.blogbackend.utils.RandomUsernameGenerator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
+
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
@@ -76,15 +77,15 @@ public class MessageController {
     public BaseResponse<Boolean> addMessage(@RequestBody BlogMessage blogMessage){
         Integer user_id = blogMessage.getUser_id();
         String message = blogMessage.getMessage();
-        String nick_name = blogMessage.getNick_name();
+        String nickName = blogMessage.getNickName();
         if (user_id == null) {
-            nick_name = RandomUsernameGenerator.generateRandomUsername();
+            nickName = RandomUsernameGenerator.generateRandomUsername();
         }
         Boolean aBoolean = blogMessageService.addMessage(blogMessage);
 
         // 发布消息推送
         if (user_id != 1) {
-            blogNotifyService.addNotify(1, 3, null, "您收到了来自于：" + nick_name + "的留言:" + message);
+            blogNotifyService.addNotify(1, 3, null, "您收到了来自于：" + nickName + "的留言:" + message);
         }
 
         return ResultUtils.success(aBoolean,"发布成功");

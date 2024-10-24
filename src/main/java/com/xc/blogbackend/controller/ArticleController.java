@@ -95,8 +95,8 @@ public class ArticleController {
     @PostMapping("/titleExist")
     public BaseResponse<Boolean> getArticleInfoByTitle(@RequestBody TitleExistRequest titleExistRequest){
         Integer id = titleExistRequest.getId();
-        String article_title = titleExistRequest.getArticle_title();
-        Boolean articleInfoByTitle = blogArticleService.getArticleInfoByTitle(id, article_title);
+        String articleTitle = titleExistRequest.getArticleTitle();
+        Boolean articleInfoByTitle = blogArticleService.getArticleInfoByTitle(id, articleTitle);
         return ResultUtils.success(articleInfoByTitle,"文章查询结果");
     }
 
@@ -201,9 +201,9 @@ public class ArticleController {
         try {
             AddArticleRequest.ArticleDate finalArticle = addArticleRequest.getFinalArticle();
 
-            String article_title = finalArticle.getArticle_title();
+            String articleTitle = finalArticle.getArticleTitle();
             Integer articleId = finalArticle.getId();
-            Boolean byTitle = blogArticleService.getArticleInfoByTitle(articleId, article_title);
+            Boolean byTitle = blogArticleService.getArticleInfoByTitle(articleId, articleTitle);
             if (byTitle){
                 throw new BusinessException(ErrorCode.PARAMS_ERROR,"已存在相同的文章标题");
             }
@@ -212,23 +212,23 @@ public class ArticleController {
             BlogCategory category = finalArticle.getCategory();
             String mdImgList = String.valueOf(finalArticle.getMdImgList());
             BlogArticle articleRest = new BlogArticle();
-            articleRest.setValues(finalArticle.getArticle_title(),
-                                  finalArticle.getAuthor_id(),
-                                  finalArticle.getArticle_content(),
-                                  finalArticle.getArticle_cover(),
-                                  finalArticle.getIs_top(),
-                                  finalArticle.getArticle_order(),
+            articleRest.setValues(finalArticle.getArticleTitle(),
+                                  finalArticle.getAuthorId(),
+                                  finalArticle.getArticleContent(),
+                                  finalArticle.getArticleCover(),
+                                  finalArticle.getIsTop(),
+                                  finalArticle.getArticleOrder(),
                                   finalArticle.getStatus(),
                                   finalArticle.getType(),
-                                  finalArticle.getOrigin_url(),
-                                  finalArticle.getArticle_description(),
+                                  finalArticle.getOriginUrl(),
+                                  finalArticle.getArticleDescription(),
                                   mdImgList);
             Integer id = category.getId();
             String categoryName = category.getCategoryName();
 
             // 如果分类不存在，则先创建分类
             Integer categoryOrReturn = createCategoryOrReturn(id, categoryName);
-            articleRest.setCategory_id(categoryOrReturn);
+            articleRest.setCategoryId(categoryOrReturn);
 
             // 先创建文章 拿到文章的id
             BlogArticle newArticle = blogArticleService.createArticle(articleRest);
@@ -248,13 +248,13 @@ public class ArticleController {
      * 修改文章置顶状态
      *
      * @param id
-     * @param is_top
+     * @param isTop
      * @return
      */
     @ApiOperation(value = "修改文章置顶状态")
-    @PutMapping("/updateTop/{id}/{is_top}")
-    public BaseResponse<Boolean> updateTop(@PathVariable Integer id,@PathVariable Integer is_top){
-        Boolean aBoolean = blogArticleService.updateTop(id, is_top);
+    @PutMapping("/updateTop/{id}/{isTop}")
+    public BaseResponse<Boolean> updateTop(@PathVariable Integer id,@PathVariable Integer isTop){
+        Boolean aBoolean = blogArticleService.updateTop(id, isTop);
 
         return ResultUtils.success(aBoolean,"修改文章置顶状态成功");
     }
@@ -459,11 +459,11 @@ public class ArticleController {
 //        BlogTagServiceImpl blogTagService = new BlogTagServiceImpl();
         for (BlogTag blogTag : tagList){
             if (blogTag.getId() == null) {
-                BlogTag oneTag = blogTagService.getOneTag(blogTag.getTag_name());
+                BlogTag oneTag = blogTagService.getOneTag(blogTag.getTagName());
                 if (oneTag != null) {
                     res = oneTag;
                 }else {
-                    res = blogTagService.createTag(blogTag.getTag_name());
+                    res = blogTagService.createTag(blogTag.getTagName());
                 }
             }
             promiseList.add(res);
@@ -473,7 +473,7 @@ public class ArticleController {
         for(BlogTag blogTag : promiseList){
             if (blogTag != null) {
                 for (int index = 0;index < tagList.size();index ++){
-                    if (tagList.get(index).getTag_name().equals(blogTag.getTag_name())){
+                    if (tagList.get(index).getTagName().equals(blogTag.getTagName())){
                         tagList.get(index).setId(blogTag.getId());
                     }
                 }
@@ -486,7 +486,7 @@ public class ArticleController {
             for (BlogTag blogTag : tagList){
                 BlogArticleTag articleTag = new BlogArticleTag();
                 articleTag.setArticle_id(Integer.valueOf(article_id));
-                articleTag.setTag_id(blogTag.getId());
+                articleTag.setTagId(blogTag.getId());
                 articleTagList.add(articleTag);
             }
             // 批量新增文章标签关联

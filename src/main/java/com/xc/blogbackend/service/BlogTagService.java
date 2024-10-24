@@ -23,18 +23,18 @@ public interface BlogTagService extends IService<BlogTag> {
     /**
      * 根据(id或者)标签名称获取标签信息
      *
-     * @param tag_name
+     * @param tagName
      * @return
      */
-    BlogTag getOneTag(String tag_name);
+    BlogTag getOneTag(String tagName);
 
     /**
      * 新增标签
      *
-     * @param tag_name
+     * @param tagName
      * @return
      */
-    BlogTag createTag(String tag_name);
+    BlogTag createTag(String tagName);
 
     /**
      * 获取标签总数
@@ -48,19 +48,19 @@ public interface BlogTagService extends IService<BlogTag> {
      *
      * @param current
      * @param size
-     * @param tag_name
+     * @param tagName
      * @return
      */
-    PageInfoResult<BlogTag> getTalkList(Integer current,Integer size,String tag_name);
+    PageInfoResult<BlogTag> getTalkList(Integer current,Integer size,String tagName);
 
     /**
      * 修改标签
      *
      * @param id
-     * @param tag_name
+     * @param tagName
      * @return
      */
-    Boolean updateTag(Integer id,String tag_name);
+    Boolean updateTag(Integer id,String tagName);
 
     /**
      * 删除标签

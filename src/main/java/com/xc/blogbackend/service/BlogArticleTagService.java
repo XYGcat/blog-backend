@@ -18,7 +18,7 @@ public interface BlogArticleTagService extends IService<BlogArticleTag> {
      *
      * @return
      */
-    List<Integer> getArticleIdListByTagId(int tag_id);
+    List<Integer> getArticleIdListByTagId(int tagId);
 
     /**
      * 根据文章id获取标签名称列表

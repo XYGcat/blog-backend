@@ -16,22 +16,22 @@ public class PaddingUtils {
         String mdImgList = String.valueOf(articleDate.getMdImgList());
 
         blogArticle.setId(articleDate.getId());
-        blogArticle.setArticle_title(articleDate.getArticle_title());
-        blogArticle.setAuthor_id(articleDate.getAuthor_id());
-        blogArticle.setCategory_id(articleDate.getCategory().getId()); // 可能需要进一步处理
-        blogArticle.setArticle_content(articleDate.getArticle_content());
-        blogArticle.setArticle_cover(articleDate.getArticle_cover());
-        blogArticle.setIs_top(articleDate.getIs_top());
+        blogArticle.setArticleTitle(articleDate.getArticleTitle());
+        blogArticle.setAuthorId(articleDate.getAuthorId());
+        blogArticle.setCategoryId(articleDate.getCategory().getId()); // 可能需要进一步处理
+        blogArticle.setArticleContent(articleDate.getArticleContent());
+        blogArticle.setArticleCover(articleDate.getArticleCover());
+        blogArticle.setIsTop(articleDate.getIsTop());
         blogArticle.setStatus(articleDate.getStatus());
         blogArticle.setType(articleDate.getType());
-        blogArticle.setOrigin_url(articleDate.getOrigin_url());
+        blogArticle.setOriginUrl(articleDate.getOriginUrl());
 //        blogArticle.setCreatedAt(articleDate.getCreatedAt());
 //        blogArticle.setUpdatedAt(articleDate.getUpdatedAt());
-        blogArticle.setView_times(articleDate.getView_times());
-        blogArticle.setArticle_description(articleDate.getArticle_description());
-        blogArticle.setThumbs_up_times(articleDate.getThumbs_up_times());
-        blogArticle.setReading_duration(articleDate.getReading_duration());
-        blogArticle.setArticle_order(articleDate.getArticle_order());
+        blogArticle.setViewTimes(articleDate.getViewTimes());
+        blogArticle.setArticleDescription(articleDate.getArticleDescription());
+        blogArticle.setThumbsUpTimes(articleDate.getThumbsUpTimes());
+        blogArticle.setReadingDuration(articleDate.getReadingDuration());
+        blogArticle.setArticleOrder(articleDate.getArticleOrder());
         blogArticle.setMdImgList(mdImgList);
 
         // 其他属性的设置

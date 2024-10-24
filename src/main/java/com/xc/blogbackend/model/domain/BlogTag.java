@@ -24,7 +24,7 @@ public class BlogTag implements Serializable {
      * 标签名称 唯一
      */
     @TableField(value = "tag_name")
-    private String tag_name;
+    private String tagName;
 
     /**
      * 创建时间，插入时自动填充
@@ -56,7 +56,7 @@ public class BlogTag implements Serializable {
         }
         BlogTag other = (BlogTag) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getTag_name() == null ? other.getTag_name() == null : this.getTag_name().equals(other.getTag_name()))
+            && (this.getTagName() == null ? other.getTagName() == null : this.getTagName().equals(other.getTagName()))
             && (this.getCreatedAt() == null ? other.getCreatedAt() == null : this.getCreatedAt().equals(other.getCreatedAt()))
             && (this.getUpdatedAt() == null ? other.getUpdatedAt() == null : this.getUpdatedAt().equals(other.getUpdatedAt()));
     }
@@ -66,7 +66,7 @@ public class BlogTag implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getTag_name() == null) ? 0 : getTag_name().hashCode());
+        result = prime * result + ((getTagName() == null) ? 0 : getTagName().hashCode());
         result = prime * result + ((getCreatedAt() == null) ? 0 : getCreatedAt().hashCode());
         result = prime * result + ((getUpdatedAt() == null) ? 0 : getUpdatedAt().hashCode());
         return result;
@@ -79,7 +79,7 @@ public class BlogTag implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", tag_name=").append(tag_name);
+        sb.append(", tag_name=").append(tagName);
         sb.append(", createdAt=").append(createdAt);
         sb.append(", updatedAt=").append(updatedAt);
         sb.append(", serialVersionUID=").append(serialVersionUID);

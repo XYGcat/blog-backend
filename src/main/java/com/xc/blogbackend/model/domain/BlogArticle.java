@@ -31,25 +31,25 @@ public class BlogArticle implements Serializable {
      * 文章标题 不能为空
      */
     @TableField(value = "article_title")
-    private String article_title;
+    private String articleTitle;
 
     /**
      * 文章作者 不能为空
      */
     @TableField(value = "author_id")
-    private Integer author_id;
+    private Integer authorId;
 
     /**
      * 分类id 不能为空
      */
     @TableField(value = "category_id")
-    private Integer category_id;
+    private Integer categoryId;
 
     /**
      * 文章内容
      */
     @TableField(value = "article_content")
-    private String article_content;
+    private String articleContent;
 
     /**
      * 文章内容中的图片链接
@@ -61,13 +61,13 @@ public class BlogArticle implements Serializable {
      * 文章缩略图
      */
     @TableField(value = "article_cover")
-    private String article_cover;
+    private String articleCover;
 
     /**
      * 是否置顶 1 置顶 2 取消置顶
      */
     @TableField(value = "is_top")
-    private Integer is_top;
+    private Integer isTop;
 
     /**
      * 文章状态  1 公开 2 私密 3 草稿箱
@@ -85,7 +85,7 @@ public class BlogArticle implements Serializable {
      * 原文链接 是转载或翻译的情况下提供
      */
     @TableField(value = "origin_url")
-    private String origin_url;
+    private String originUrl;
 
     @TableField(exist = false)
     private List<Integer> tagIdList;
@@ -120,69 +120,69 @@ public class BlogArticle implements Serializable {
      * 文章访问次数
      */
     @TableField(value = "view_times")
-    private Integer view_times;
+    private Integer viewTimes;
 
     /**
      * 描述信息 不能为空
      */
     @TableField(value = "article_description")
-    private String article_description;
+    private String articleDescription;
 
     /**
      * 文章点赞次数
      */
     @TableField(value = "thumbs_up_times")
-    private Integer thumbs_up_times;
+    private Integer thumbsUpTimes;
 
     /**
      * 文章阅读时长
      */
     @TableField(value = "reading_duration")
-    private Double reading_duration;
+    private Double readingDuration;
 
     /**
      * 排序 1 最大 往后越小 用于置顶文章的排序
      */
     @TableField(value = "article_order")
-    private Integer article_order;
+    private Integer articleOrder;
 
     /**
      * 自定义方法，一次性插入多个值
      *
-     * @param article_title
-     * @param author_id
-     * @param article_content
-     * @param article_cover
-     * @param is_top
-     * @param article_order
+     * @param articleTitle
+     * @param authorId
+     * @param articleContent
+     * @param articleCover
+     * @param isTop
+     * @param articleOrder
      * @param status
      * @param type
-     * @param origin_url
-     * @param article_description
+     * @param originUrl
+     * @param articleDescription
      */
     public void setValues(
-            String article_title,
-            Integer author_id,
-            String article_content,
-            String article_cover,
-            Integer is_top,
-            Integer article_order,
+            String articleTitle,
+            Integer authorId,
+            String articleContent,
+            String articleCover,
+            Integer isTop,
+            Integer articleOrder,
             Integer status,
             Integer type,
-            String origin_url,
-            String article_description,
+            String originUrl,
+            String articleDescription,
             String mdImgList
     ) {
-        this.article_title = article_title;
-        this.author_id = author_id;
-        this.article_content = article_content;
-        this.article_cover = article_cover;
-        this.is_top = is_top;
-        this.article_order = article_order;
+        this.articleTitle = articleTitle;
+        this.authorId = authorId;
+        this.articleContent = articleContent;
+        this.articleCover = articleCover;
+        this.isTop = isTop;
+        this.articleOrder = articleOrder;
         this.status = status;
         this.type = type;
-        this.origin_url = origin_url;
-        this.article_description = article_description;
+        this.originUrl = originUrl;
+        this.articleDescription = articleDescription;
         this.mdImgList = mdImgList;
     }
 }

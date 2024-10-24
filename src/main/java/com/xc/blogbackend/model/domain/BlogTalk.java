@@ -24,7 +24,7 @@ public class BlogTalk implements Serializable {
     private String  avatar;
 
     @TableField(exist = false)
-    private String nick_name;
+    private String nickName;
 
     @TableField(exist = false)
     private List<String> talkImgListResponse;
@@ -60,7 +60,7 @@ public class BlogTalk implements Serializable {
      * 是否置顶 1 置顶 2 不置顶
      */
     @TableField(value = "is_top")
-    private Integer is_top;
+    private Integer isTop;
 
     /**
      * 点赞次数

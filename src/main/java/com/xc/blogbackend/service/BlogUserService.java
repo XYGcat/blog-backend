@@ -54,12 +54,12 @@ public interface BlogUserService extends IService<BlogUser> {
      * 分页查询用户列表
      *
      * @param current
-     * @param nick_name
+     * @param nickName
      * @param role
      * @param size
      * @return
      */
-    PageInfoResult<BlogUser> getUserList(Integer current, String nick_name, Integer role, Integer size);
+    PageInfoResult<BlogUser> getUserList(Integer current, String nickName, Integer role, Integer size);
 
     /**
      *获取用户总数

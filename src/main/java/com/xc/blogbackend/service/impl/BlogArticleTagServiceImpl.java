@@ -31,10 +31,10 @@ public class BlogArticleTagServiceImpl extends ServiceImpl<BlogArticleTagMapper,
     private BlogTagMapper blogTagMapper;
 
     @Override
-    public List<Integer> getArticleIdListByTagId(int tag_id) {
+    public List<Integer> getArticleIdListByTagId(int tagId) {
         QueryWrapper<BlogArticleTag> queryWrapper = new QueryWrapper<>();
         queryWrapper.select("article_id");
-        queryWrapper.eq("tag_id",tag_id);
+        queryWrapper.eq("tag_id",tagId);
         List<BlogArticleTag> articleTags = blogArticleTagMapper.selectList(queryWrapper);
 
         // 创建一个 Set 用于存储唯一的文章 ID
@@ -60,13 +60,13 @@ public class BlogArticleTagServiceImpl extends ServiceImpl<BlogArticleTagMapper,
         queryWrapper.select("tag_id");
         List<BlogArticleTag> articleTags = blogArticleTagMapper.selectList(queryWrapper);
 
-        List<Integer> tagIdList = articleTags.stream().map(BlogArticleTag::getTag_id).collect(Collectors.toList());
+        List<Integer> tagIdList = articleTags.stream().map(BlogArticleTag::getTagId).collect(Collectors.toList());
 
         // 根据标签 ID 列表获取标签信息
         List<BlogTag> tagList = blogTagMapper.selectBatchIds(tagIdList);
 
         // 提取标签名列表
-        List<String> tagNameList = tagList.stream().map(BlogTag::getTag_name).collect(Collectors.toList());
+        List<String> tagNameList = tagList.stream().map(BlogTag::getTagName).collect(Collectors.toList());
 
         // 构建返回对象
         Map<String, Object> result = new HashMap<>();

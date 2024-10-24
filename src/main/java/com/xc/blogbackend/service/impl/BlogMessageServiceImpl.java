@@ -86,7 +86,7 @@ public class BlogMessageServiceImpl extends ServiceImpl<BlogMessageMapper, BlogM
             } else {
                 // 如果用户ID不存在，设置默认值
                 BlogUser oneUserInfo = new BlogUser();
-                oneUserInfo.setNick_name(row.getNick_name());
+                oneUserInfo.setNickName(row.getNickName());
                 oneUserInfo.setAvatar("");
                 CompletableFuture<BlogUser> futureUserInfo = CompletableFuture.completedFuture(oneUserInfo);
                 promiseList.add(futureUserInfo);
@@ -101,7 +101,7 @@ public class BlogMessageServiceImpl extends ServiceImpl<BlogMessageMapper, BlogM
                 BlogUser blogUser = promiseList.get(i).join();
                 //检查 CompletableFuture 是否以异常完成
                 if (blogUser != null) {
-                    rows.get(i).setNick_name(blogUser.getNick_name());
+                    rows.get(i).setNickName(blogUser.getNickName());
                     rows.get(i).setAvatar(blogUser.getAvatar());
                 }
             }
@@ -115,7 +115,7 @@ public class BlogMessageServiceImpl extends ServiceImpl<BlogMessageMapper, BlogM
 //            BlogUser blogUser = promiseList.get(i).join();
 //            //检查 CompletableFuture 是否以异常完成
 //            if (blogUser != null) {
-//                rows.get(i).setNick_name(blogUser.getNick_name());
+//                rows.get(i).setNickName(blogUser.getNickName());
 //                rows.get(i).setAvatar(blogUser.getAvatar());
 //            }
 //        }
@@ -138,7 +138,7 @@ public class BlogMessageServiceImpl extends ServiceImpl<BlogMessageMapper, BlogM
 //                    return oneUserInfo;
 //                }else {
 //                    BlogUser oneUserInfo = new BlogUser();
-//                    oneUserInfo.setNick_name(row.getNick_name());
+//                    oneUserInfo.setNickName(row.getNickName());
 //                    oneUserInfo.setAvatar("");
 //                    return oneUserInfo;
 //                }
@@ -154,7 +154,7 @@ public class BlogMessageServiceImpl extends ServiceImpl<BlogMessageMapper, BlogM
 //            try {
 //                BlogUser v = future.get();
 //                if (v != null) {
-//                    rows.get(index).setNick_name(v.getNick_name());
+//                    rows.get(index).setNickName(v.getNickName());
 //                    rows.get(index).setAvatar(v.getAvatar());
 //                }
 //            }catch (InterruptedException | ExecutionException e){

@@ -1,5 +1,4 @@
 package com.xc.blogbackend.service;
-import java.util.Date;
 
 import com.xc.blogbackend.model.domain.BlogUser;
 import org.junit.jupiter.api.Assertions;
@@ -20,7 +19,7 @@ public class BlogUserServiceTest {
         blogUser.setUsername("123456789");
         blogUser.setPassword("123456789.xc");
         blogUser.setRole(0);
-        blogUser.setNick_name("xc");
+        blogUser.setNickName("xc");
 //        blogUser.setAvatar("");
         blogUser.setQq("1111");
         blogUser.setIp("1111");

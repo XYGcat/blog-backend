@@ -109,7 +109,7 @@ public class BlogMessage implements Serializable {
      * 游客用户的昵称
      */
     @TableField(value = "nick_name")
-    private String nick_name;
+    private String nickName;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

@@ -71,28 +71,28 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
     @Override
     public PageInfoResult<BlogArticle> getArticleList(@RequestBody ArticleRequest articleRequest) {
         // 从参数中提取所需的信息
-        String article_title = articleRequest.getArticle_title();
-        List<String> create_time = articleRequest.getCreate_time();
+        String articleTitle = articleRequest.getArticleTitle();
+        List<String> createTime = articleRequest.getCreateTime();
         Integer status = articleRequest.getStatus();
-        Integer is_top = articleRequest.getIs_top();
+        Integer isTop = articleRequest.getIsTop();
         int current = articleRequest.getCurrent();
         int size = articleRequest.getSize();
-        Integer tag_id = articleRequest.getTag_id();
-        Integer category_id = articleRequest.getCategory_id();
+        Integer tagId = articleRequest.getTagId();
+        Integer categoryId = articleRequest.getCategoryId();
 
         // 构建查询条件
         QueryWrapper<BlogArticle> queryWrapper = new QueryWrapper<>();
         // 如果文章标题不为空，使用like模糊查询
-        if (article_title != null && !article_title.isEmpty()) {
-            queryWrapper.like("article_title", "%" + article_title + "%");
+        if (articleTitle != null && !articleTitle.isEmpty()) {
+            queryWrapper.like("article_title", "%" + articleTitle + "%");
         }
         // 如果创建时间不为空，使用between范围查询
-        if (create_time != null && create_time.size() == 2 && create_time.get(0) != null && create_time.get(1) != null) {
-            queryWrapper.between("created_at", create_time.get(0), create_time.get(1));
+        if (createTime != null && createTime.size() == 2 && createTime.get(0) != null && createTime.get(1) != null) {
+            queryWrapper.between("created_at", createTime.get(0), createTime.get(1));
         }
         // 如果是否置顶不为空，使用eq精确查询
-        if (is_top != null) {
-            queryWrapper.eq("is_top", is_top);
+        if (isTop != null) {
+            queryWrapper.eq("is_top", isTop);
         }
         // 如果状态不为空，使用eq精确查询
         if (status != null) {
@@ -101,12 +101,12 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
             queryWrapper.in("status", Arrays.asList(1, 2)); // 1, 2 是状态值的例子，根据实际情况修改
         }
         // 如果分类id不为空，使用eq精确查询
-        if (category_id != null) {
-            queryWrapper.eq("category_id", category_id);
+        if (categoryId != null) {
+            queryWrapper.eq("category_id", categoryId);
         }
         // 如果标签id不为空，根据标签id查文章
-        if (tag_id != null) {
-            List<Integer> articleIdList = blogArticleTagService.getArticleIdListByTagId(tag_id);
+        if (tagId != null) {
+            List<Integer> articleIdList = blogArticleTagService.getArticleIdListByTagId(tagId);
             // 如果文章id列表不为空，使用in范围查询
             if (articleIdList != null && !articleIdList.isEmpty()) {
                 queryWrapper.in("id", articleIdList);
@@ -151,7 +151,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
             // 创建一个Callable对象，定义异步任务的逻辑
             Callable<ArticleDTO> task = () -> {
                 // 调用其他方法或访问数据库，获取需要的数据
-                String categoryName = blogCategoryService.getCategoryNameById(v.getCategory_id());
+                String categoryName = blogCategoryService.getCategoryNameById(v.getCategoryId());
                 Map<String, Object> tagList = blogArticleTagService.getTagListByArticleId(v.getId());
                 // 创建一个对象，存储数据
                 ArticleDTO articleDTO = new ArticleDTO();
@@ -175,7 +175,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
                     // 直接在循环中修改 rows 的数据
                     rows.get(index).setCategoryName(res.getCategoryName());
                     rows.get(index).setTagNameList(res.getTagNameList());
-                    rows.get(index).setArticle_cover(qiniu.downloadUrl(rows.get(index).getArticle_cover()));
+                    rows.get(index).setArticleCover(qiniu.downloadUrl(rows.get(index).getArticleCover()));
                 }
             } catch (InterruptedException | ExecutionException | QiniuException e) {
                 // 处理可能抛出的异常
@@ -197,10 +197,10 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
     }
 
     @Override
-    public Boolean getArticleInfoByTitle(Integer id, String article_title) {
+    public Boolean getArticleInfoByTitle(Integer id, String articleTitle) {
         QueryWrapper<BlogArticle> queryWrapper = new QueryWrapper<>();
         queryWrapper.select("id");
-        queryWrapper.eq("article_title",article_title);
+        queryWrapper.eq("article_title",articleTitle);
         BlogArticle article = blogArticleMapper.selectOne(queryWrapper);
         if (article != null) {
             if (id != null){
@@ -231,7 +231,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
         BlogArticle blogArticle = blogArticleMapper.selectById(article_id);
         if (blogArticle != null) {
             // 对浏览次数属性进行自增
-            blogArticle.setView_times(blogArticle.getView_times() + 1);
+            blogArticle.setViewTimes(blogArticle.getViewTimes() + 1);
             // 保存更新后的文章对象到数据库
             blogArticleMapper.updateById(blogArticle);
         }
@@ -240,9 +240,9 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
         List<Integer> tagIdList = (List<Integer>) listByArticleId.get("tagIdList");
         List<String> tagNameList = (List<String>) listByArticleId.get("tagNameList");
         // 获取分类名称
-        String categoryNameById = blogCategoryService.getCategoryNameById(blogArticle.getCategory_id());
+        String categoryNameById = blogCategoryService.getCategoryNameById(blogArticle.getCategoryId());
         // 获取文章作者昵称
-        String authorNameById = blogUserService.getAuthorNameById(blogArticle.getAuthor_id());
+        String authorNameById = blogUserService.getAuthorNameById(blogArticle.getAuthorId());
 
         blogArticle.setTagIdList(tagIdList);
         blogArticle.setTagNameList(tagNameList);
@@ -276,15 +276,15 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
         // 转换为BlogArticle对象
         BlogArticle articleRest = PaddingUtils.mapToBlogArticle(request);
         Integer articleId = articleRest.getId();
-        String articleTitle = articleRest.getArticle_title();
+        String articleTitle = articleRest.getArticleTitle();
 
         // 获取数据库中的旧文章信息
         BlogArticle oldArticle = this.getArticle(articleId);
-        String oldArticleTitle = oldArticle.getArticle_title();
-        String oldArticleCover = oldArticle.getArticle_cover();
+        String oldArticleTitle = oldArticle.getArticleTitle();
+        String oldArticleCover = oldArticle.getArticleCover();
 
         // 如果封面图片改变，删除旧的七牛云文章封面图片
-        if (oldArticleCover != null && !oldArticleCover.equals(articleRest.getArticle_cover())) {
+        if (oldArticleCover != null && !oldArticleCover.equals(articleRest.getArticleCover())) {
             String imgKey = StringManipulation.subString(oldArticleCover);
             qiniu.deleteFile(imgKey);
         }
@@ -300,9 +300,9 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
         // 判断文章标题是否改变，改变则更新七牛云和数据库图片链接
         if (!oldArticleTitle.equals(articleTitle)){
             // 更新数据库文章内容中图片链接
-            String newArticle_content = articleRest.getArticle_content();
+            String newArticle_content = articleRest.getArticleContent();
             String replaceContent = newArticle_content.replace("/article/" + oldArticleTitle, "/article/" + articleTitle);
-            articleRest.setArticle_content(replaceContent);
+            articleRest.setArticleContent(replaceContent);
             // 更新数据库文章内容中图片列表链接
             String mdImgList = articleRest.getMdImgList();
             if (mdImgList != null){
@@ -341,10 +341,10 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
                 }
             }
             // 更新数据库和七牛云文章封面图片链接
-            if (Objects.equals(oldArticleCover, articleRest.getArticle_cover())) {
+            if (Objects.equals(oldArticleCover, articleRest.getArticleCover())) {
                 assert oldArticleCover != null;
                 String newArticle_cover = oldArticleCover.replace(oldArticleTitle, articleTitle);
-                articleRest.setArticle_cover(newArticle_cover);
+                articleRest.setArticleCover(newArticle_cover);
                 String newKey = StringManipulation.subString(newArticle_cover);
                 String oldKey = StringManipulation.subString(oldArticleCover);
                 qiniu.renameImgKey(oldKey,newKey);
@@ -363,7 +363,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
 
         // 判断新的分类是新增的还是已经存在的 并且返回分类id
         Integer categoryOrReturn = createCategoryOrReturn(category.getId(),category.getCategoryName());
-        articleRest.setCategory_id(categoryOrReturn);
+        articleRest.setCategoryId(categoryOrReturn);
 
         // 创建新的标签和文章关联
         createArticleTagByArticleId(articleRest.getId(), tagList);
@@ -378,7 +378,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
     @Override
     public String getArticleCoverById(Integer article_id) {
         BlogArticle blogArticle = blogArticleMapper.selectById(article_id);
-        return blogArticle.getArticle_cover();
+        return blogArticle.getArticleCover();
     }
 
     @Override
@@ -408,9 +408,9 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
     }
 
     @Override
-    public Boolean updateTop(Integer id, Integer is_top) {
+    public Boolean updateTop(Integer id, Integer isTop) {
         BlogArticle blogArticle = new BlogArticle();
-        blogArticle.setIs_top(is_top);
+        blogArticle.setIsTop(isTop);
         blogArticle.setId(id);
         int i = blogArticleMapper.updateById(blogArticle);
         return i > 0;
@@ -470,7 +470,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
             // 创建一个Callable对象，定义异步任务的逻辑
             Callable<ArticleDTO> task = () -> {
                 // 调用其他方法或访问数据库，获取需要的数据
-                String categoryName = blogCategoryService.getCategoryNameById(v.getCategory_id());
+                String categoryName = blogCategoryService.getCategoryNameById(v.getCategoryId());
                 Map<String, Object> tagList = blogArticleTagService.getTagListByArticleId(v.getId());
                 // 创建一个对象，存储数据
                 ArticleDTO articleDTO = new ArticleDTO();
@@ -494,7 +494,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
                     // 直接在循环中修改 rows 的数据
                     rows.get(index).setCategoryName(res.getCategoryName());
                     rows.get(index).setTagNameList(res.getTagNameList());
-                    rows.get(index).setArticle_cover(qiniu.downloadUrl(rows.get(index).getArticle_cover()));
+                    rows.get(index).setArticleCover(qiniu.downloadUrl(rows.get(index).getArticleCover()));
                 }
             } catch (InterruptedException | ExecutionException | QiniuException e) {
                 // 处理可能抛出的异常
@@ -550,8 +550,8 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
         Map<String, Object> tagListByArticleId = blogArticleTagService.getTagListByArticleId(article_id);
         List<Integer> tagIdList = (List<Integer>) tagListByArticleId.get("tagIdList");
         List<Integer> articleIdList = new ArrayList<>();
-        for (Integer tag_id : tagIdList){
-            List<Integer> listByTagId = blogArticleTagService.getArticleIdListByTagId(tag_id);
+        for (Integer tagId : tagIdList){
+            List<Integer> listByTagId = blogArticleTagService.getArticleIdListByTagId(tagId);
             if (listByTagId != null) {
                 articleIdList.addAll(listByTagId);
             }
@@ -599,8 +599,8 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
         for (BlogArticle v : rows){
             //添加七牛云下载图片凭证
             try {
-                String url = qiniu.downloadUrl(v.getArticle_cover());
-                v.setArticle_cover(url);
+                String url = qiniu.downloadUrl(v.getArticleCover());
+                v.setArticleCover(url);
             } catch (QiniuException e) {
                 throw new RuntimeException(e);
             }
@@ -631,11 +631,11 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
     }
 
     @Override
-    public PageInfoResult<BlogArticle> getArticleListByCategoryId(Integer current, Integer size, Integer category_id) {
+    public PageInfoResult<BlogArticle> getArticleListByCategoryId(Integer current, Integer size, Integer categoryId) {
 
         QueryWrapper<BlogArticle> queryWrapper = new QueryWrapper<>();    // 构建查询条件
         queryWrapper.eq("status", 1);
-        queryWrapper.eq("category_id",category_id);
+        queryWrapper.eq("category_id",categoryId);
         queryWrapper.select("id","article_title","article_cover","created_at");
         queryWrapper.orderByDesc("created_at");
         // 创建Page对象，设置当前页和分页大小
@@ -648,9 +648,9 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
         long count = articlePage.getTotal();
 
         for (BlogArticle blogArticle : rows){
-            String article_cover = blogArticle.getArticle_cover();
+            String articleCover = blogArticle.getArticleCover();
             try {
-                blogArticle.setArticle_cover(qiniu.downloadUrl(article_cover));
+                blogArticle.setArticleCover(qiniu.downloadUrl(articleCover));
             } catch (QiniuException e) {
                 throw new RuntimeException(e);
             }
@@ -665,8 +665,8 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
     }
 
     @Override
-    public PageInfoResult<BlogArticle> getArticleListByTagId(Integer current, Integer size, Integer tag_id) {
-        List<Integer> tagIdList = blogArticleTagService.getArticleIdListByTagId(tag_id);
+    public PageInfoResult<BlogArticle> getArticleListByTagId(Integer current, Integer size, Integer tagId) {
+        List<Integer> tagIdList = blogArticleTagService.getArticleIdListByTagId(tagId);
 
         QueryWrapper<BlogArticle> queryWrapper = new QueryWrapper<>();    // 构建查询条件
         queryWrapper.eq("status", 1);
@@ -683,9 +683,9 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
         long count = articlePage.getTotal();
 
         for (BlogArticle blogArticle : rows){
-            String article_cover = blogArticle.getArticle_cover();
+            String articleCover = blogArticle.getArticleCover();
             try {
-                blogArticle.setArticle_cover(qiniu.downloadUrl(article_cover));
+                blogArticle.setArticleCover(qiniu.downloadUrl(articleCover));
             } catch (QiniuException e) {
                 throw new RuntimeException(e);
             }
@@ -724,23 +724,23 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
         String extracted;
         if (blogArticles != null) {
             for (BlogArticle r : blogArticles){
-                String article_content = r.getArticle_content();
-                int index = article_content.indexOf(content);
+                String articleContent = r.getArticleContent();
+                int index = articleContent.indexOf(content);
                 if (index != -1) { // 如果找到了指定内容
                     int previous = index;
                     int next = index + content.length() + 12;
                     // 截取文章内容，构建结果对象
-                    if (next <= article_content.length() - previous) {
-                        extracted = article_content.substring(previous, next);
+                    if (next <= articleContent.length() - previous) {
+                        extracted = articleContent.substring(previous, next);
                         // 处理截取的内容
                     } else {
-                        extracted = article_content.substring(previous);
+                        extracted = articleContent.substring(previous);
                         // 处理从 previous 到字符串结尾的内容
                     }
                     ArticleListByContent resultObject = new ArticleListByContent();
                     resultObject.setId(r.getId());
-                    resultObject.setArticle_content(extracted);
-                    resultObject.setArticle_title(r.getArticle_title());
+                    resultObject.setArticleContent(extracted);
+                    resultObject.setArticleTitle(r.getArticleTitle());
                     result.add(resultObject);
                 }
             }
@@ -752,8 +752,8 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
     public Boolean articleLike(Integer id) {
         BlogArticle blogArticle = blogArticleMapper.selectById(id);
         if (blogArticle != null){
-            Integer thumbs_up_times = blogArticle.getThumbs_up_times();
-            blogArticle.setThumbs_up_times(thumbs_up_times + 1);
+            Integer thumbsUpTimes = blogArticle.getThumbsUpTimes();
+            blogArticle.setThumbsUpTimes(thumbsUpTimes + 1);
             int i = blogArticleMapper.updateById(blogArticle);
             return i > 0;
         }
@@ -764,8 +764,8 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
     public Boolean cancelArticleLike(Integer id) {
         BlogArticle blogArticle = blogArticleMapper.selectById(id);
         if (blogArticle != null){
-            Integer thumbs_up_times = blogArticle.getThumbs_up_times();
-            blogArticle.setThumbs_up_times(thumbs_up_times - 1);
+            Integer thumbsUpTimes = blogArticle.getThumbsUpTimes();
+            blogArticle.setThumbsUpTimes(thumbsUpTimes - 1);
             int i = blogArticleMapper.updateById(blogArticle);
             return i > 0;
         }
@@ -776,8 +776,8 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
     public Boolean addReadingDuration(Integer id, Integer duration) {
         BlogArticle blogArticle = blogArticleMapper.selectById(id);
         if (blogArticle != null){
-            Double reading_duration = blogArticle.getReading_duration();
-            blogArticle.setReading_duration(reading_duration + duration);
+            Double readingDuration = blogArticle.getReadingDuration();
+            blogArticle.setReadingDuration(readingDuration + duration);
             int i = blogArticleMapper.updateById(blogArticle);
             return i > 0;
         }
@@ -825,11 +825,11 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
 //        BlogTagServiceImpl blogTagService = new BlogTagServiceImpl();
         for (BlogTag blogTag : tagList){
             if (blogTag.getId() == null) {
-                BlogTag oneTag = blogTagService.getOneTag(blogTag.getTag_name());
+                BlogTag oneTag = blogTagService.getOneTag(blogTag.getTagName());
                 if (oneTag != null) {
                     res = oneTag;
                 }else {
-                    res = blogTagService.createTag(blogTag.getTag_name());
+                    res = blogTagService.createTag(blogTag.getTagName());
                 }
             }
             promiseList.add(res);
@@ -839,7 +839,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
         for(BlogTag blogTag : promiseList){
             if (blogTag != null) {
                 for (int index = 0;index < tagList.size();index ++){
-                    if (tagList.get(index).getTag_name().equals(blogTag.getTag_name())){
+                    if (tagList.get(index).getTagName().equals(blogTag.getTagName())){
                         tagList.get(index).setId(blogTag.getId());
                     }
                 }
@@ -852,7 +852,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
             for (BlogTag blogTag : tagList){
                 BlogArticleTag articleTag = new BlogArticleTag();
                 articleTag.setArticle_id(Integer.valueOf(article_id));
-                articleTag.setTag_id(blogTag.getId());
+                articleTag.setTagId(blogTag.getId());
                 articleTagList.add(articleTag);
             }
             // 批量新增文章标签关联

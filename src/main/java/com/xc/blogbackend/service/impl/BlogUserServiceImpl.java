@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import static com.xc.blogbackend.contant.BlogUserConstant.USER_LOGIN_STATE;
 
 /**
@@ -128,7 +129,7 @@ public class BlogUserServiceImpl extends ServiceImpl<BlogUserMapper, BlogUser>
         blogUser.setUsername(username);
         blogUser.setPassword(encryptPassword);
         blogUser.setAvatar("https://pic.imgdb.cn/item/65114060c458853aef1f9fa4.jpg");
-        blogUser.setNick_name(RandomUsernameGenerator.generateRandomUsername());
+        blogUser.setNickName(RandomUsernameGenerator.generateRandomUsername());
         blogUser.setIp(ip);
         boolean saveResult = this.save(blogUser);
         if(!saveResult){
@@ -151,7 +152,7 @@ public class BlogUserServiceImpl extends ServiceImpl<BlogUserMapper, BlogUser>
         safetUser.setRole(originUser.getRole());
         safetUser.setIp(originUser.getIp());
         safetUser.setAvatar(originUser.getAvatar());
-        safetUser.setNick_name(originUser.getNick_name());
+        safetUser.setNickName(originUser.getNickName());
         safetUser.setQq(originUser.getQq());
         return safetUser;
     }
@@ -168,14 +169,14 @@ public class BlogUserServiceImpl extends ServiceImpl<BlogUserMapper, BlogUser>
     }
 
     @Override
-    public PageInfoResult<BlogUser> getUserList(Integer current, String nick_name, Integer role, Integer size) {
+    public PageInfoResult<BlogUser> getUserList(Integer current, String nickName, Integer role, Integer size) {
 
         QueryWrapper<BlogUser> queryWrapper = new QueryWrapper<>();
         if (role != null) {
             queryWrapper.eq("role", role);
         }
-        if (nick_name != null && !nick_name.isEmpty()) {
-            queryWrapper.like("nick_name", "%" + nick_name + "%");
+        if (nickName != null && !nickName.isEmpty()) {
+            queryWrapper.like("nick_name", "%" + nickName + "%");
         }
         //构建查询条件并返回除密码外的其他列
         queryWrapper.select(BlogUser.class, info -> !info.getColumn().equals("password"));
@@ -191,9 +192,9 @@ public class BlogUserServiceImpl extends ServiceImpl<BlogUserMapper, BlogUser>
 
         rows.forEach(row -> {
             if (row.getIp() != null && !row.getIp().isEmpty()) {
-                row.setIp_address(IpUtils.getLocation(row.getIp()));
+                row.setIpAddress(IpUtils.getLocation(row.getIp()));
             } else {
-                row.setIp_address("火星");
+                row.setIpAddress("火星");
             }
         });
 
@@ -218,20 +219,20 @@ public class BlogUserServiceImpl extends ServiceImpl<BlogUserMapper, BlogUser>
     public String getAuthorNameById(Integer user_id) {
         BlogUser blogUser = blogUserMapper.selectById(user_id);
 
-        return blogUser != null ? blogUser.getNick_name() : null;
+        return blogUser != null ? blogUser.getNickName() : null;
     }
 
     @Override
     public Boolean updateOwnUserInfo(Map<String, Object> request) {
         Integer id = (Integer) request.get("id");
         String avatar = (String) request.get("avatar");
-        String nick_name = (String) request.get("nick_name");
+        String nickName = (String) request.get("nick_name");
         String qq = (String) request.get("qq");
 
         BlogUser blogUser = new BlogUser();
         blogUser.setId(id);
         blogUser.setAvatar(avatar);
-        blogUser.setNick_name(nick_name);
+        blogUser.setNickName(nickName);
         blogUser.setQq(qq);
 
         int i = blogUserMapper.updateById(blogUser);

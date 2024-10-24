@@ -30,7 +30,7 @@ public class BlogArticleTag implements Serializable {
      * 标签id
      */
     @TableField(value = "tag_id")
-    private Integer tag_id;
+    private Integer tagId;
 
     /**
      * 创建时间，插入时自动填充

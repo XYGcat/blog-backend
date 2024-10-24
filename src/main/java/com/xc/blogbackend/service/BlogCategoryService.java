@@ -16,10 +16,10 @@ public interface BlogCategoryService extends IService<BlogCategory> {
     /**
      * 通过分类id获取分类名称
      *
-     * @param category_id
+     * @param categoryId
      * @return
      */
-    String getCategoryNameById(Integer category_id);
+    String getCategoryNameById(Integer categoryId);
 
     /**
      * 根据类型获取分类数据字典

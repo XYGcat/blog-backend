@@ -35,19 +35,19 @@ public class BlogTagServiceImpl extends ServiceImpl<BlogTagMapper, BlogTag>
     }
 
     @Override
-    public BlogTag getOneTag(String tag_name) {
+    public BlogTag getOneTag(String tagName) {
         QueryWrapper<BlogTag> queryWrapper = new QueryWrapper<>();
-        if (tag_name != null) {
-            queryWrapper.eq("tag_name",tag_name);
+        if (tagName != null) {
+            queryWrapper.eq("tag_name",tagName);
         }
         BlogTag blogTag = blogTagMapper.selectOne(queryWrapper);
         return blogTag;
     }
 
     @Override
-    public BlogTag createTag(String tag_name) {
+    public BlogTag createTag(String tagName) {
         BlogTag blogTag = new BlogTag();
-        blogTag.setTag_name(tag_name);
+        blogTag.setTagName(tagName);
         blogTagMapper.insert(blogTag);
 
         QueryWrapper<BlogTag> queryWrapper = new QueryWrapper<>();
@@ -65,13 +65,13 @@ public class BlogTagServiceImpl extends ServiceImpl<BlogTagMapper, BlogTag>
     }
 
     @Override
-    public PageInfoResult<BlogTag> getTalkList(Integer current, Integer size, String tag_name) {
+    public PageInfoResult<BlogTag> getTalkList(Integer current, Integer size, String tagName) {
 
         // 构建查询条件
         QueryWrapper<BlogTag> queryWrapper = new QueryWrapper<>();
         // 如果标签名不为空，使用like模糊查询
-        if (tag_name != null && !tag_name.isEmpty()) {
-            queryWrapper.like("tag_name", "%" + tag_name + "%");
+        if (tagName != null && !tagName.isEmpty()) {
+            queryWrapper.like("tag_name", "%" + tagName + "%");
         }
 
         // 创建Page对象，设置当前页和分页大小
@@ -93,9 +93,9 @@ public class BlogTagServiceImpl extends ServiceImpl<BlogTagMapper, BlogTag>
     }
 
     @Override
-    public Boolean updateTag(Integer id, String tag_name) {
+    public Boolean updateTag(Integer id, String tagName) {
         BlogTag blogTag = new BlogTag();
-        blogTag.setTag_name(tag_name);
+        blogTag.setTagName(tagName);
         UpdateWrapper<BlogTag> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("id",id);
         int update = blogTagMapper.update(blogTag, updateWrapper);

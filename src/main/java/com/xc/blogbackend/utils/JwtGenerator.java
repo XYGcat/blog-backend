@@ -59,7 +59,7 @@ public class JwtGenerator {
         // 创建payload的私有声明（根据特定的业务需要添加，如果要拿这个做验证，一般是需要和jwt的接收方提前沟通好验证的方式）
         Claims claims = Jwts.claims();
         claims.setSubject(blogUser.getUsername());  //jwt所面向的用户，放登录的用户名，一个json格式的字符串，可存放userid，roldid之类，作为用户的唯一标志
-        claims.put("nick_name", blogUser.getNick_name());
+        claims.put("nick_name", blogUser.getNickName());
         claims.put("id", blogUser.getId());
         claims.put("role", blogUser.getRole());
 
@@ -117,7 +117,7 @@ public class JwtGenerator {
             // 返回用户信息对象
             BlogUser blogUser = new BlogUser();
             blogUser.setUsername(body.getSubject());
-            blogUser.setNick_name(body.get("nick_name", String.class));
+            blogUser.setNickName(body.get("nick_name", String.class));
             blogUser.setId(body.get("id", Integer.class));
             blogUser.setRole(body.get("role", Integer.class));
 

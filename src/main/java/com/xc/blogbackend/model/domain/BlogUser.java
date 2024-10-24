@@ -19,7 +19,7 @@ public class BlogUser implements Serializable {
      * ip所在地理位置
      */
     @TableField(exist = false)
-    private String ip_address;
+    private String ipAddress;
 
     /**
      * 添加一个token字段
@@ -55,7 +55,7 @@ public class BlogUser implements Serializable {
      * 用户昵称
      */
     @TableField(value = "nick_name")
-    private String nick_name;
+    private String nickName;
 
     /**
      * 用户头像

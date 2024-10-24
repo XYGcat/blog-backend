@@ -19,7 +19,7 @@ public class BlogComment implements Serializable {
      * 作者id
      */
     @TableField(exist = false)
-    private Integer author_id;
+    private Integer authorId;
 
     /**
      * 是否点赞

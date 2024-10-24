@@ -36,10 +36,10 @@ public interface BlogArticleService extends IService<BlogArticle> {
      * 根据文章标题获取文章信息 校验是否可以新增或编辑文章
      *
      * @param id
-     * @param article_title
+     * @param articleTitle
      * @return
      */
-    Boolean getArticleInfoByTitle(Integer id,String article_title);
+    Boolean getArticleInfoByTitle(Integer id,String articleTitle);
 
     /**
      * 新增文章
@@ -110,10 +110,10 @@ public interface BlogArticleService extends IService<BlogArticle> {
      * 修改文章置顶信息
      *
      * @param id
-     * @param is_top
+     * @param isTop
      * @return
      */
-    Boolean updateTop(Integer id,Integer is_top);
+    Boolean updateTop(Integer id,Integer isTop);
 
     /**
      * 删除文章
@@ -155,20 +155,20 @@ public interface BlogArticleService extends IService<BlogArticle> {
      *
      * @param current 当前页
      * @param size 每页显示条数
-     * @param category_id 分类id
+     * @param categoryId 分类id
      * @return 文章列表
      */
-    PageInfoResult<BlogArticle> getArticleListByCategoryId(Integer current,Integer size,Integer category_id);
+    PageInfoResult<BlogArticle> getArticleListByCategoryId(Integer current,Integer size,Integer categoryId);
 
     /**
      * 通过tagId 获取到文章列表
      *
      * @param current
      * @param size
-     * @param tag_id
+     * @param tagId
      * @return
      */
-    PageInfoResult<BlogArticle> getArticleListByTagId(Integer current,Integer size,Integer tag_id);
+    PageInfoResult<BlogArticle> getArticleListByTagId(Integer current,Integer size,Integer tagId);
 
     /**
      * 获取热门文章

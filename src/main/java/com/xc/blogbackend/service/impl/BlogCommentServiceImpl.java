@@ -107,7 +107,7 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
                 //检查 CompletableFuture 是否以异常完成
                 if (blogUser != null) {
                     rows.get(i).setFrom_avatar(blogUser.getAvatar());
-                    rows.get(i).setFrom_name(blogUser.getNick_name());
+                    rows.get(i).setFrom_name(blogUser.getNickName());
                 }
             }
         }).join(); // 等待用户信息异步任务完成
@@ -202,7 +202,7 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
                 //检查 CompletableFuture 是否以异常完成
                 if (blogUser != null) {
                     rows.get(i).setFrom_avatar(blogUser.getAvatar());
-                    rows.get(i).setFrom_name(blogUser.getNick_name());
+                    rows.get(i).setFrom_name(blogUser.getNickName());
                 }
             }
         }).join(); // 等待用户信息异步任务完成
@@ -225,7 +225,7 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
                 //检查 CompletableFuture 是否以异常完成
                 if (blogUser != null) {
                     rows.get(i).setTo_avatar(blogUser.getAvatar());
-                    rows.get(i).setTo_name(blogUser.getNick_name());
+                    rows.get(i).setTo_name(blogUser.getNickName());
                 }
             }
         }).join(); // 等待用户信息异步任务完成
@@ -323,7 +323,7 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
                 //检查 CompletableFuture 是否以异常完成
                 if (blogUser != null) {
                     rows.get(i).setFrom_avatar(blogUser.getAvatar());
-                    rows.get(i).setFrom_name(blogUser.getNick_name());
+                    rows.get(i).setFrom_name(blogUser.getNickName());
                 }
             }
         }).join(); // 等待用户信息异步任务完成
@@ -346,7 +346,7 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
                 //检查 CompletableFuture 是否以异常完成
                 if (blogUser != null) {
                     rows.get(i).setTo_avatar(blogUser.getAvatar());
-                    rows.get(i).setTo_name(blogUser.getNick_name());
+                    rows.get(i).setTo_name(blogUser.getNickName());
                 }
             }
         }).join(); // 等待用户信息异步任务完成

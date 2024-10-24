@@ -17,10 +17,10 @@ public class ArticleRequest implements Serializable {
 
     private int current = 1;
     private int size = 10;
-    private String article_title;
-    private Integer tag_id;
-    private Integer category_id;
-    private Integer is_top;
+    private String articleTitle;
+    private Integer tagId;
+    private Integer categoryId;
+    private Integer isTop;
     private Integer status;
-    private List<String> create_time = new ArrayList<>();
+    private List<String> createTime = new ArrayList<>();
 }

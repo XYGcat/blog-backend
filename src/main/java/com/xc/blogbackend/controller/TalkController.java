@@ -8,6 +8,7 @@ import com.xc.blogbackend.service.BlogTalkService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
+
 import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
@@ -72,19 +73,19 @@ public class TalkController {
      * 修改说说公开置顶状态 1 置顶 2 不置顶
      *
      * @param id
-     * @param is_top
+     * @param isTop
      * @return
      */
     @ApiOperation(value = "修改说说公开置顶状态")
-    @PutMapping("/toggleTop/{id}/{is_top}")
-    public BaseResponse<Boolean> toggleTop(@PathVariable Integer id,@PathVariable Integer is_top){
+    @PutMapping("/toggleTop/{id}/{isTop}")
+    public BaseResponse<Boolean> toggleTop(@PathVariable Integer id,@PathVariable Integer isTop){
         String message;
-        if (is_top == 1) {
+        if (isTop == 1) {
             message = "置顶";
         }else {
             message = "取消置顶";
         }
-        Boolean aBoolean = blogTalkService.toggleTop(id, is_top);
+        Boolean aBoolean = blogTalkService.toggleTop(id, isTop);
         return ResultUtils.success(aBoolean,message + "说说成功");
     }
 

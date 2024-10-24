@@ -12,14 +12,14 @@ class BlogCategoryServiceImplTest {
         BlogCategoryServiceImpl blogCategoryService = new BlogCategoryServiceImpl();
 
         // 创建一个测试用的分类id
-        Integer category_id = 4;
+        Integer categoryId = 4;
 
         // 创建一个 BlogCategory 对象，用于存储查询结果
-        String categoryNameById = blogCategoryService.getCategoryNameById(category_id);
+        String categoryNameById = blogCategoryService.getCategoryNameById(categoryId);
 
         // 断言查询结果是否为空
         assertNotNull(categoryNameById);
-        assertEquals(category_id, categoryNameById);
+        assertEquals(categoryId, categoryNameById);
 
         // 打印查询结果
         System.out.println("Category Name: " + categoryNameById);

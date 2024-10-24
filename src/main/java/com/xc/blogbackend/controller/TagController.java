@@ -8,6 +8,7 @@ import com.xc.blogbackend.service.BlogTagService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
+
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
@@ -48,8 +49,8 @@ public class TagController {
     public BaseResponse<PageInfoResult<BlogTag>> getTagList(@RequestBody Map<String,Object> request){
         Integer current = (Integer) request.get("current");
         Integer size = (Integer) request.get("size");
-        String tag_name = (String) request.get("tag_name");
-        PageInfoResult<BlogTag> tagList = blogTagService.getTalkList(current, size, tag_name);
+        String tagName = (String) request.get("tag_name");
+        PageInfoResult<BlogTag> tagList = blogTagService.getTalkList(current, size, tagName);
 
         return ResultUtils.success(tagList,"分页查找标签成功");
     }
@@ -64,8 +65,8 @@ public class TagController {
     @PutMapping("/update")
     public BaseResponse<Boolean> updateTag(@RequestBody Map<String,Object> request){
         Integer id = (Integer) request.get("id");
-        String tag_name = (String) request.get("tag_name");
-        Boolean aBoolean = blogTagService.updateTag(id, tag_name);
+        String tagName = (String) request.get("tag_name");
+        Boolean aBoolean = blogTagService.updateTag(id, tagName);
         return ResultUtils.success(aBoolean,"修改标签成功");
     }
 
@@ -92,8 +93,8 @@ public class TagController {
     @ApiOperation(value = "新增标签")
     @PostMapping("/add")
     public BaseResponse<BlogTag> addTag(@RequestBody Map<String,Object> request){
-        String tag_name = (String) request.get("tag_name");
-        BlogTag tag = blogTagService.createTag(tag_name);
+        String tagName = (String) request.get("tag_name");
+        BlogTag tag = blogTagService.createTag(tagName);
         return ResultUtils.success(tag,"新增标签成功");
     }
 }

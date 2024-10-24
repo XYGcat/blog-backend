@@ -30,22 +30,22 @@ public class UpdateArticleRequest implements Serializable {
         private List<String> tagNameList;
 
         private Integer id;
-        private String article_title;
-        private Integer author_id;
-        private Integer category_id;
-        private String article_content;
-        private String article_cover;
-        private Integer is_top;
+        private String articleTitle;
+        private Integer authorId;
+        private Integer categoryId;
+        private String articleContent;
+        private String articleCover;
+        private Integer isTop;
         private Integer status;
         private Integer type;
-        private String origin_url;
+        private String originUrl;
         private String createdAt;
         private String updatedAt;
-        private Integer view_times;
-        private String article_description;
-        private Integer thumbs_up_times;
-        private Double reading_duration;
-        private Integer article_order;
+        private Integer viewTimes;
+        private String articleDescription;
+        private Integer thumbsUpTimes;
+        private Double readingDuration;
+        private Integer articleOrder;
         private List<String> mdImgList; //文章内容中的图片链接
 
     }
