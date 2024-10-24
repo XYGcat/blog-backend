@@ -43,8 +43,8 @@ public class BlogArticleTagServiceImpl extends ServiceImpl<BlogArticleTagMapper,
         // 遍历结果列表，将文章 ID 添加到集合中
         articleTags.forEach(v -> {
             // 检查集合中是否已存在该文章 ID，若不存在则添加
-            if (!articleIdList.contains(v.getArticle_id())) {
-                articleIdList.add(v.getArticle_id());
+            if (!articleIdList.contains(v.getArticleId())) {
+                articleIdList.add(v.getArticleId());
             }
         });
 
@@ -53,10 +53,10 @@ public class BlogArticleTagServiceImpl extends ServiceImpl<BlogArticleTagMapper,
     }
 
     @Override
-    public Map<String, Object> getTagListByArticleId(Integer article_id) {
+    public Map<String, Object> getTagListByArticleId(Integer articleId) {
         // 查询关联的标签 ID 列表
         QueryWrapper<BlogArticleTag> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("article_id",article_id);
+        queryWrapper.eq("article_id",articleId);
         queryWrapper.select("tag_id");
         List<BlogArticleTag> articleTags = blogArticleTagMapper.selectList(queryWrapper);
 
@@ -90,9 +90,9 @@ public class BlogArticleTagServiceImpl extends ServiceImpl<BlogArticleTagMapper,
     }
 
     @Override
-    public Integer deleteArticleTag(Integer article_id) {
+    public Integer deleteArticleTag(Integer articleId) {
         QueryWrapper<BlogArticleTag> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("article_id",article_id);
+        queryWrapper.eq("article_id",articleId);
         int deleteById = blogArticleTagMapper.delete(queryWrapper);
         return deleteById;
     }

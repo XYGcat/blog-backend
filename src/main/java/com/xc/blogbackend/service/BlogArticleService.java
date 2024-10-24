@@ -52,26 +52,26 @@ public interface BlogArticleService extends IService<BlogArticle> {
     /**
      * 根据文章id获取文章详细信息
      *
-     * @param article_id
+     * @param articleId
      * @return
      */
-    BlogArticle getArticleById(Integer article_id);
+    BlogArticle getArticleById(Integer articleId);
 
     /**
      * 根据文章id获取文章内容的图片链接
      *
-     * @param article_id
+     * @param articleId
      * @return
      */
-    String getMdImgList(Integer article_id);
+    String getMdImgList(Integer articleId);
 
     /**
      * 根据文章id获取文章信息
      *
-     * @param article_id
+     * @param articleId
      * @return
      */
-    BlogArticle getArticle(Integer article_id);
+    BlogArticle getArticle(Integer articleId);
 
     /**
      * 修改文章信息
@@ -84,10 +84,10 @@ public interface BlogArticleService extends IService<BlogArticle> {
     /**
      * 根据文章获取文章封面
      *
-     * @param article_id
+     * @param articleId
      * @return
      */
-    String getArticleCoverById(Integer article_id);
+    String getArticleCoverById(Integer articleId);
 
     /**
      * 公开或隐藏文章
@@ -136,10 +136,10 @@ public interface BlogArticleService extends IService<BlogArticle> {
     /**
      * 根据文章id获取推荐文章
      *
-     * @param article_id 文章ID
+     * @param articleId 文章ID
      * @return  推荐文章列表
      */
-    RecommendResult getRecommendArticleById(Integer article_id);
+    RecommendResult getRecommendArticleById(Integer articleId);
 
     /**
      * 时间轴

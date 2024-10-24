@@ -202,8 +202,7 @@ public class ArticleController {
             AddArticleRequest.ArticleDate finalArticle = addArticleRequest.getFinalArticle();
 
             String articleTitle = finalArticle.getArticleTitle();
-            Integer articleId = finalArticle.getId();
-            Boolean byTitle = blogArticleService.getArticleInfoByTitle(articleId, articleTitle);
+            Boolean byTitle = blogArticleService.getArticleInfoByTitle(finalArticle.getId(), articleTitle);
             if (byTitle){
                 throw new BusinessException(ErrorCode.PARAMS_ERROR,"已存在相同的文章标题");
             }
@@ -234,9 +233,9 @@ public class ArticleController {
             BlogArticle newArticle = blogArticleService.createArticle(articleRest);
 
             // tag和标签进行关联
-            Integer article_id = newArticle.getId();
+            Integer newArticleId = newArticle.getId();
             List<BlogArticleTag> articleTagByArticleId =
-                    createArticleTagByArticleId(article_id, tagList);
+                    createArticleTagByArticleId(newArticleId, tagList);
 
             return ResultUtils.success(articleTagByArticleId,"新增文章成功");
         } catch (Exception e) {
@@ -445,11 +444,11 @@ public class ArticleController {
     /**
      *进行添加文章分类与标签关联的公共方法
      *
-     * @param article_id
+     * @param articleId
      * @param tagList
      * @return
      */
-    public List<BlogArticleTag> createArticleTagByArticleId(Integer article_id, List<BlogTag> tagList){
+    public List<BlogArticleTag> createArticleTagByArticleId(Integer articleId, List<BlogTag> tagList){
         List<BlogArticleTag> articleTags = null;
 
         //// TODO: 2023-11-19 实现异步操作
@@ -481,11 +480,11 @@ public class ArticleController {
         }
 
         // 文章id和标签id 关联
-        if (article_id != null) {
+        if (articleId != null) {
             ArrayList<BlogArticleTag> articleTagList = new ArrayList<>();
             for (BlogTag blogTag : tagList){
                 BlogArticleTag articleTag = new BlogArticleTag();
-                articleTag.setArticle_id(Integer.valueOf(article_id));
+                articleTag.setArticleId(Integer.valueOf(articleId));
                 articleTag.setTagId(blogTag.getId());
                 articleTagList.add(articleTag);
             }

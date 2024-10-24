@@ -24,7 +24,7 @@ public class BlogArticleTag implements Serializable {
      * 文章id
      */
     @TableField(value = "article_id")
-    private Integer article_id;
+    private Integer articleId;
 
     /**
      * 标签id

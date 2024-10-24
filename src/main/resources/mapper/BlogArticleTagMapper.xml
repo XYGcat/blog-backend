@@ -6,8 +6,8 @@
 
     <resultMap id="BaseResultMap" type="com.xc.blogbackend.model.domain.BlogArticleTag">
             <id property="id" column="id" jdbcType="INTEGER"/>
-            <result property="article_id" column="article_id" jdbcType="INTEGER"/>
-            <result property="tag_id" column="tag_id" jdbcType="INTEGER"/>
+            <result property="articleId" column="article_id" jdbcType="INTEGER"/>
+            <result property="tagId" column="tag_id" jdbcType="INTEGER"/>
             <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
             <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
     </resultMap>
