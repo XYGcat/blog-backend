@@ -102,7 +102,7 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
 
         // 异步获取用户信息
         List<CompletableFuture<BlogUser>> userFutures = rows.stream()
-                .map(row -> CompletableFuture.supplyAsync(() -> blogUserService.getOneUserInfo(row.getUser_id())))
+                .map(row -> CompletableFuture.supplyAsync(() -> blogUserService.getOneUserInfo(row.getUserId())))
                 .collect(Collectors.toList());
 
         // 等待所有用户信息异步任务完成并处理结果
@@ -202,7 +202,7 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
 //            // 创建一个Callable对象，定义异步任务的逻辑
 //            Callable<BlogUser> task = () -> {
 //                // 调用其他方法或访问数据库，获取需要的数据
-//                BlogUser oneUserInfo = blogUserService.getOneUserInfo(row.getUser_id());
+//                BlogUser oneUserInfo = blogUserService.getOneUserInfo(row.getUserId());
 //                return oneUserInfo;
 //            };
 //            // 将Callable对象提交给线程池执行，并将返回的Future对象添加到List对象中
@@ -346,7 +346,7 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
     }
 
     @Override
-    public PageInfoResult<BlogTalk> blogGetTalkList(Integer current, Integer size, Integer user_id) {
+    public PageInfoResult<BlogTalk> blogGetTalkList(Integer current, Integer size, Integer userId) {
 
         QueryWrapper<BlogTalk> queryWrapper = new QueryWrapper<>();    // 构建查询条件
         queryWrapper.eq("status", 1);
@@ -389,7 +389,7 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
 
         // 异步获取用户信息
         List<CompletableFuture<BlogUser>> userFutures = rows.stream()
-                .map(row -> CompletableFuture.supplyAsync(() -> blogUserService.getOneUserInfo(row.getUser_id())))
+                .map(row -> CompletableFuture.supplyAsync(() -> blogUserService.getOneUserInfo(row.getUserId())))
                 .collect(Collectors.toList());
 
         // 等待所有用户信息异步任务完成并处理结果
@@ -405,10 +405,10 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
         }).join(); // 等待用户信息异步任务完成
 
         // 判断当前登录用户是否点赞了
-        if (user_id != null) {
+        if (userId != null) {
             // 异步获取用户点赞信息
             List<CompletableFuture<Boolean>> likeFutures = rows.stream()
-                    .map(row -> CompletableFuture.supplyAsync(() -> blogLikeService.getIsLikeByIdAndType(row.getId(), 2, user_id)))
+                    .map(row -> CompletableFuture.supplyAsync(() -> blogLikeService.getIsLikeByIdAndType(row.getId(), 2, userId)))
                     .collect(Collectors.toList());
 
             // 等待所有用户信息异步任务完成并处理结果
@@ -417,7 +417,7 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
                 for (int i = 0; i < rows.size(); i++) {
                     try {
                         Boolean aBoolean = likeFutures.get(i).get();
-                        rows.get(i).setIs_like(aBoolean);
+                        rows.get(i).setIsLike(aBoolean);
                     } catch (InterruptedException | ExecutionException e) {
                         throw new RuntimeException(e);
                     }

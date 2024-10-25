@@ -20,8 +20,8 @@ public class PageRequest implements Serializable {
     private Integer size;       // 分页大小
     private String message;     // 消息
     private List<String> time = new ArrayList<>();
-    private String site_name;   // 网站名称
+    private String siteName;   // 网站名称
     private Integer status;      // 状态
     private String tag;          // 标签
-    private Integer user_id;     // 用户id
+    private Integer userId;     // 用户id
 }

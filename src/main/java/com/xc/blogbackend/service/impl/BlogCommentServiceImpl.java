@@ -61,7 +61,7 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
         Integer size = (Integer) request.get("size");
         Integer type = (Integer) request.get("type");
         Integer for_id = (Integer) request.get("for_id");
-        Integer user_id = (Integer) request.get("user_id");
+        Integer userId = (Integer) request.get("user_id");
         String order = (String) request.get("order");
 
         QueryWrapper<BlogComment> queryWrapper = new QueryWrapper<>();
@@ -113,10 +113,10 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
         }).join(); // 等待用户信息异步任务完成
 
         // 判断当前登录用户是否点赞了
-        if (user_id != null) {
+        if (userId != null) {
             // 异步获取用户点赞信息
             List<CompletableFuture<Boolean>> promiseLikeList = rows.stream()
-                    .map(row -> CompletableFuture.supplyAsync(() -> blogLikeService.getIsLikeByIdAndType(row.getId(), 4, user_id)))
+                    .map(row -> CompletableFuture.supplyAsync(() -> blogLikeService.getIsLikeByIdAndType(row.getId(), 4, userId)))
                     .collect(Collectors.toList());
 
             // 等待所有用户信息异步任务完成并处理结果
@@ -125,7 +125,7 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
                 for (int i = 0; i < rows.size(); i++) {
                     try {
                         Boolean aBoolean = promiseLikeList.get(i).get();
-                        rows.get(i).setIs_like(aBoolean);
+                        rows.get(i).setIsLike(aBoolean);
                     } catch (InterruptedException | ExecutionException e) {
                         throw new RuntimeException(e);
                     }
@@ -159,7 +159,7 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
         Integer size = (Integer) request.get("size");
         Integer type = (Integer) request.get("type");
         Integer for_id = (Integer) request.get("for_id");
-        Integer user_id = (Integer) request.get("user_id");
+        Integer userId = (Integer) request.get("user_id");
         Integer parent_id = (Integer) request.get("parent_id");
 
         QueryWrapper<BlogComment> queryWrapper = new QueryWrapper<>();
@@ -231,10 +231,10 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
         }).join(); // 等待用户信息异步任务完成
 
         // 判断当前登录用户是否点赞了
-        if (user_id != null) {
+        if (userId != null) {
             // 异步获取用户点赞信息
             List<CompletableFuture<Boolean>> promiseLikeList = rows.stream()
-                    .map(row -> CompletableFuture.supplyAsync(() -> blogLikeService.getIsLikeByIdAndType(row.getId(), 4, user_id)))
+                    .map(row -> CompletableFuture.supplyAsync(() -> blogLikeService.getIsLikeByIdAndType(row.getId(), 4, userId)))
                     .collect(Collectors.toList());
 
             // 等待所有用户信息异步任务完成并处理结果
@@ -243,7 +243,7 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
                 for (int i = 0; i < rows.size(); i++) {
                     try {
                         Boolean aBoolean = promiseLikeList.get(i).get();
-                        rows.get(i).setIs_like(aBoolean);
+                        rows.get(i).setIsLike(aBoolean);
                     } catch (InterruptedException | ExecutionException e) {
                         throw new RuntimeException(e);
                     }

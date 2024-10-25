@@ -24,7 +24,7 @@ public class BlogHeader implements Serializable {
      * 背景图
      */
     @TableField(value = "bg_url")
-    private String bg_url;
+    private String bgUrl;
 
     /**
      * 创建时间，插入时自动填充

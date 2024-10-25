@@ -45,10 +45,10 @@ public interface BlogUserService extends IService<BlogUser> {
     /**
      * 根据id查询用户信息
      *
-     * @param user_id 用户id
+     * @param userId 用户id
      * @return
      */
-    BlogUser getOneUserInfo(Integer user_id);
+    BlogUser getOneUserInfo(Integer userId);
 
     /**
      * 分页查询用户列表
@@ -71,10 +71,10 @@ public interface BlogUserService extends IService<BlogUser> {
     /**
      * 根据用户id获取昵称
      *
-     * @param user_id
+     * @param userId
      * @return
      */
-    String getAuthorNameById(Integer user_id);
+    String getAuthorNameById(Integer userId);
 
     /**
      * 用户自己修改用户信息

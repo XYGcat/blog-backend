@@ -38,17 +38,17 @@ public class LikeController {
     public BaseResponse<Boolean> getIsLikeByIdAndType(@RequestBody Map<String,Integer> request){
         Integer for_id = request.get("for_id");
         Integer type = request.get("type");
-        Integer user_id = request.get("user_id");
+        Integer userId = request.get("user_id");
         if (for_id == null) {
             return ResultUtils.error(ErrorCode.NULL_ERROR);
         }
         if (type == null) {
             return ResultUtils.error(ErrorCode.NULL_ERROR);
         }
-        if (user_id == null) {
+        if (userId == null) {
             return ResultUtils.success(false,"获取用户是否点赞成功");
         }else {
-            Boolean like = blogLikeService.getIsLikeByIdAndType(for_id, type, user_id);
+            Boolean like = blogLikeService.getIsLikeByIdAndType(for_id, type, userId);
             return ResultUtils.success(like,"获取用户是否点赞成功");
         }
     }
@@ -64,7 +64,7 @@ public class LikeController {
     public BaseResponse<Boolean> addLike(@RequestBody Map<String,Integer> request){
         Integer for_id = request.get("for_id");
         Integer type = request.get("type");
-        Integer user_id = request.get("user_id");
+        Integer userId = request.get("user_id");
 
         if (for_id == null) {
             return ResultUtils.error(ErrorCode.NULL_ERROR);
@@ -72,10 +72,10 @@ public class LikeController {
         if (type == null) {
             return ResultUtils.error(ErrorCode.NULL_ERROR);
         }
-        if (user_id == null) {
+        if (userId == null) {
             return ResultUtils.success(false, "获取用户是否点赞成功");
         }else {
-            Boolean aBoolean = blogLikeService.addLike(for_id, type, user_id);
+            Boolean aBoolean = blogLikeService.addLike(for_id, type, userId);
             return ResultUtils.success(aBoolean,"点赞成功");
         }
     }
@@ -91,7 +91,7 @@ public class LikeController {
     public BaseResponse<Boolean> cancelLike(@RequestBody Map<String,Integer> request){
         Integer for_id = request.get("for_id");
         Integer type = request.get("type");
-        Integer user_id = request.get("user_id");
+        Integer userId = request.get("user_id");
 
         if (for_id == null) {
             return ResultUtils.error(ErrorCode.NULL_ERROR);
@@ -99,10 +99,10 @@ public class LikeController {
         if (type == null) {
             return ResultUtils.error(ErrorCode.NULL_ERROR);
         }
-        if (user_id == null) {
+        if (userId == null) {
             return ResultUtils.success(false, "获取用户是否点赞成功");
         }else {
-            Boolean aBoolean = blogLikeService.cancelLike(for_id, type, user_id);
+            Boolean aBoolean = blogLikeService.cancelLike(for_id, type, userId);
             return ResultUtils.success(aBoolean,"点赞成功");
         }
     }

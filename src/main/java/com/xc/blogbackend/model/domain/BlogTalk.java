@@ -18,7 +18,7 @@ import java.util.Map;
 public class BlogTalk implements Serializable {
 
     @TableField(exist = false)
-    private Boolean  is_like;
+    private Boolean  isLike;
 
     @TableField(exist = false)
     private String  avatar;
@@ -42,7 +42,7 @@ public class BlogTalk implements Serializable {
      * 发布说说的用户id
      */
     @TableField(value = "user_id")
-    private Integer user_id;
+    private Integer userId;
 
     /**
      * 说说内容

@@ -30,7 +30,7 @@ public class BlogNotify implements Serializable {
      * 通知给谁
      */
     @TableField(value = "user_id")
-    private Integer user_id;
+    private Integer userId;
 
     /**
      * 通知类型 1 文章 2 说说 3 留言 4 友链

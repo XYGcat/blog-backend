@@ -24,7 +24,7 @@ public interface BlogMessageService extends IService<BlogMessage> {
      * @return
      */
     PageInfoResult<BlogMessage> getMessageList
-    (Integer current, Integer size, String message, List<String> time,String tag,Integer user_id);
+    (Integer current, Integer size, String message, List<String> time,String tag,Integer userId);
 
     /**
      * 获取热门的标签

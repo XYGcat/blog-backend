@@ -170,8 +170,8 @@ public class TalkController {
     public BaseResponse<PageInfoResult<BlogTalk>> blogGetTalkList(@RequestBody Map<String,Integer> request){
         Integer current = request.get("current");
         Integer size = request.get("size");
-        Integer user_id = request.get("user_id");
-        PageInfoResult<BlogTalk> talkPageInfoResult = blogTalkService.blogGetTalkList(current, size, user_id);
+        Integer userId = request.get("user_id");
+        PageInfoResult<BlogTalk> talkPageInfoResult = blogTalkService.blogGetTalkList(current, size, userId);
         return ResultUtils.success(talkPageInfoResult,"获取说说列表成功");
     }
 

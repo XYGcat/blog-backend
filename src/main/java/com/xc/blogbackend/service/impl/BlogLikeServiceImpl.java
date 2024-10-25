@@ -2,8 +2,8 @@ package com.xc.blogbackend.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.xc.blogbackend.model.domain.BlogLike;
 import com.xc.blogbackend.mapper.BlogLikeMapper;
+import com.xc.blogbackend.model.domain.BlogLike;
 import com.xc.blogbackend.service.BlogLikeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,31 +24,31 @@ public class BlogLikeServiceImpl extends ServiceImpl<BlogLikeMapper, BlogLike>
     private BlogLikeMapper blogLikeMapper;
 
     @Override
-    public Boolean getIsLikeByIdAndType(Integer for_id, Integer type, Integer user_id) {
+    public Boolean getIsLikeByIdAndType(Integer for_id, Integer type, Integer userId) {
         QueryWrapper<BlogLike> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("for_id",for_id)
                     .eq("type",type)
-                    .eq("user_id",user_id);
+                    .eq("user_id",userId);
         Long count = blogLikeMapper.selectCount(queryWrapper);
         return count > 0;
     }
 
     @Override
-    public Boolean addLike(Integer for_id, Integer type, Integer user_id) {
+    public Boolean addLike(Integer for_id, Integer type, Integer userId) {
         BlogLike blogLike = new BlogLike();
         blogLike.setFor_id(for_id);
-        blogLike.setUser_id(user_id);
+        blogLike.setUserId(userId);
         blogLike.setType(type);
         int insert = blogLikeMapper.insert(blogLike);
         return insert > 0;
     }
 
     @Override
-    public Boolean cancelLike(Integer for_id, Integer type, Integer user_id) {
+    public Boolean cancelLike(Integer for_id, Integer type, Integer userId) {
         QueryWrapper<BlogLike> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("for_id",for_id);
         queryWrapper.eq("type",type);
-        queryWrapper.eq("user_id",user_id);
+        queryWrapper.eq("user_id",userId);
         int delete = blogLikeMapper.delete(queryWrapper);
         return delete > 0;
     }

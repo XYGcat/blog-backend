@@ -9,15 +9,15 @@
             <result property="tag" column="tag" jdbcType="VARCHAR"/>
             <result property="message" column="message" jdbcType="VARCHAR"/>
             <result property="color" column="color" jdbcType="VARCHAR"/>
-            <result property="font_size" column="font_size" jdbcType="INTEGER"/>
-            <result property="bg_color" column="bg_color" jdbcType="VARCHAR"/>
-            <result property="bg_url" column="bg_url" jdbcType="VARCHAR"/>
-            <result property="user_id" column="user_id" jdbcType="INTEGER"/>
-            <result property="like_times" column="like_times" jdbcType="INTEGER"/>
+            <result property="fontSize" column="font_size" jdbcType="INTEGER"/>
+            <result property="bgColor" column="bg_color" jdbcType="VARCHAR"/>
+            <result property="bgUrl" column="bg_url" jdbcType="VARCHAR"/>
+            <result property="userId" column="user_id" jdbcType="INTEGER"/>
+            <result property="likeTimes" column="like_times" jdbcType="INTEGER"/>
             <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
             <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
-            <result property="font_weight" column="font_weight" jdbcType="INTEGER"/>
-            <result property="nick_name" column="nick_name" jdbcType="VARCHAR"/>
+            <result property="fontWeight" column="font_weight" jdbcType="INTEGER"/>
+            <result property="nickName" column="nick_name" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">

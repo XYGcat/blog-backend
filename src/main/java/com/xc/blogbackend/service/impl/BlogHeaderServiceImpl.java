@@ -38,8 +38,8 @@ public class BlogHeaderServiceImpl extends ServiceImpl<BlogHeaderMapper, BlogHea
 
         for (BlogHeader v : blogHeaders){
             try {
-                String url = qiniu.downloadUrl(v.getBg_url());
-                v.setBg_url(url);
+                String url = qiniu.downloadUrl(v.getBgUrl());
+                v.setBgUrl(url);
             } catch (QiniuException e) {
                 throw new RuntimeException(e);
             }
@@ -54,7 +54,7 @@ public class BlogHeaderServiceImpl extends ServiceImpl<BlogHeaderMapper, BlogHea
         if (id != null){
             //删除七牛云旧图片
             BlogHeader selectById = blogHeaderMapper.selectById(id);
-            String subString = StringManipulation.subString(selectById.getBg_url());
+            String subString = StringManipulation.subString(selectById.getBgUrl());
             qiniu.deleteFile(subString);
 
             int i = blogHeaderMapper.updateById(blogHeader);

@@ -46,10 +46,10 @@ public class MessageController {
         String message = request.getMessage();
         List<String> time = request.getTime();
         String tag = request.getTag();
-        Integer user_id = request.getUser_id();
+        Integer userId = request.getUserId();
 
         PageInfoResult<BlogMessage> messageList = blogMessageService.getMessageList
-                (current, size, message, time,tag,user_id);
+                (current, size, message, time,tag,userId);
 
         return ResultUtils.success(messageList,"分页获取留言成功");
     }
@@ -75,16 +75,16 @@ public class MessageController {
     @ApiOperation(value = "新增留言")
     @PostMapping("/add")
     public BaseResponse<Boolean> addMessage(@RequestBody BlogMessage blogMessage){
-        Integer user_id = blogMessage.getUser_id();
+        Integer userId = blogMessage.getUserId();
         String message = blogMessage.getMessage();
         String nickName = blogMessage.getNickName();
-        if (user_id == null) {
+        if (userId == null) {
             nickName = RandomUsernameGenerator.generateRandomUsername();
         }
         Boolean aBoolean = blogMessageService.addMessage(blogMessage);
 
         // 发布消息推送
-        if (user_id != 1) {
+        if (userId != 1) {
             blogNotifyService.addNotify(1, 3, null, "您收到了来自于：" + nickName + "的留言:" + message);
         }
 

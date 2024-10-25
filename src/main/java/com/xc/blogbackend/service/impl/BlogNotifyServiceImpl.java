@@ -28,11 +28,11 @@ public class BlogNotifyServiceImpl extends ServiceImpl<BlogNotifyMapper, BlogNot
     private BlogNotifyMapper blogNotifyMapper;
 
     @Override
-    public PageInfoResult<BlogNotify> getNotifyList(Integer current, Integer size, Integer user_id) {
+    public PageInfoResult<BlogNotify> getNotifyList(Integer current, Integer size, Integer userId) {
 
         QueryWrapper<BlogNotify> queryWrapper = new QueryWrapper<>();    // 构建查询条件
-        if (user_id != null) {
-            queryWrapper.eq("user_id", user_id);
+        if (userId != null) {
+            queryWrapper.eq("user_id", userId);
         }
         //按照 isView 升序和 createdAt 降序排列
         queryWrapper.orderByAsc("isView")
@@ -56,10 +56,10 @@ public class BlogNotifyServiceImpl extends ServiceImpl<BlogNotifyMapper, BlogNot
     }
 
     @Override
-    public BlogNotify addNotify(Integer user_id, Integer type, Integer to_id, String message) {
+    public BlogNotify addNotify(Integer userId, Integer type, Integer to_id, String message) {
         BlogNotify blogNotify = new BlogNotify();
-        if (user_id != null) {
-            blogNotify.setUser_id(user_id);
+        if (userId != null) {
+            blogNotify.setUserId(userId);
         }
         if (type != null) {
             blogNotify.setType(type);

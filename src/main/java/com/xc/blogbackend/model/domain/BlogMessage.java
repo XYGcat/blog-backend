@@ -17,13 +17,13 @@ public class BlogMessage implements Serializable {
 
     //是否点赞
     @TableField(exist = false)
-    private Boolean  is_like;
+    private Boolean  isLike;
 
     /**
      *评论总数
      */
     @TableField(exist = false)
-    private Long comment_total;
+    private Long commentTotal;
 
     /**
      * 用户头像
@@ -59,31 +59,31 @@ public class BlogMessage implements Serializable {
      * 字体大小
      */
     @TableField(value = "font_size")
-    private Integer font_size;
+    private Integer fontSize;
 
     /**
      * 背景颜色
      */
     @TableField(value = "bg_color")
-    private String bg_color;
+    private String bgColor;
 
     /**
      * 背景图片
      */
     @TableField(value = "bg_url")
-    private String bg_url;
+    private String bgUrl;
 
     /**
      * 留言用户的id
      */
     @TableField(value = "user_id")
-    private Integer user_id;
+    private Integer userId;
 
     /**
      * 点赞次数
      */
     @TableField(value = "like_times")
-    private Integer like_times;
+    private Integer likeTimes;
 
     /**
      * 创建时间，插入时自动填充
@@ -103,7 +103,7 @@ public class BlogMessage implements Serializable {
      * 字体宽度
      */
     @TableField(value = "font_weight")
-    private Integer font_weight;
+    private Integer fontWeight;
 
     /**
      * 游客用户的昵称

@@ -158,12 +158,12 @@ public class BlogUserServiceImpl extends ServiceImpl<BlogUserMapper, BlogUser>
     }
 
     @Override
-    public BlogUser getOneUserInfo(Integer user_id) {
+    public BlogUser getOneUserInfo(Integer userId) {
         QueryWrapper<BlogUser> queryWrapper = new QueryWrapper<>();
-        if (user_id == null) {
+        if (userId == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR,"为空");
         }
-        queryWrapper.eq("id",user_id);
+        queryWrapper.eq("id",userId);
         BlogUser blogUser = blogUserMapper.selectOne(queryWrapper);
         return getSafetyUser(blogUser);
     }
@@ -216,8 +216,8 @@ public class BlogUserServiceImpl extends ServiceImpl<BlogUserMapper, BlogUser>
     }
 
     @Override
-    public String getAuthorNameById(Integer user_id) {
-        BlogUser blogUser = blogUserMapper.selectById(user_id);
+    public String getAuthorNameById(Integer userId) {
+        BlogUser blogUser = blogUserMapper.selectById(userId);
 
         return blogUser != null ? blogUser.getNickName() : null;
     }

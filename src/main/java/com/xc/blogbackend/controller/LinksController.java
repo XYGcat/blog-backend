@@ -11,6 +11,7 @@ import com.xc.blogbackend.service.BlogNotifyService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
+
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
@@ -55,14 +56,14 @@ public class LinksController {
     @PostMapping("/addOrUpdate")
     public BaseResponse<Boolean> addOrUpdateLinks(@RequestBody Map<String,Object> request){
         Integer id = (Integer) request.get("id");
-        String site_name = (String) request.get("site_name");
+        String siteName = (String) request.get("site_name");
         String msg;
 
         Boolean aBoolean = blogLinksService.addOrUpdateLinks(request);
 
         if(id == null){
             BlogNotify blogNotify = blogNotifyService.addNotify
-                    (1, 4, null, "您的收到了来自于：" + site_name + "的友链申请，点我去后台审核！");
+                    (1, 4, null, "您的收到了来自于：" + siteName + "的友链申请，点我去后台审核！");
         }
 
         if(id != null){

@@ -24,19 +24,19 @@ public class BlogLinks implements Serializable {
      * 网站名称
      */
     @TableField(value = "site_name")
-    private String site_name;
+    private String siteName;
 
     /**
      * 网站描述
      */
     @TableField(value = "site_desc")
-    private String site_desc;
+    private String siteDesc;
 
     /**
      * 网站头像
      */
     @TableField(value = "site_avatar")
-    private String site_avatar;
+    private String siteAvatar;
 
     /**
      * 网站地址

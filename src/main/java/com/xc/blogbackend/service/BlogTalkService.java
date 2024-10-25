@@ -85,10 +85,10 @@ public interface BlogTalkService extends IService<BlogTalk> {
      *
      * @param current
      * @param size
-     * @param user_id
+     * @param userId
      * @return
      */
-    PageInfoResult<BlogTalk> blogGetTalkList(Integer current,Integer size,Integer user_id);
+    PageInfoResult<BlogTalk> blogGetTalkList(Integer current,Integer size,Integer userId);
 
     /**
      * 取消点赞

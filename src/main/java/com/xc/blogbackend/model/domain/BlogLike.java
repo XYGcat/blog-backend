@@ -36,7 +36,7 @@ public class BlogLike implements Serializable {
      * 点赞用户id
      */
     @TableField(value = "user_id")
-    private Integer user_id;
+    private Integer userId;
 
     /**
      * 创建时间，插入时自动填充

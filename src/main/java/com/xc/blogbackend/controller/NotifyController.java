@@ -8,6 +8,7 @@ import com.xc.blogbackend.service.BlogNotifyService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
+
 import javax.annotation.Resource;
 import java.util.Map;
 
@@ -71,12 +72,12 @@ public class NotifyController {
 //    /**
 //     * 新增消息通知
 //     *
-//     * @param user_id
+//     * @param userId
 //     * @param type
 //     * @param to_id
 //     * @param message
 //     */
-//    public void addNotify(Integer user_id,Integer type,Integer to_id,String message){
-//        BlogNotify notify = blogNotifyService.createNotify(user_id, type, to_id, message);
+//    public void addNotify(Integer userId,Integer type,Integer to_id,String message){
+//        BlogNotify notify = blogNotifyService.createNotify(userId, type, to_id, message);
 //    }
 }

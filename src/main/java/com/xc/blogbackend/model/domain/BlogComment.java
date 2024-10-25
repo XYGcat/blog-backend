@@ -25,7 +25,7 @@ public class BlogComment implements Serializable {
      * 是否点赞
      */
     @TableField(exist = false)
-    private Boolean is_like;
+    private Boolean isLike;
 
     /**
      *地理位置

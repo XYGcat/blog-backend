@@ -16,21 +16,21 @@ public interface BlogNotifyService extends IService<BlogNotify> {
      *
      * @param current
      * @param size
-     * @param user_id
+     * @param userId
      * @return
      */
-    PageInfoResult<BlogNotify> getNotifyList(Integer current, Integer size, Integer user_id);
+    PageInfoResult<BlogNotify> getNotifyList(Integer current, Integer size, Integer userId);
 
     /**
      * 新增消息通知
      *
-     * @param user_id
+     * @param userId
      * @param type
      * @param to_id
      * @param message
      * @return
      */
-    BlogNotify addNotify(Integer user_id,Integer type,Integer to_id,String message);
+    BlogNotify addNotify(Integer userId,Integer type,Integer to_id,String message);
 
     /**
      * 已阅消息通知

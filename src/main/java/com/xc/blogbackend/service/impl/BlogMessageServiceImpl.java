@@ -52,7 +52,7 @@ public class BlogMessageServiceImpl extends ServiceImpl<BlogMessageMapper, BlogM
 
     @Override
     public PageInfoResult<BlogMessage> getMessageList
-            (Integer current, Integer size, String message, List<String> time,String tag,Integer user_id) {
+            (Integer current, Integer size, String message, List<String> time,String tag,Integer userId) {
 
         QueryWrapper<BlogMessage> queryWrapper = new QueryWrapper<>();
         if (tag != null && !tag.isEmpty()) {
@@ -78,10 +78,10 @@ public class BlogMessageServiceImpl extends ServiceImpl<BlogMessageMapper, BlogM
         List<CompletableFuture<BlogUser>> promiseList = new ArrayList<>();
         // 遍历每行数据
         for (BlogMessage row : rows) {
-            if (row.getUser_id() != null) {
+            if (row.getUserId() != null) {
                 // 如果用户ID存在，创建异步任务获取用户信息
                 CompletableFuture<BlogUser> res = CompletableFuture.supplyAsync(()
-                        -> blogUserService.getOneUserInfo(row.getUser_id()));
+                        -> blogUserService.getOneUserInfo(row.getUserId()));
                 promiseList.add(res);
             } else {
                 // 如果用户ID不存在，设置默认值
@@ -132,9 +132,9 @@ public class BlogMessageServiceImpl extends ServiceImpl<BlogMessageMapper, BlogM
 //        for(BlogMessage row : rows){
 //            // 创建一个Callable对象，定义异步任务的逻辑
 //            Callable<BlogUser> task = () -> {
-//                if (row.getUser_id() != null) {
+//                if (row.getUserId() != null) {
 //                    // 调用其他方法或访问数据库，获取需要的数据
-//                    BlogUser oneUserInfo = blogUserService.getOneUserInfo(row.getUser_id());
+//                    BlogUser oneUserInfo = blogUserService.getOneUserInfo(row.getUserId());
 //                    return oneUserInfo;
 //                }else {
 //                    BlogUser oneUserInfo = new BlogUser();
@@ -164,10 +164,10 @@ public class BlogMessageServiceImpl extends ServiceImpl<BlogMessageMapper, BlogM
 //        }
 
         // 判断当前登录用户是否点赞了
-        if (user_id != null) {
+        if (userId != null) {
             // 异步获取用户点赞信息
             List<CompletableFuture<Boolean>> likeFutures = rows.stream()
-                    .map(row -> CompletableFuture.supplyAsync(() -> blogLikeService.getIsLikeByIdAndType(row.getId(), 3, user_id)))
+                    .map(row -> CompletableFuture.supplyAsync(() -> blogLikeService.getIsLikeByIdAndType(row.getId(), 3, userId)))
                     .collect(Collectors.toList());
 
             // 等待所有用户信息异步任务完成并处理结果
@@ -176,7 +176,7 @@ public class BlogMessageServiceImpl extends ServiceImpl<BlogMessageMapper, BlogM
                 for (int i = 0; i < rows.size(); i++) {
                     try {
                         Boolean aBoolean = likeFutures.get(i).get();
-                        rows.get(i).setIs_like(aBoolean);
+                        rows.get(i).setIsLike(aBoolean);
                     } catch (InterruptedException | ExecutionException e) {
                         throw new RuntimeException(e);
                     }
@@ -193,7 +193,7 @@ public class BlogMessageServiceImpl extends ServiceImpl<BlogMessageMapper, BlogM
         allComments.thenAccept(ignored -> {
             for (int i = 0; i < rows.size(); i++) {
                 Long r = promiseCommentList.get(i).join();
-                rows.get(i).setComment_total(r);
+                rows.get(i).setCommentTotal(r);
             }
         }).join(); // 等待异步任务完成
 
@@ -230,9 +230,9 @@ public class BlogMessageServiceImpl extends ServiceImpl<BlogMessageMapper, BlogM
         //添加返回值
         //插入带下载七牛云图片凭证的url
         for(BlogMessage blogMessage : rows){
-            String bg_url = blogMessage.getBg_url();
+            String bgUrl = blogMessage.getBgUrl();
             try {
-                blogMessage.setBg_url(qiniu.downloadUrl(bg_url));
+                blogMessage.setBgUrl(qiniu.downloadUrl(bgUrl));
             } catch (QiniuException e) {
                 throw new RuntimeException(e);
             }
@@ -313,7 +313,7 @@ public class BlogMessageServiceImpl extends ServiceImpl<BlogMessageMapper, BlogM
     public Boolean likeMessage(Integer id) {
         BlogMessage blogMessage = blogMessageMapper.selectById(id);
         if (blogMessage != null) {
-            blogMessage.setLike_times(blogMessage.getLike_times() + 1);
+            blogMessage.setLikeTimes(blogMessage.getLikeTimes() + 1);
             int i = blogMessageMapper.updateById(blogMessage);
             return i > 0;
         }else {
@@ -325,7 +325,7 @@ public class BlogMessageServiceImpl extends ServiceImpl<BlogMessageMapper, BlogM
     public Boolean cancelLikeMessage(Integer id) {
         BlogMessage blogMessage = blogMessageMapper.selectById(id);
         if (blogMessage != null) {
-            blogMessage.setLike_times(blogMessage.getLike_times() - 1);
+            blogMessage.setLikeTimes(blogMessage.getLikeTimes() - 1);
             int i = blogMessageMapper.updateById(blogMessage);
             return i > 0;
         }else {

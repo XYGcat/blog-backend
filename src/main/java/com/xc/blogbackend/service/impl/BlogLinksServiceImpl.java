@@ -38,13 +38,13 @@ public class BlogLinksServiceImpl extends ServiceImpl<BlogLinksMapper, BlogLinks
     public PageInfoResult<BlogLinks> getLinksList(PageRequest pageRequest) {
         Integer current = pageRequest.getCurrent();
         Integer size = pageRequest.getSize();
-        String site_name = pageRequest.getSite_name();
+        String siteName = pageRequest.getSiteName();
         Integer status = pageRequest.getStatus();
         List<String> time = pageRequest.getTime();
 
         QueryWrapper<BlogLinks> queryWrapper = new QueryWrapper<>();
-        if (site_name != null && !site_name.isEmpty()) {
-            queryWrapper.like("site_name", "%" + site_name + "%");
+        if (siteName != null && !siteName.isEmpty()) {
+            queryWrapper.like("site_name", "%" + siteName + "%");
         }
         if (status != null) {
             queryWrapper.eq("status",status);
@@ -64,8 +64,8 @@ public class BlogLinksServiceImpl extends ServiceImpl<BlogLinksMapper, BlogLinks
 
         for (BlogLinks v : rows){
             try {
-                String downloadUrl = qiniu.downloadUrl(v.getSite_avatar());
-                v.setSite_avatar(downloadUrl);
+                String downloadUrl = qiniu.downloadUrl(v.getSiteAvatar());
+                v.setSiteAvatar(downloadUrl);
             } catch (QiniuException e) {
                 throw new RuntimeException(e);
             }
@@ -83,26 +83,26 @@ public class BlogLinksServiceImpl extends ServiceImpl<BlogLinksMapper, BlogLinks
     @Override
     public Boolean addOrUpdateLinks(Map<String, Object> request) {
         Integer id = (Integer) request.get("id");
-        String site_name = (String) request.get("site_name");
-        String site_desc = (String) request.get("site_desc");
-        String site_avatar = (String) request.get("site_avatar");
+        String siteName = (String) request.get("site_name");
+        String siteDesc = (String) request.get("site_desc");
+        String siteAvatar = (String) request.get("site_avatar");
         String url = (String) request.get("url");
         int res;
 
         if (id != null) {
             BlogLinks blogLinks = new BlogLinks();
-            blogLinks.setSite_name(site_name);
-            blogLinks.setSite_desc(site_desc);
-            blogLinks.setSite_avatar(site_avatar);
+            blogLinks.setSiteName(siteName);
+            blogLinks.setSiteDesc(siteDesc);
+            blogLinks.setSiteAvatar(siteAvatar);
             blogLinks.setUrl(url);
             UpdateWrapper<BlogLinks> updateWrapper = new UpdateWrapper<>();
             updateWrapper.eq("id",id);
             res = blogLinksMapper.update(blogLinks, updateWrapper);
         }else {
             BlogLinks blogLinks = new BlogLinks();
-            blogLinks.setSite_name(site_name);
-            blogLinks.setSite_desc(site_desc);
-            blogLinks.setSite_avatar(site_avatar);
+            blogLinks.setSiteName(siteName);
+            blogLinks.setSiteDesc(siteDesc);
+            blogLinks.setSiteAvatar(siteAvatar);
             blogLinks.setUrl(url);
             blogLinks.setStatus(1);
             res = blogLinksMapper.insert(blogLinks);
