@@ -12,7 +12,7 @@ class BlogCategoryServiceImplTest {
         BlogCategoryServiceImpl blogCategoryService = new BlogCategoryServiceImpl();
 
         // 创建一个测试用的分类id
-        Integer categoryId = 4;
+        Long categoryId = 4L;
 
         // 创建一个 BlogCategory 对象，用于存储查询结果
         String categoryNameById = blogCategoryService.getCategoryNameById(categoryId);

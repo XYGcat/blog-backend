@@ -109,7 +109,6 @@ public class Qiniu {
         //手动拼接
         String secretKey = qiniuConfig.getSecretKey();
         String accessKey = qiniuConfig.getAccessKey();
-//        String publicUrl = String.format("%s", imgUrl);   //String.format 方法用于将一个格式化字符串中的占位符替换为相应的值
         Auth auth = Auth.create(accessKey, secretKey);
         long expireInSeconds = 3600;   //自定义链接过期时间
         String finalUrl = auth.privateDownloadUrl(imgUrl, expireInSeconds);

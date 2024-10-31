@@ -12,6 +12,7 @@ import com.xc.blogbackend.model.domain.BlogCategory;
 import com.xc.blogbackend.model.domain.BlogTag;
 import com.xc.blogbackend.model.domain.request.*;
 import com.xc.blogbackend.model.domain.result.ArticleListByContent;
+import com.xc.blogbackend.model.domain.result.ArticleResDto;
 import com.xc.blogbackend.model.domain.result.PageInfoResult;
 import com.xc.blogbackend.model.domain.result.RecommendResult;
 import com.xc.blogbackend.service.BlogArticleService;
@@ -195,49 +196,45 @@ public class ArticleController {
     @PostMapping("/add")
     @Transactional(rollbackFor = Exception.class)  //Spring 的事务管理，如果发生异常，会自动回滚事务
     public BaseResponse<List<BlogArticleTag>> createArticle(@RequestBody AddArticleRequest addArticleRequest){
-        try {
-            AddArticleRequest.ArticleDate finalArticle = addArticleRequest.getFinalArticle();
+        AddArticleRequest.ArticleDate finalArticle = addArticleRequest.getFinalArticle();
 
-            String articleTitle = finalArticle.getArticleTitle();
-            Boolean byTitle = blogArticleService.getArticleInfoByTitle(finalArticle.getId(), articleTitle);
-            if (byTitle){
-                throw new BusinessException(ErrorCode.PARAMS_ERROR,"已存在相同的文章标题");
-            }
-
-            List<BlogTag> tagList = finalArticle.getTagList();
-            BlogCategory category = finalArticle.getCategory();
-            String mdImgList = String.valueOf(finalArticle.getMdImgList());
-            BlogArticle articleRest = new BlogArticle();
-            articleRest.setValues(finalArticle.getArticleTitle(),
-                                  finalArticle.getAuthorId(),
-                                  finalArticle.getArticleContent(),
-                                  finalArticle.getArticleCover(),
-                                  finalArticle.getIsTop(),
-                                  finalArticle.getArticleOrder(),
-                                  finalArticle.getStatus(),
-                                  finalArticle.getType(),
-                                  finalArticle.getOriginUrl(),
-                                  finalArticle.getArticleDescription(),
-                                  mdImgList);
-            Long id = category.getId();
-            String categoryName = category.getCategoryName();
-
-            // 如果分类不存在，则先创建分类
-            Long categoryOrReturn = createCategoryOrReturn(id, categoryName);
-            articleRest.setCategoryId(categoryOrReturn);
-
-            // 先创建文章 拿到文章的id
-            BlogArticle newArticle = blogArticleService.createArticle(articleRest);
-
-            // tag和标签进行关联
-            Long newArticleId = newArticle.getId();
-            List<BlogArticleTag> articleTagByArticleId =
-                    createArticleTagByArticleId(newArticleId, tagList);
-
-            return ResultUtils.success(articleTagByArticleId,"新增文章成功");
-        } catch (Exception e) {
-            throw new RuntimeException("新增文章失败");
+        String articleTitle = finalArticle.getArticleTitle();
+        Boolean byTitle = blogArticleService.getArticleInfoByTitle(finalArticle.getId(), articleTitle);
+        if (byTitle){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR,"已存在相同的文章标题");
         }
+
+        List<BlogTag> tagList = finalArticle.getTagList();
+        BlogCategory category = finalArticle.getCategory();
+        String mdImgList = String.valueOf(finalArticle.getMdImgList());
+        BlogArticle articleRest = new BlogArticle();
+        articleRest.setValues(finalArticle.getArticleTitle(),
+                              finalArticle.getAuthorId(),
+                              finalArticle.getArticleContent(),
+                              finalArticle.getArticleCover(),
+                              finalArticle.getIsTop(),
+                              finalArticle.getArticleOrder(),
+                              finalArticle.getStatus(),
+                              finalArticle.getType(),
+                              finalArticle.getOriginUrl(),
+                              finalArticle.getArticleDescription(),
+                              mdImgList);
+        Long id = category.getId();
+        String categoryName = category.getCategoryName();
+
+        // 如果分类不存在，则先创建分类
+        Long categoryOrReturn = createCategoryOrReturn(id, categoryName);
+        articleRest.setCategoryId(categoryOrReturn);
+
+        // 先创建文章 拿到文章的id
+        BlogArticle newArticle = blogArticleService.createArticle(articleRest);
+
+        // tag和标签进行关联
+        Long newArticleId = newArticle.getId();
+        List<BlogArticleTag> articleTagByArticleId =
+                createArticleTagByArticleId(newArticleId, tagList);
+
+        return ResultUtils.success(articleTagByArticleId,"新增文章成功");
     }
 
     /**
@@ -297,8 +294,8 @@ public class ArticleController {
      */
     @ApiOperation(value = "分页获取时间轴信息")
     @GetMapping("/blogTimelineGetArticleList/{current}/{size}")
-    public BaseResponse<PageInfoResult<BlogArticle>> blogTimelineGetArticleList(@PathVariable Integer current, @PathVariable Integer size){
-        PageInfoResult<BlogArticle> result = blogArticleService.blogTimelineGetArticleList(current, size);
+    public BaseResponse<PageInfoResult<ArticleResDto>> blogTimelineGetArticleList(@PathVariable Integer current, @PathVariable Integer size){
+        PageInfoResult<ArticleResDto> result = blogArticleService.blogTimelineGetArticleList(current, size);
 
         return ResultUtils.success(result,"获取文章时间轴列表成功");
     }
@@ -455,14 +452,13 @@ public class ArticleController {
         // 先将新增的tag进行保存，拿到tag的id，再进行标签 文章关联
         BlogTag res = null;
         ArrayList<BlogTag> promiseList = new ArrayList<>();
-//        BlogTagServiceImpl blogTagService = new BlogTagServiceImpl();
         for (BlogTag blogTag : tagList){
             if (blogTag.getId() == null) {
                 BlogTag oneTag = blogTagService.getOneTag(blogTag.getTagName());
                 if (oneTag != null) {
                     res = oneTag;
                 }else {
-                    res = blogTagService.createTag(blogTag.getTagName());
+                    res = blogTagService.createTag(blogTag);
                 }
             }
             promiseList.add(res);
@@ -489,7 +485,6 @@ public class ArticleController {
                 articleTagList.add(articleTag);
             }
             // 批量新增文章标签关联
-//            BlogArticleTagServiceImpl blogArticleTagService = new BlogArticleTagServiceImpl();
             articleTags = blogArticleTagService.createArticleTags(articleTagList);
         }
 

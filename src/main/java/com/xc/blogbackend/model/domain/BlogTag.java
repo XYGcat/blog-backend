@@ -27,6 +27,11 @@ public class BlogTag implements Serializable {
     private String tagName;
 
     /**
+     * 标签类型（1：文章；2：资源导航）
+     */
+    private Integer tagType;
+
+    /**
      * 创建时间，插入时自动填充
      */
     @TableField(fill = FieldFill.INSERT)
@@ -42,48 +47,4 @@ public class BlogTag implements Serializable {
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
-
-    @Override
-    public boolean equals(Object that) {
-        if (this == that) {
-            return true;
-        }
-        if (that == null) {
-            return false;
-        }
-        if (getClass() != that.getClass()) {
-            return false;
-        }
-        BlogTag other = (BlogTag) that;
-        return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getTagName() == null ? other.getTagName() == null : this.getTagName().equals(other.getTagName()))
-            && (this.getCreatedAt() == null ? other.getCreatedAt() == null : this.getCreatedAt().equals(other.getCreatedAt()))
-            && (this.getUpdatedAt() == null ? other.getUpdatedAt() == null : this.getUpdatedAt().equals(other.getUpdatedAt()));
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getTagName() == null) ? 0 : getTagName().hashCode());
-        result = prime * result + ((getCreatedAt() == null) ? 0 : getCreatedAt().hashCode());
-        result = prime * result + ((getUpdatedAt() == null) ? 0 : getUpdatedAt().hashCode());
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", tag_name=").append(tagName);
-        sb.append(", createdAt=").append(createdAt);
-        sb.append(", updatedAt=").append(updatedAt);
-        sb.append(", serialVersionUID=").append(serialVersionUID);
-        sb.append("]");
-        return sb.toString();
-    }
 }

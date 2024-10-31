@@ -5,6 +5,7 @@ import com.xc.blogbackend.model.domain.BlogArticle;
 import com.xc.blogbackend.model.domain.request.ArticleRequest;
 import com.xc.blogbackend.model.domain.request.UpdateArticleRequest;
 import com.xc.blogbackend.model.domain.result.ArticleListByContent;
+import com.xc.blogbackend.model.domain.result.ArticleResDto;
 import com.xc.blogbackend.model.domain.result.PageInfoResult;
 import com.xc.blogbackend.model.domain.result.RecommendResult;
 
@@ -148,7 +149,7 @@ public interface BlogArticleService extends IService<BlogArticle> {
      * @param size 每页显示条数
      * @return 时间轴文章列表
      */
-    PageInfoResult<BlogArticle> blogTimelineGetArticleList(Integer current, Integer size);
+    PageInfoResult<ArticleResDto> blogTimelineGetArticleList(Integer current, Integer size);
 
     /**
      * 通过分类id获取文章列表

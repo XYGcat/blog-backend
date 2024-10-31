@@ -88,7 +88,7 @@ public class BlogArticle implements Serializable {
     private String originUrl;
 
     @TableField(exist = false)
-    private List<Integer> tagIdList;
+    private List<Long> tagIdList;
 
     @TableField(exist = false)
     private String authorName;
@@ -106,14 +106,14 @@ public class BlogArticle implements Serializable {
      * 创建时间，插入时自动填充
      */
     @TableField(fill = FieldFill.INSERT)
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+    @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDateTime createdAt;
 
     /**
      * 更新时间，插入和更新时自动填充
      */
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+    @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDateTime updatedAt;
 
     /**

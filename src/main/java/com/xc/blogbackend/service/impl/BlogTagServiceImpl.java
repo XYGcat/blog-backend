@@ -45,12 +45,9 @@ public class BlogTagServiceImpl extends ServiceImpl<BlogTagMapper, BlogTag>
     }
 
     @Override
-    public BlogTag createTag(String tagName) {
-        BlogTag blogTag = new BlogTag();
-        blogTag.setTagName(tagName);
+    public BlogTag createTag(BlogTag blogTag) {
         blogTagMapper.insert(blogTag);
 
-        QueryWrapper<BlogTag> queryWrapper = new QueryWrapper<>();
         Long id = blogTag.getId();
         BlogTag tag = blogTagMapper.selectById(id);
         return tag;

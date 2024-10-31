@@ -31,10 +31,10 @@ public interface BlogTagService extends IService<BlogTag> {
     /**
      * 新增标签
      *
-     * @param tagName
+     * @param blogTag
      * @return
      */
-    BlogTag createTag(String tagName);
+    BlogTag createTag(BlogTag blogTag);
 
     /**
      * 获取标签总数

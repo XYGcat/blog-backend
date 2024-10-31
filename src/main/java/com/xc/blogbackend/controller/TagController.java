@@ -87,14 +87,13 @@ public class TagController {
     /**
      * 新增标签
      *
-     * @param request
+     * @param blogTag
      * @return
      */
     @ApiOperation(value = "新增标签")
     @PostMapping("/add")
-    public BaseResponse<BlogTag> addTag(@RequestBody Map<String,Object> request){
-        String tagName = (String) request.get("tag_name");
-        BlogTag tag = blogTagService.createTag(tagName);
+    public BaseResponse<BlogTag> addTag(@RequestBody BlogTag blogTag){
+        BlogTag tag = blogTagService.createTag(blogTag);
         return ResultUtils.success(tag,"新增标签成功");
     }
 }

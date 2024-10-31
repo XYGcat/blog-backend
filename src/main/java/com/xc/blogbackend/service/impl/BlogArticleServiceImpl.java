@@ -15,13 +15,11 @@ import com.xc.blogbackend.model.domain.request.ArticleRequest;
 import com.xc.blogbackend.model.domain.request.CategoryReqDto;
 import com.xc.blogbackend.model.domain.request.UpdateArticleRequest;
 import com.xc.blogbackend.model.domain.result.ArticleListByContent;
+import com.xc.blogbackend.model.domain.result.ArticleResDto;
 import com.xc.blogbackend.model.domain.result.PageInfoResult;
 import com.xc.blogbackend.model.domain.result.RecommendResult;
 import com.xc.blogbackend.service.*;
-import com.xc.blogbackend.utils.ImageLinkComparator;
-import com.xc.blogbackend.utils.PaddingUtils;
-import com.xc.blogbackend.utils.Qiniu;
-import com.xc.blogbackend.utils.StringManipulation;
+import com.xc.blogbackend.utils.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -240,7 +238,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
         }
         // 获取标签列表
         Map<String, Object> listByArticleId = blogArticleTagService.getTagListByArticleId(articleId);
-        List<Integer> tagIdList = (List<Integer>) listByArticleId.get("tagIdList");
+        List<Long> tagIdList = (List<Long>) listByArticleId.get("tagIdList");
         List<String> tagNameList = (List<String>) listByArticleId.get("tagNameList");
         // 获取分类名称
         String categoryNameById = blogCategoryService.getCategoryNameById(blogArticle.getCategoryId());
@@ -582,7 +580,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
     }
 
     @Override
-    public PageInfoResult<BlogArticle> blogTimelineGetArticleList(Integer current, Integer size) {
+    public PageInfoResult<ArticleResDto> blogTimelineGetArticleList(Integer current, Integer size) {
 
         QueryWrapper<BlogArticle> queryWrapper = new QueryWrapper<>();    // 构建查询条件
         queryWrapper.eq("status", 1);
@@ -595,25 +593,21 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
         Page<BlogArticle> articlePage = blogArticleMapper.selectPage(page, queryWrapper);
         // 获取分页数据
         List<BlogArticle> rows = articlePage.getRecords();
+        // 将属性拷贝到ArticleResDto
+        List<ArticleResDto> articleResDtos = PropertyCopyUtils.copyProperties(rows, ArticleResDto.class);
         // 获取通知总数
         long count = articlePage.getTotal();
 
-        Map<String, List<BlogArticle>> resultList = new HashMap<>();
-        for (BlogArticle v : rows){
-            //添加七牛云下载图片凭证
-            try {
-                String url = qiniu.downloadUrl(v.getArticleCover());
-                v.setArticleCover(url);
-            } catch (QiniuException e) {
-                throw new RuntimeException(e);
-            }
+        Map<String, List<ArticleResDto>> resultList = new HashMap<>();
+        // 将文章按照年份分组
+        for (ArticleResDto v : articleResDtos){
             LocalDateTime createdAt = v.getCreatedAt();
             String year = "year_" + StringManipulation.getYearFromDate(createdAt);
             //如果resultList中已经有了year这个键，它将直接将v添加到对应的列表中；
             //如果没有这个键，它将会新建一个ArrayList，并将v加入其中.
             resultList.computeIfAbsent(year, k -> new ArrayList<>()).add(v);
         }
-        // 整合数据
+        // 整合数据到最终列表
         List<Map<String, Object>> finalList = new ArrayList<>();
         for (String key : resultList.keySet()) {
             String year = key.replace("year_", "");
@@ -625,7 +619,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
             finalList.add(obj);
         }
 
-        PageInfoResult<BlogArticle> pageInfoResult = new PageInfoResult<>();
+        PageInfoResult<ArticleResDto> pageInfoResult = new PageInfoResult<>();
         pageInfoResult.setCurrent(current);
         pageInfoResult.setFinalList(finalList);
         pageInfoResult.setTotal(count);
@@ -835,7 +829,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
                 if (oneTag != null) {
                     res = oneTag;
                 }else {
-                    res = blogTagService.createTag(blogTag.getTagName());
+                    res = blogTagService.createTag(blogTag);
                 }
             }
             promiseList.add(res);
