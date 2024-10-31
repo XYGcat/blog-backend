@@ -16,7 +16,7 @@ public interface BlogPhotoAlbumService extends IService<BlogPhotoAlbum> {
     /**
      *获取相册列表
      *
-     * @param album_name    相册名称
+     * @param albumName    相册名称
      * @param current
      * @param size
      * @return
@@ -26,8 +26,8 @@ public interface BlogPhotoAlbumService extends IService<BlogPhotoAlbum> {
     /**
      * 新增相册
      *
-     * @param album_name
-     * @param album_cover
+     * @param albumName
+     * @param albumCover
      * @param description
      * @return
      */
@@ -37,7 +37,7 @@ public interface BlogPhotoAlbumService extends IService<BlogPhotoAlbum> {
      * 根据id 或 相册名称获取相册信息
      *
      * @param id
-     * @param album_name
+     * @param albumName
      * @return
      */
     BlogPhotoAlbum getOneAlbum(Integer id,String albumName);
@@ -46,8 +46,8 @@ public interface BlogPhotoAlbumService extends IService<BlogPhotoAlbum> {
      * 编辑相册
      *
      * @param id
-     * @param album_name
-     * @param album_cover
+     * @param albumName
+     * @param albumCover
      * @param description
      * @return
      */

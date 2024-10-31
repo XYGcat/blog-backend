@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -28,10 +28,10 @@ class BlogTalkServiceImplTest {
         assertNotNull(blogUserMapper);
         List<BlogTalk> blogTalks = blogTalkMapper.selectList(null);
         List<BlogUser> blogUsers = blogUserMapper.selectList(null);
-        Date createdAt = blogTalks.get(0).getCreatedAt();
-        Date updatedAt = blogTalks.get(0).getUpdatedAt();
-        Date createdAt1 = blogUsers.get(0).getCreatedAt();
-        Date updatedAt1 = blogUsers.get(0).getUpdatedAt();
+        LocalDateTime createdAt = blogTalks.get(0).getCreatedAt();
+        LocalDateTime updatedAt = blogTalks.get(0).getUpdatedAt();
+        LocalDateTime createdAt1 = blogUsers.get(0).getCreatedAt();
+        LocalDateTime updatedAt1 = blogUsers.get(0).getUpdatedAt();
         System.out.println(blogTalks);
     }
 }

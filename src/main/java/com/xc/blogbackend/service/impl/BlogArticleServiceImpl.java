@@ -12,6 +12,7 @@ import com.xc.blogbackend.exception.BusinessException;
 import com.xc.blogbackend.mapper.BlogArticleMapper;
 import com.xc.blogbackend.model.domain.*;
 import com.xc.blogbackend.model.domain.request.ArticleRequest;
+import com.xc.blogbackend.model.domain.request.CategoryReqDto;
 import com.xc.blogbackend.model.domain.request.UpdateArticleRequest;
 import com.xc.blogbackend.model.domain.result.ArticleListByContent;
 import com.xc.blogbackend.model.domain.result.PageInfoResult;
@@ -27,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -604,7 +606,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
             } catch (QiniuException e) {
                 throw new RuntimeException(e);
             }
-            Date createdAt = v.getCreatedAt();
+            LocalDateTime createdAt = v.getCreatedAt();
             String year = "year_" + StringManipulation.getYearFromDate(createdAt);
             //如果resultList中已经有了year这个键，它将直接将v添加到对应的列表中；
             //如果没有这个键，它将会新建一个ArrayList，并将v加入其中.
@@ -801,7 +803,10 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
             if (oneCategory != null) {
                 finalId = oneCategory.getId();
             } else {
-                BlogCategory createCategory = blogCategoryService.createCategory(categoryName, CategoryEnum.ARTICLE.getCode());
+                CategoryReqDto categoryReqDto = new CategoryReqDto();
+                categoryReqDto.setCategoryName(categoryName);
+                categoryReqDto.setCategoryType(CategoryEnum.ARTICLE.getCode());
+                BlogCategory createCategory = blogCategoryService.createCategory(categoryReqDto);
                 finalId = createCategory.getId();
             }
         }

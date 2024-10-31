@@ -48,9 +48,9 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
     private BlogLikeService blogLikeService;
 
     @Override
-    public Long getCommentTotal(Integer for_id, Integer type) {
+    public Long getCommentTotal(Integer forId, Integer type) {
         QueryWrapper<BlogComment> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("for_id", for_id).eq("type", type);
+        queryWrapper.eq("for_id", forId).eq("type", type);
         Long count = blogCommentMapper.selectCount(queryWrapper);
         return count;
     }
@@ -60,7 +60,7 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
         Integer current = (Integer) request.get("current");
         Integer size = (Integer) request.get("size");
         Integer type = (Integer) request.get("type");
-        Integer for_id = (Integer) request.get("for_id");
+        Integer forId = (Integer) request.get("for_id");
         Integer userId = (Integer) request.get("user_id");
         String order = (String) request.get("order");
 
@@ -68,10 +68,10 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
         if (type != null){
             queryWrapper.eq("type",type);
         }
-        if (for_id != null){
-            queryWrapper.eq("for_id",for_id);
+        if (forId != null){
+            queryWrapper.eq("for_id",forId);
         }
-        // 模拟添加 { parent_id: null } 条件
+        // 模拟添加 { parentId: null } 条件
         queryWrapper.isNull("parent_id");
         if(order == "new"){
             queryWrapper.orderByDesc("created_at");
@@ -92,9 +92,9 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
         // 根据用户id获取用户当前的昵称和头像
         List<CompletableFuture<BlogUser>> promiseList = new ArrayList<>();
         for (BlogComment row : rows){
-            if (row.getFrom_id() != null) {
+            if (row.getFromId() != null) {
                 CompletableFuture<BlogUser> res = CompletableFuture.supplyAsync(
-                        () -> blogUserService.getOneUserInfo(row.getFrom_id()));
+                        () -> blogUserService.getOneUserInfo(row.getFromId()));
                 promiseList.add(res);
             }
         }
@@ -106,8 +106,8 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
                 BlogUser blogUser = promiseList.get(i).join();
                 //检查 CompletableFuture 是否以异常完成
                 if (blogUser != null) {
-                    rows.get(i).setFrom_avatar(blogUser.getAvatar());
-                    rows.get(i).setFrom_name(blogUser.getNickName());
+                    rows.get(i).setFromAvatar(blogUser.getAvatar());
+                    rows.get(i).setFromName(blogUser.getNickName());
                 }
             }
         }).join(); // 等待用户信息异步任务完成
@@ -134,11 +134,11 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
         }
 
         for (BlogComment row : rows){
-            String from_avatar = row.getFrom_avatar();
-//            String to_avatar = row.getTo_avatar();
+            String fromAvatar = row.getFromAvatar();
+//            String toAvatar = row.getToAvatar();
             try {
-                row.setFrom_avatar(qiniu.downloadUrl(from_avatar));
-//                row.setTo_avatar(qiniu.downloadUrl(to_avatar));
+                row.setFromAvatar(qiniu.downloadUrl(fromAvatar));
+//                row.setToAvatar(qiniu.downloadUrl(toAvatar));
             } catch (QiniuException e) {
                 throw new RuntimeException(e);
             }
@@ -158,19 +158,19 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
         Integer current = (Integer) request.get("current");
         Integer size = (Integer) request.get("size");
         Integer type = (Integer) request.get("type");
-        Integer for_id = (Integer) request.get("for_id");
+        Integer forId = (Integer) request.get("for_id");
         Integer userId = (Integer) request.get("user_id");
-        Integer parent_id = (Integer) request.get("parent_id");
+        Integer parentId = (Integer) request.get("parent_id");
 
         QueryWrapper<BlogComment> queryWrapper = new QueryWrapper<>();
         if (type != null){
             queryWrapper.eq("type",type);
         }
-        if (for_id != null){
-            queryWrapper.eq("for_id",for_id);
+        if (forId != null){
+            queryWrapper.eq("for_id",forId);
         }
-        if (parent_id != null){
-            queryWrapper.eq("parent_id",parent_id);
+        if (parentId != null){
+            queryWrapper.eq("parent_id",parentId);
         }
         queryWrapper.orderByAsc("created_at");
         Page<BlogComment> page = new Page<>(current,size);
@@ -187,9 +187,9 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
         // 根据用户id获取用户当前的昵称和头像
         List<CompletableFuture<BlogUser>> promiseList = new ArrayList<>();
         for (BlogComment row : rows){
-            if (row.getFrom_id() != null) {
+            if (row.getFromId() != null) {
                 CompletableFuture<BlogUser> res = CompletableFuture.supplyAsync(
-                        () -> blogUserService.getOneUserInfo(row.getFrom_id()));
+                        () -> blogUserService.getOneUserInfo(row.getFromId()));
                 promiseList.add(res);
             }
         }
@@ -201,8 +201,8 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
                 BlogUser blogUser = promiseList.get(i).join();
                 //检查 CompletableFuture 是否以异常完成
                 if (blogUser != null) {
-                    rows.get(i).setFrom_avatar(blogUser.getAvatar());
-                    rows.get(i).setFrom_name(blogUser.getNickName());
+                    rows.get(i).setFromAvatar(blogUser.getAvatar());
+                    rows.get(i).setFromName(blogUser.getNickName());
                 }
             }
         }).join(); // 等待用户信息异步任务完成
@@ -210,9 +210,9 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
         // 根据用户id获取用户当前的昵称和头像
         List<CompletableFuture<BlogUser>> promiseList2 = new ArrayList<>();
         for (BlogComment row : rows){
-            if (row.getTo_id() != null) {
+            if (row.getToId() != null) {
                 CompletableFuture<BlogUser> res = CompletableFuture.supplyAsync(
-                        () -> blogUserService.getOneUserInfo(row.getTo_id()));
+                        () -> blogUserService.getOneUserInfo(row.getToId()));
                 promiseList2.add(res);
             }
         }
@@ -224,8 +224,8 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
                 BlogUser blogUser = promiseList.get(i).join();
                 //检查 CompletableFuture 是否以异常完成
                 if (blogUser != null) {
-                    rows.get(i).setTo_avatar(blogUser.getAvatar());
-                    rows.get(i).setTo_name(blogUser.getNickName());
+                    rows.get(i).setToAvatar(blogUser.getAvatar());
+                    rows.get(i).setToName(blogUser.getNickName());
                 }
             }
         }).join(); // 等待用户信息异步任务完成
@@ -252,11 +252,11 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
         }
 
         for (BlogComment row : rows){
-            String from_avatar = row.getFrom_avatar();
-            String to_avatar = row.getTo_avatar();
+            String fromAvatar = row.getFromAvatar();
+            String toAvatar = row.getToAvatar();
             try {
-                row.setFrom_avatar(qiniu.downloadUrl(from_avatar));
-                row.setTo_avatar(qiniu.downloadUrl(to_avatar));
+                row.setFromAvatar(qiniu.downloadUrl(fromAvatar));
+                row.setToAvatar(qiniu.downloadUrl(toAvatar));
             } catch (QiniuException e) {
                 throw new RuntimeException(e);
             }
@@ -276,19 +276,19 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
         Integer current = (Integer) request.get("current");
         Integer size = (Integer) request.get("size");
         String content = (String) request.get("content");
-        String to_name = (String) request.get("to_name");
-        String from_name = (String) request.get("from_name");
+        String toName = (String) request.get("to_name");
+        String fromName = (String) request.get("from_name");
         List<String> time = (List<String>) request.get("time");
 
         QueryWrapper<BlogComment> queryWrapper = new QueryWrapper<>();
         if (content != null && !content.isEmpty()){
             queryWrapper.like("content","%" + content + "%");
         }
-        if (to_name != null && !to_name.isEmpty()){
-            queryWrapper.like("to_name","%" + to_name + "%");
+        if (toName != null && !toName.isEmpty()){
+            queryWrapper.like("to_name","%" + toName + "%");
         }
-        if (from_name != null && !from_name.isEmpty()){
-            queryWrapper.like("from_name","%" + from_name + "%");
+        if (fromName != null && !fromName.isEmpty()){
+            queryWrapper.like("from_name","%" + fromName + "%");
         }
         if (time != null && time.size() == 2 && time.get(0) != null && time.get(1) != null) {
             queryWrapper.between("created_at", time.get(0), time.get(1));
@@ -308,9 +308,9 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
         // 根据用户from_id获取用户当前的昵称和头像
         List<CompletableFuture<BlogUser>> promiseList = new ArrayList<>();
         for (BlogComment row : rows){
-            if (row.getFrom_id() != null) {
+            if (row.getFromId() != null) {
                 CompletableFuture<BlogUser> res = CompletableFuture.supplyAsync(
-                        () -> blogUserService.getOneUserInfo(row.getFrom_id()));
+                        () -> blogUserService.getOneUserInfo(row.getFromId()));
                 promiseList.add(res);
             }
         }
@@ -322,8 +322,8 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
                 BlogUser blogUser = promiseList.get(i).join();
                 //检查 CompletableFuture 是否以异常完成
                 if (blogUser != null) {
-                    rows.get(i).setFrom_avatar(blogUser.getAvatar());
-                    rows.get(i).setFrom_name(blogUser.getNickName());
+                    rows.get(i).setFromAvatar(blogUser.getAvatar());
+                    rows.get(i).setFromName(blogUser.getNickName());
                 }
             }
         }).join(); // 等待用户信息异步任务完成
@@ -331,9 +331,9 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
         // 根据用户id获取用户当前的昵称和头像
         List<CompletableFuture<BlogUser>> promiseList2 = new ArrayList<>();
         for (BlogComment row : rows){
-            if (row.getTo_id() != null) {
+            if (row.getToId() != null) {
                 CompletableFuture<BlogUser> res = CompletableFuture.supplyAsync(
-                        () -> blogUserService.getOneUserInfo(row.getTo_id()));
+                        () -> blogUserService.getOneUserInfo(row.getToId()));
                 promiseList2.add(res);
             }
         }
@@ -345,19 +345,19 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
                 BlogUser blogUser = promiseList.get(i).join();
                 //检查 CompletableFuture 是否以异常完成
                 if (blogUser != null) {
-                    rows.get(i).setTo_avatar(blogUser.getAvatar());
-                    rows.get(i).setTo_name(blogUser.getNickName());
+                    rows.get(i).setToAvatar(blogUser.getAvatar());
+                    rows.get(i).setToName(blogUser.getNickName());
                 }
             }
         }).join(); // 等待用户信息异步任务完成
 
         for (BlogComment row : rows){
-            String from_avatar = row.getFrom_avatar();
-            String to_avatar = row.getTo_avatar();
+            String fromAvatar = row.getFromAvatar();
+            String toAvatar = row.getToAvatar();
             try {
-                row.setFrom_avatar(qiniu.downloadUrl(from_avatar));
-                if (to_avatar != null) {
-                    row.setTo_avatar(qiniu.downloadUrl(to_avatar));
+                row.setFromAvatar(qiniu.downloadUrl(fromAvatar));
+                if (toAvatar != null) {
+                    row.setToAvatar(qiniu.downloadUrl(toAvatar));
                 }
             } catch (QiniuException e) {
                 throw new RuntimeException(e);
@@ -384,9 +384,9 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
     public BlogComment applyComment(BlogComment blogComment, String ip) {
         blogComment.setIp(ip);
         //截取头像图片链接
-        String to_avatar = blogComment.getTo_avatar();
-        String baseUrl = StringManipulation.extractBaseUrl(to_avatar);
-        blogComment.setTo_avatar(baseUrl);
+        String toAvatar = blogComment.getToAvatar();
+        String baseUrl = StringManipulation.extractBaseUrl(toAvatar);
+        blogComment.setToAvatar(baseUrl);
 
         int insert = blogCommentMapper.insert(blogComment);
         return blogComment;
@@ -396,8 +396,8 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
     public Boolean thumbUpComment(Integer id) {
         BlogComment blogComment = blogCommentMapper.selectById(id);
         if (blogComment != null) {
-            Integer thumbs_up = blogComment.getThumbs_up();
-            blogComment.setThumbs_up(thumbs_up + 1);
+            Integer thumbsUp = blogComment.getThumbsUp();
+            blogComment.setThumbsUp(thumbsUp + 1);
             int i = blogCommentMapper.updateById(blogComment);
             return i > 0;
         }
@@ -408,8 +408,8 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
     public Boolean cancelThumbUp(Integer id) {
         BlogComment blogComment = blogCommentMapper.selectById(id);
         if (blogComment != null) {
-            Integer thumbs_up = blogComment.getThumbs_up();
-            blogComment.setThumbs_up(thumbs_up - 1);
+            Integer thumbsUp = blogComment.getThumbsUp();
+            blogComment.setThumbsUp(thumbsUp - 1);
             int i = blogCommentMapper.updateById(blogComment);
             return i > 0;
         }
@@ -417,9 +417,9 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
     }
 
     @Override
-    public Boolean deleteComment(Integer id, Integer parent_id) {
+    public Boolean deleteComment(Integer id, Integer parentId) {
         // 如果有父级评论 就只删除这一条
-        if (parent_id > 0){
+        if (parentId > 0){
             int deleteById = blogCommentMapper.deleteById(id);
             return deleteById > 0;
         }

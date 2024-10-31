@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * 
@@ -16,9 +16,9 @@ import java.util.Date;
 public class BlogCategory implements Serializable {
 
     /**
-     * 
+     *  id
      */
-    @TableId(value = "id", type = IdType.AUTO)
+    @TableId(type = IdType.ASSIGN_ID)
     private Integer id;
 
     /**
@@ -34,6 +34,16 @@ public class BlogCategory implements Serializable {
     private Integer categoryType;
 
     /**
+     * 分类级别（1: 一级, 2: 二级, 3: 三级）
+     */
+    private Integer level;
+
+    /**
+     * 父分类的ID（根分类为NULL）
+     */
+    private Integer parentId;
+
+    /**
      * 排序
      */
     private Integer sort;
@@ -43,14 +53,14 @@ public class BlogCategory implements Serializable {
      */
     @TableField(fill = FieldFill.INSERT)
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     /**
      * 更新时间，插入和更新时自动填充
      */
     @TableField(fill = FieldFill.INSERT_UPDATE)
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

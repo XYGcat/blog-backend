@@ -8,13 +8,15 @@
             <id property="id" column="id" jdbcType="INTEGER"/>
             <result property="categoryName" column="category_name" jdbcType="VARCHAR"/>
             <result property="categoryType" column="category_type" jdbcType="INTEGER"/>
+            <result property="level" column="level" jdbcType="INTEGER"/>
+            <result property="parentId" column="parent_id" jdbcType="INTEGER"/>
             <result property="sort" column="sort" jdbcType="INTEGER"/>
             <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
             <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,category_name,category_type,sort,created_at,
+        id,category_name,category_type, level,parent_id,sort,created_at,
         updated_at
     </sql>
 </mapper>

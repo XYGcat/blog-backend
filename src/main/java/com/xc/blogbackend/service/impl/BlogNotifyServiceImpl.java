@@ -56,7 +56,7 @@ public class BlogNotifyServiceImpl extends ServiceImpl<BlogNotifyMapper, BlogNot
     }
 
     @Override
-    public BlogNotify addNotify(Integer userId, Integer type, Integer to_id, String message) {
+    public BlogNotify addNotify(Integer userId, Integer type, Integer toId, String message) {
         BlogNotify blogNotify = new BlogNotify();
         if (userId != null) {
             blogNotify.setUserId(userId);
@@ -64,8 +64,8 @@ public class BlogNotifyServiceImpl extends ServiceImpl<BlogNotifyMapper, BlogNot
         if (type != null) {
             blogNotify.setType(type);
         }
-        if (to_id != null) {
-            blogNotify.setTo_id(to_id);
+        if (toId != null) {
+            blogNotify.setToId(toId);
         }
         if (message != null) {
             blogNotify.setMessage(message);

@@ -16,11 +16,11 @@ public interface BlogCommentService extends IService<BlogComment> {
     /**
      * 根据 评论类型 和 类型对应的id获取评论总数
      *
-     * @param for_id
+     * @param forId
      * @param type
      * @return
      */
-    Long getCommentTotal(Integer for_id,Integer type);
+    Long getCommentTotal(Integer forId,Integer type);
 
     /**
      * 前台分页获取父级评论
@@ -80,8 +80,8 @@ public interface BlogCommentService extends IService<BlogComment> {
      * 前台删除评论
      *
      * @param id
-     * @param parent_id
+     * @param parentId
      * @return
      */
-    Boolean deleteComment(Integer id,Integer parent_id);
+    Boolean deleteComment(Integer id,Integer parentId);
 }

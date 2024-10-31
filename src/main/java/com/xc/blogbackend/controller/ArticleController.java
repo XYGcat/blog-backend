@@ -10,10 +10,7 @@ import com.xc.blogbackend.model.domain.BlogArticle;
 import com.xc.blogbackend.model.domain.BlogArticleTag;
 import com.xc.blogbackend.model.domain.BlogCategory;
 import com.xc.blogbackend.model.domain.BlogTag;
-import com.xc.blogbackend.model.domain.request.AddArticleRequest;
-import com.xc.blogbackend.model.domain.request.ArticleRequest;
-import com.xc.blogbackend.model.domain.request.TitleExistRequest;
-import com.xc.blogbackend.model.domain.request.UpdateArticleRequest;
+import com.xc.blogbackend.model.domain.request.*;
 import com.xc.blogbackend.model.domain.result.ArticleListByContent;
 import com.xc.blogbackend.model.domain.result.PageInfoResult;
 import com.xc.blogbackend.model.domain.result.RecommendResult;
@@ -434,7 +431,10 @@ public class ArticleController {
             if (oneCategory != null) {
                 finalId = oneCategory.getId();
             } else {
-                BlogCategory createCategory = blogCategoryService.createCategory(categoryName, CategoryEnum.ARTICLE.getCode());
+                CategoryReqDto categoryReqDto = new CategoryReqDto();
+                categoryReqDto.setCategoryName(categoryName);
+                categoryReqDto.setCategoryType(CategoryEnum.ARTICLE.getCode());
+                BlogCategory createCategory = blogCategoryService.createCategory(categoryReqDto);
                 finalId = createCategory.getId();
             }
         }

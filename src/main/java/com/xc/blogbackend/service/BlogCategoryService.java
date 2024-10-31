@@ -2,6 +2,7 @@ package com.xc.blogbackend.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xc.blogbackend.model.domain.BlogCategory;
+import com.xc.blogbackend.model.domain.request.CategoryReqDto;
 import com.xc.blogbackend.model.domain.result.PageInfoResult;
 
 import java.util.List;
@@ -39,10 +40,10 @@ public interface BlogCategoryService extends IService<BlogCategory> {
     /**
      * 新增分类
      *
-     * @param categoryName
+     * @param categoryReqDto
      * @return
      */
-    BlogCategory createCategory(String categoryName, Integer type);
+    BlogCategory createCategory(CategoryReqDto categoryReqDto);
 
     /**
      *获取分类总数

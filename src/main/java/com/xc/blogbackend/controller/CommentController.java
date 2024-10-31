@@ -41,9 +41,9 @@ public class CommentController {
     @ApiOperation(value = "获取评论总条数")
     @PostMapping("/getCommentTotal")
     public BaseResponse<Long> getCommentTotal(@RequestBody Map<String,Integer> request){
-        Integer for_id = request.get("for_id");
+        Integer forId = request.get("for_id");
         Integer type = request.get("type");
-        Long commentTotal = blogCommentService.getCommentTotal(for_id, type);
+        Long commentTotal = blogCommentService.getCommentTotal(forId, type);
         return ResultUtils.success(commentTotal,"获取评论总条数成功");
     }
 
@@ -103,17 +103,17 @@ public class CommentController {
         String clientIp = IpUtils.getClientIp(httpServletRequest);
         BlogComment comment = blogCommentService.createComment(blogComment, clientIp);
         // from_id表示当前登陆人id 发表评论的人和当前登录人不一样才进行消息提示 author_id表示当前被评论的作者的id
-        Integer from_id = blogComment.getFrom_id();
+        Integer fromId = blogComment.getFromId();
         Integer authorId = blogComment.getAuthorId();
         Integer type = blogComment.getType();
-        Integer for_id = blogComment.getFor_id();
-        String from_name = blogComment.getFrom_name();
+        Integer forId = blogComment.getForId();
+        String fromName = blogComment.getFromName();
         String content = blogComment.getContent();
         String typeName = CurrentTypeName.getCurrentTypeName(blogComment.getType());
         // 不是作者自己评论的才给作者消息提示
-        if (from_id != authorId) {
-            blogNotifyService.addNotify(authorId,type,for_id,
-                    "您的" + typeName  + "收到了来自于：" + from_name + "的评论:" + content);
+        if (fromId != authorId) {
+            blogNotifyService.addNotify(authorId,type,forId,
+                    "您的" + typeName  + "收到了来自于：" + fromName + "的评论:" + content);
         }
         return ResultUtils.success(comment,"新增评论成功");
     }
@@ -132,18 +132,18 @@ public class CommentController {
 
         BlogComment comment = blogCommentService.applyComment(blogComment, clientIp);
 
-        Integer from_id = blogComment.getFrom_id();
+        Integer fromId = blogComment.getFromId();
         Integer authorId = blogComment.getAuthorId();
         Integer type = blogComment.getType();
-        Integer for_id = blogComment.getFor_id();
-        String from_name = blogComment.getFrom_name();
-        Integer to_id = blogComment.getTo_id();
+        Integer forId = blogComment.getForId();
+        String fromName = blogComment.getFromName();
+        Integer toId = blogComment.getToId();
         String content = blogComment.getContent();
         String typeName = CurrentTypeName.getCurrentTypeName(blogComment.getType());
 
-        if (from_id != to_id) {
-            blogNotifyService.addNotify(to_id,type,for_id,
-                    "您收到了来自于：" + from_name + "的评论回复:" + content);
+        if (fromId != toId) {
+            blogNotifyService.addNotify(toId,type,forId,
+                    "您收到了来自于：" + fromName + "的评论回复:" + content);
         }
         return ResultUtils.success(comment,"回复评论成功");
     }
@@ -179,13 +179,13 @@ public class CommentController {
      * 删除评论
      *
      * @param id
-     * @param parent_id
+     * @param parentId
      * @return
      */
     @ApiOperation(value = "前台后台 删除评论")
-    @DeleteMapping("/delete/{id}/{parent_id}")
-    public BaseResponse<Boolean> deleteComment(@PathVariable Integer id,@PathVariable Integer parent_id){
-        Boolean aBoolean = blogCommentService.deleteComment(id, parent_id);
+    @DeleteMapping("/delete/{id}/{parentId}")
+    public BaseResponse<Boolean> deleteComment(@PathVariable Integer id,@PathVariable Integer parentId){
+        Boolean aBoolean = blogCommentService.deleteComment(id, parentId);
 
         return ResultUtils.success(aBoolean,"删除评论成功");
     }

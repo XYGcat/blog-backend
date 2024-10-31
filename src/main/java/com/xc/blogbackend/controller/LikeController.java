@@ -36,10 +36,10 @@ public class LikeController {
     @ApiOperation(value = "获取当前用户对当前文章/说说/留言 是否点赞")
     @PostMapping("/getIsLikeByIdAndType")
     public BaseResponse<Boolean> getIsLikeByIdAndType(@RequestBody Map<String,Integer> request){
-        Integer for_id = request.get("for_id");
+        Integer forId = request.get("for_id");
         Integer type = request.get("type");
         Integer userId = request.get("user_id");
-        if (for_id == null) {
+        if (forId == null) {
             return ResultUtils.error(ErrorCode.NULL_ERROR);
         }
         if (type == null) {
@@ -48,7 +48,7 @@ public class LikeController {
         if (userId == null) {
             return ResultUtils.success(false,"获取用户是否点赞成功");
         }else {
-            Boolean like = blogLikeService.getIsLikeByIdAndType(for_id, type, userId);
+            Boolean like = blogLikeService.getIsLikeByIdAndType(forId, type, userId);
             return ResultUtils.success(like,"获取用户是否点赞成功");
         }
     }
@@ -62,11 +62,11 @@ public class LikeController {
     @ApiOperation(value = "点赞")
     @PostMapping("/addLike")
     public BaseResponse<Boolean> addLike(@RequestBody Map<String,Integer> request){
-        Integer for_id = request.get("for_id");
+        Integer forId = request.get("for_id");
         Integer type = request.get("type");
         Integer userId = request.get("user_id");
 
-        if (for_id == null) {
+        if (forId == null) {
             return ResultUtils.error(ErrorCode.NULL_ERROR);
         }
         if (type == null) {
@@ -75,7 +75,7 @@ public class LikeController {
         if (userId == null) {
             return ResultUtils.success(false, "获取用户是否点赞成功");
         }else {
-            Boolean aBoolean = blogLikeService.addLike(for_id, type, userId);
+            Boolean aBoolean = blogLikeService.addLike(forId, type, userId);
             return ResultUtils.success(aBoolean,"点赞成功");
         }
     }
@@ -89,11 +89,11 @@ public class LikeController {
     @ApiOperation(value = "取消点赞")
     @PostMapping("/cancelLike")
     public BaseResponse<Boolean> cancelLike(@RequestBody Map<String,Integer> request){
-        Integer for_id = request.get("for_id");
+        Integer forId = request.get("for_id");
         Integer type = request.get("type");
         Integer userId = request.get("user_id");
 
-        if (for_id == null) {
+        if (forId == null) {
             return ResultUtils.error(ErrorCode.NULL_ERROR);
         }
         if (type == null) {
@@ -102,7 +102,7 @@ public class LikeController {
         if (userId == null) {
             return ResultUtils.success(false, "获取用户是否点赞成功");
         }else {
-            Boolean aBoolean = blogLikeService.cancelLike(for_id, type, userId);
+            Boolean aBoolean = blogLikeService.cancelLike(forId, type, userId);
             return ResultUtils.success(aBoolean,"点赞成功");
         }
     }

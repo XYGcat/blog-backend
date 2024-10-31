@@ -13,31 +13,31 @@ public interface BlogLikeService extends IService<BlogLike> {
     /**
      * 获取当前用户对当前文章/说说/留言 是否点赞
      *
-     * @param for_id
+     * @param forId
      * @param type
      * @param userId
      * @return
      */
-    Boolean getIsLikeByIdAndType(Integer for_id,Integer type,Integer userId);
+    Boolean getIsLikeByIdAndType(Integer forId,Integer type,Integer userId);
 
     /**
      * 点赞
      *
-     * @param for_id
+     * @param forId
      * @param type
      * @param userId
      * @return
      */
-    Boolean addLike(Integer for_id,Integer type,Integer userId);
+    Boolean addLike(Integer forId,Integer type,Integer userId);
 
     /**
      * 取消点赞
      *
-     * @param for_id
+     * @param forId
      * @param type
      * @param userId
      * @return
      */
-    Boolean cancelLike(Integer for_id,Integer type,Integer userId);
+    Boolean cancelLike(Integer forId,Integer type,Integer userId);
 
 }

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xc.blogbackend.mapper.BlogCategoryMapper;
 import com.xc.blogbackend.model.domain.BlogCategory;
+import com.xc.blogbackend.model.domain.request.CategoryReqDto;
 import com.xc.blogbackend.model.domain.result.PageInfoResult;
 import com.xc.blogbackend.service.BlogCategoryService;
 import lombok.extern.slf4j.Slf4j;
@@ -54,10 +55,13 @@ public class BlogCategoryServiceImpl extends ServiceImpl<BlogCategoryMapper, Blo
     }
 
     @Override
-    public BlogCategory createCategory(String categoryName, Integer type) {
+    public BlogCategory createCategory(CategoryReqDto categoryReqDto) {
         BlogCategory category = new BlogCategory();
-        category.setCategoryName(categoryName);
-        category.setCategoryType(type);
+        category.setCategoryName(categoryReqDto.getCategoryName());
+        category.setCategoryType(categoryReqDto.getCategoryType());
+        category.setLevel(categoryReqDto.getLevel());
+        category.setParentId(categoryReqDto.getParentId());
+        category.setSort(categoryReqDto.getSort());
         blogCategoryMapper.insert(category);
 
         Integer id = category.getId();

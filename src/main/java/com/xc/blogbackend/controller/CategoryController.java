@@ -3,6 +3,7 @@ package com.xc.blogbackend.controller;
 import com.xc.blogbackend.common.BaseResponse;
 import com.xc.blogbackend.common.ResultUtils;
 import com.xc.blogbackend.model.domain.BlogCategory;
+import com.xc.blogbackend.model.domain.request.CategoryReqDto;
 import com.xc.blogbackend.model.domain.result.PageInfoResult;
 import com.xc.blogbackend.service.BlogCategoryService;
 import io.swagger.annotations.Api;
@@ -57,15 +58,13 @@ public class CategoryController {
     /**
      * 新增分类
      *
-     * @param request
+     * @param categoryReqDto
      * @return
      */
     @ApiOperation(value = "新增分类")
     @PostMapping("/add")
-    public BaseResponse<BlogCategory> addCategory(@RequestBody Map<String,Object> request){
-        String categoryName = (String) request.get("category_name");
-        Integer type = (Integer) request.get("type");
-        BlogCategory category = blogCategoryService.createCategory(categoryName, type);
+    public BaseResponse<BlogCategory> addCategory(@RequestBody CategoryReqDto categoryReqDto){
+        BlogCategory category = blogCategoryService.createCategory(categoryReqDto);
         return ResultUtils.success(category,"新增分类成功");
     }
 

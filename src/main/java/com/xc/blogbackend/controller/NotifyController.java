@@ -74,10 +74,10 @@ public class NotifyController {
 //     *
 //     * @param userId
 //     * @param type
-//     * @param to_id
+//     * @param toId
 //     * @param message
 //     */
-//    public void addNotify(Integer userId,Integer type,Integer to_id,String message){
-//        BlogNotify notify = blogNotifyService.createNotify(userId, type, to_id, message);
+//    public void addNotify(Integer userId,Integer type,Integer toId,String message){
+//        BlogNotify notify = blogNotifyService.createNotify(userId, type, toId, message);
 //    }
 }

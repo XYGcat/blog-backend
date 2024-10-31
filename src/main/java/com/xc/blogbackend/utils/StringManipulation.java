@@ -1,7 +1,7 @@
 package com.xc.blogbackend.utils;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * 截取字符串的工具类
@@ -48,7 +48,7 @@ public class StringManipulation {
      * @param date
      * @return
      */
-    public static String getYearFromDate(Date date) {
+    public static String getYearFromDate(LocalDateTime date) {
         SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
         return yearFormat.format(date); // 格式化为年份字符串
     }

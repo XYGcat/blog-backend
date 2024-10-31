@@ -26,11 +26,11 @@ public interface BlogNotifyService extends IService<BlogNotify> {
      *
      * @param userId
      * @param type
-     * @param to_id
+     * @param toId
      * @param message
      * @return
      */
-    BlogNotify addNotify(Integer userId,Integer type,Integer to_id,String message);
+    BlogNotify addNotify(Integer userId,Integer type,Integer toId,String message);
 
     /**
      * 已阅消息通知
