@@ -19,7 +19,7 @@ public interface BlogPhotoService extends IService<BlogPhoto> {
      * @param album_id
      * @return
      */
-    Boolean deletePhotosByAlbumId(Integer album_id);
+    Boolean deletePhotosByAlbumId(Long album_id);
 
     /**
      * 后台
@@ -31,7 +31,7 @@ public interface BlogPhotoService extends IService<BlogPhoto> {
      * @param status
      * @return
      */
-    PageInfoResult<BlogPhoto> getPhotosByAlbumId(Integer current, Integer size, Integer id, Integer status);
+    PageInfoResult<BlogPhoto> getPhotosByAlbumId(Integer current, Integer size, Long id, Integer status);
 
     /**
      * 前台
@@ -40,7 +40,7 @@ public interface BlogPhotoService extends IService<BlogPhoto> {
      * @param album_id
      * @return
      */
-    List<BlogPhoto> getAllPhotosByAlbumId(Integer album_id);
+    List<BlogPhoto> getAllPhotosByAlbumId(Long album_id);
 
     /**
      * 批量新增图片
@@ -57,7 +57,7 @@ public interface BlogPhotoService extends IService<BlogPhoto> {
      * @param type
      * @return
      */
-    Boolean deletePhotos(List<Integer> idList,Integer type);
+    Boolean deletePhotos(List<Long> idList,Integer type);
 
     /**
      * 批量恢复图片
@@ -65,5 +65,5 @@ public interface BlogPhotoService extends IService<BlogPhoto> {
      * @param idList
      * @return
      */
-    Boolean revertPhotos(List<Integer> idList);
+    Boolean revertPhotos(List<Long> idList);
 }

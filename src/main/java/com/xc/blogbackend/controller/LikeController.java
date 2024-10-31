@@ -35,10 +35,10 @@ public class LikeController {
      */
     @ApiOperation(value = "获取当前用户对当前文章/说说/留言 是否点赞")
     @PostMapping("/getIsLikeByIdAndType")
-    public BaseResponse<Boolean> getIsLikeByIdAndType(@RequestBody Map<String,Integer> request){
-        Integer forId = request.get("for_id");
-        Integer type = request.get("type");
-        Integer userId = request.get("user_id");
+    public BaseResponse<Boolean> getIsLikeByIdAndType(@RequestBody Map<String,Long> request){
+        Long forId = request.get("for_id");
+        Integer type = Math.toIntExact(request.get("type"));
+        Long userId = request.get("user_id");
         if (forId == null) {
             return ResultUtils.error(ErrorCode.NULL_ERROR);
         }
@@ -61,10 +61,10 @@ public class LikeController {
      */
     @ApiOperation(value = "点赞")
     @PostMapping("/addLike")
-    public BaseResponse<Boolean> addLike(@RequestBody Map<String,Integer> request){
-        Integer forId = request.get("for_id");
-        Integer type = request.get("type");
-        Integer userId = request.get("user_id");
+    public BaseResponse<Boolean> addLike(@RequestBody Map<String,Long> request){
+        Long forId = request.get("for_id");
+        Integer type = Math.toIntExact(request.get("type"));
+        Long userId = request.get("user_id");
 
         if (forId == null) {
             return ResultUtils.error(ErrorCode.NULL_ERROR);
@@ -88,10 +88,10 @@ public class LikeController {
      */
     @ApiOperation(value = "取消点赞")
     @PostMapping("/cancelLike")
-    public BaseResponse<Boolean> cancelLike(@RequestBody Map<String,Integer> request){
-        Integer forId = request.get("for_id");
-        Integer type = request.get("type");
-        Integer userId = request.get("user_id");
+    public BaseResponse<Boolean> cancelLike(@RequestBody Map<String,Long> request){
+        Long forId = request.get("for_id");
+        Integer type = Math.toIntExact(request.get("type"));
+        Long userId = request.get("user_id");
 
         if (forId == null) {
             return ResultUtils.error(ErrorCode.NULL_ERROR);

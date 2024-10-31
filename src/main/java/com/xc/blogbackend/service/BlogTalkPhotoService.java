@@ -15,10 +15,10 @@ public interface BlogTalkPhotoService extends IService<BlogTalkPhoto> {
     /**
      * 根据说说id获取图片列表
      *
-     * @param talk_id   说说id
+     * @param talkId   说说id
      * @return
      */
-   List<BlogTalkPhoto> getPhotoByTalkId(Integer talk_id);
+   List<BlogTalkPhoto> getPhotoByTalkId(Long talkId);
 
     /**
      * 新增说说图片
@@ -31,8 +31,8 @@ public interface BlogTalkPhotoService extends IService<BlogTalkPhoto> {
     /**
      * 根据说说id删除图片
      *
-     * @param talk_id
+     * @param talkId
      * @return
      */
-   Boolean deleteTalkPhoto(Integer talk_id);
+   Boolean deleteTalkPhoto(Long talkId);
 }

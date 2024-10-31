@@ -28,7 +28,7 @@ public class BlogNotifyServiceImpl extends ServiceImpl<BlogNotifyMapper, BlogNot
     private BlogNotifyMapper blogNotifyMapper;
 
     @Override
-    public PageInfoResult<BlogNotify> getNotifyList(Integer current, Integer size, Integer userId) {
+    public PageInfoResult<BlogNotify> getNotifyList(Integer current, Integer size, Long userId) {
 
         QueryWrapper<BlogNotify> queryWrapper = new QueryWrapper<>();    // 构建查询条件
         if (userId != null) {
@@ -56,7 +56,7 @@ public class BlogNotifyServiceImpl extends ServiceImpl<BlogNotifyMapper, BlogNot
     }
 
     @Override
-    public BlogNotify addNotify(Integer userId, Integer type, Integer toId, String message) {
+    public BlogNotify addNotify(Long userId, Integer type, Long toId, String message) {
         BlogNotify blogNotify = new BlogNotify();
         if (userId != null) {
             blogNotify.setUserId(userId);
@@ -76,7 +76,7 @@ public class BlogNotifyServiceImpl extends ServiceImpl<BlogNotifyMapper, BlogNot
     }
 
     @Override
-    public Boolean updateNotify(Integer id) {
+    public Boolean updateNotify(Long id) {
         BlogNotify blogNotify = new BlogNotify();
         blogNotify.setIsView(2);
         UpdateWrapper<BlogNotify> updateWrapper = new UpdateWrapper<>();
@@ -86,7 +86,7 @@ public class BlogNotifyServiceImpl extends ServiceImpl<BlogNotifyMapper, BlogNot
     }
 
     @Override
-    public Boolean deleteNotifys(Integer id) {
+    public Boolean deleteNotifys(Long id) {
         int deleteById = blogNotifyMapper.deleteById(id);
         return deleteById > 0;
     }

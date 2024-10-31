@@ -40,7 +40,7 @@ public interface BlogPhotoAlbumService extends IService<BlogPhotoAlbum> {
      * @param albumName
      * @return
      */
-    BlogPhotoAlbum getOneAlbum(Integer id,String albumName);
+    BlogPhotoAlbum getOneAlbum(Long id,String albumName);
 
     /**
      * 编辑相册
@@ -51,7 +51,7 @@ public interface BlogPhotoAlbumService extends IService<BlogPhotoAlbum> {
      * @param description
      * @return
      */
-    Boolean updateAlbum(Integer id,String albumName,String albumCover,String description);
+    Boolean updateAlbum(Long id,String albumName,String albumCover,String description);
 
     /**
      * 根据id删除相册
@@ -59,7 +59,7 @@ public interface BlogPhotoAlbumService extends IService<BlogPhotoAlbum> {
      * @param id
      * @return
      */
-    Boolean deleteAlbum(Integer id);
+    Boolean deleteAlbum(Long id);
 
     /**
      * 前台

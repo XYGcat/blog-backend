@@ -118,7 +118,7 @@ public class JwtGenerator {
             BlogUser blogUser = new BlogUser();
             blogUser.setUsername(body.getSubject());
             blogUser.setNickName(body.get("nick_name", String.class));
-            blogUser.setId(body.get("id", Integer.class));
+            blogUser.setId(body.get("id", Long.class));
             blogUser.setRole(body.get("role", Integer.class));
 
             return blogUser;

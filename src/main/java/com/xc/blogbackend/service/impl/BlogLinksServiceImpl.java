@@ -123,7 +123,7 @@ public class BlogLinksServiceImpl extends ServiceImpl<BlogLinksMapper, BlogLinks
 
     @Override
     public Boolean deleteLinks(List<Integer> idList) {
-        int i = blogLinksMapper.deleteBatchIds(idList);
+        int i = blogLinksMapper.deleteByIds(idList);
         return i > 0;
     }
 }

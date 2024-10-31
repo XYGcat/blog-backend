@@ -25,7 +25,7 @@ public class BlogArticle implements Serializable {
      *  文章id 不能为空
      */
     @TableId(type = IdType.ASSIGN_ID)
-    private Integer id;
+    private Long id;
 
     /**
      * 文章标题 不能为空
@@ -37,13 +37,13 @@ public class BlogArticle implements Serializable {
      * 文章作者 不能为空
      */
     @TableField(value = "author_id")
-    private Integer authorId;
+    private Long authorId;
 
     /**
      * 分类id 不能为空
      */
     @TableField(value = "category_id")
-    private Integer categoryId;
+    private Long categoryId;
 
     /**
      * 文章内容
@@ -162,7 +162,7 @@ public class BlogArticle implements Serializable {
      */
     public void setValues(
             String articleTitle,
-            Integer authorId,
+            Long authorId,
             String articleContent,
             String articleCover,
             Integer isTop,

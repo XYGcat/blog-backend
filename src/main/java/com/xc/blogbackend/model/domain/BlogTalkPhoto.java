@@ -19,13 +19,13 @@ public class BlogTalkPhoto implements Serializable {
      * 
      */
     @TableId(type = IdType.ASSIGN_ID)
-    private Integer id;
+    private Long id;
 
     /**
      * 说说的id
      */
     @TableField(value = "talk_id")
-    private Integer talk_id;
+    private Long talkId;
 
     /**
      * 图片地址

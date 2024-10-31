@@ -35,7 +35,7 @@ public class BlogMessage implements Serializable {
      * id
      */
     @TableId(type = IdType.ASSIGN_ID)
-    private Integer id;
+    private Long id;
 
     /**
      * 标签
@@ -77,7 +77,7 @@ public class BlogMessage implements Serializable {
      * 留言用户的id
      */
     @TableField(value = "user_id")
-    private Integer userId;
+    private Long userId;
 
     /**
      * 点赞次数

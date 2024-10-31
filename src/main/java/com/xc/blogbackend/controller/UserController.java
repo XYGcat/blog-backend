@@ -65,7 +65,7 @@ public class UserController {
                 blogUser.setUsername("admin");
                 blogUser.setNickName("超级管理员");
                 blogUser.setRole(1);
-                blogUser.setId(5201314);
+                blogUser.setId(5201314L);
                 blogUser.setIp(ipAddress);
 
                 // 生成token
@@ -119,11 +119,11 @@ public class UserController {
      */
     @ApiOperation(value = "根据用户id获取用户信息")
     @GetMapping("/getUserInfoById/{id}")
-    public BaseResponse<BlogUser> getUserInfo(@PathVariable Integer id){
+    public BaseResponse<BlogUser> getUserInfo(@PathVariable Long id){
         if (id != null) {
             if (id == 5201314) {
                 BlogUser blogUser = new BlogUser();
-                blogUser.setId(5201314);
+                blogUser.setId(5201314L);
                 blogUser.setRole(1);
                 blogUser.setNickName("超级管理员");
                 return ResultUtils.success(blogUser);
@@ -173,7 +173,7 @@ public class UserController {
     @ApiOperation(value = "更新用户信息")
     @PutMapping("/updateOwnUserInfo")
     public BaseResponse<Boolean> updateOwnUserInfo(@RequestBody Map<String,Object> request){
-        Integer id = (Integer) request.get("id");
+        Long id = (Long) request.get("id");
         String avatar = (String) request.get("avatar");
 
         BlogUser userInfo = blogUserService.getOneUserInfo(id);
@@ -204,7 +204,7 @@ public class UserController {
 
         // 从 Session 中获取 BlogUser 对象
         BlogUser safetyUser = (BlogUser) httpServletRequest.getSession().getAttribute(USER_LOGIN_STATE);
-        Integer id = safetyUser.getId();
+        Long id = safetyUser.getId();
 
         Boolean aBoolean = blogUserService.updatePassword(id, password, password1);
 
@@ -220,7 +220,7 @@ public class UserController {
      */
     @ApiOperation(value = "修改用户角色")
     @PutMapping("/updateRole/{id}/{role}")
-    public BaseResponse<Boolean> updateRole(@PathVariable Integer id,@PathVariable Integer role){
+    public BaseResponse<Boolean> updateRole(@PathVariable Long id,@PathVariable Integer role){
         Boolean aBoolean = blogUserService.updateRole(id, role);
 
         return ResultUtils.success(aBoolean,"修改角色成功");

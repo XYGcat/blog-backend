@@ -13,6 +13,7 @@ import com.xc.blogbackend.utils.Qiniu;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import javax.annotation.Resource;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class BlogPhotoServiceImpl extends ServiceImpl<BlogPhotoMapper, BlogPhoto
     private Qiniu qiniu;
 
     @Override
-    public Boolean deletePhotosByAlbumId(Integer album_id) {
+    public Boolean deletePhotosByAlbumId(Long album_id) {
         QueryWrapper<BlogPhoto> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("album_id",album_id);
         int delete = blogPhotoMapper.delete(queryWrapper);
@@ -41,7 +42,7 @@ public class BlogPhotoServiceImpl extends ServiceImpl<BlogPhotoMapper, BlogPhoto
     }
 
     @Override
-    public PageInfoResult<BlogPhoto> getPhotosByAlbumId(Integer current, Integer size, Integer id, Integer status) {
+    public PageInfoResult<BlogPhoto> getPhotosByAlbumId(Integer current, Integer size, Long id, Integer status) {
 
         //构建查询条件
         QueryWrapper<BlogPhoto> queryWrapper = new QueryWrapper<>();
@@ -80,7 +81,7 @@ public class BlogPhotoServiceImpl extends ServiceImpl<BlogPhotoMapper, BlogPhoto
     }
 
     @Override
-    public List<BlogPhoto> getAllPhotosByAlbumId(Integer album_id) {
+    public List<BlogPhoto> getAllPhotosByAlbumId(Long album_id) {
         QueryWrapper<BlogPhoto> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("album_id",album_id);
         queryWrapper.eq("status",1);
@@ -98,7 +99,7 @@ public class BlogPhotoServiceImpl extends ServiceImpl<BlogPhotoMapper, BlogPhoto
 
     @Override
     @Transactional(rollbackFor = Exception.class)  //Spring 的事务管理，如果发生异常，会自动回滚事务
-    public Boolean deletePhotos(List<Integer> idList, Integer type) {
+    public Boolean deletePhotos(List<Long> idList, Integer type) {
         if (type == 1) {
             BlogPhoto blogPhoto = new BlogPhoto();
             blogPhoto.setStatus(2);
@@ -107,14 +108,14 @@ public class BlogPhotoServiceImpl extends ServiceImpl<BlogPhotoMapper, BlogPhoto
             int update = blogPhotoMapper.update(blogPhoto, updateWrapper);
             return update > 0;
         }else {
-            int batchIds = blogPhotoMapper.deleteBatchIds(idList);
+            int batchIds = blogPhotoMapper.deleteByIds(idList);
             return batchIds > 0;
         }
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)  //Spring 的事务管理，如果发生异常，会自动回滚事务
-    public Boolean revertPhotos(List<Integer> idList) {
+    public Boolean revertPhotos(List<Long> idList) {
         BlogPhoto blogPhoto = new BlogPhoto();
         blogPhoto.setStatus(1);
         UpdateWrapper<BlogPhoto> updateWrapper = new UpdateWrapper<>();

@@ -19,7 +19,7 @@ public class BlogCategory implements Serializable {
      *  id
      */
     @TableId(type = IdType.ASSIGN_ID)
-    private Integer id;
+    private Long id;
 
     /**
      * 分类名称 唯一

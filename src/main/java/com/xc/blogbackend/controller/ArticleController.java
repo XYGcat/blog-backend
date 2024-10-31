@@ -64,7 +64,7 @@ public class ArticleController {
      */
     @ApiOperation(value = "根据id获取文章信息")
     @GetMapping("/getArticleById/{id}")
-    public BaseResponse<BlogArticle> getArticleById(@PathVariable Integer id){
+    public BaseResponse<BlogArticle> getArticleById(@PathVariable Long id){
         BlogArticle articleById = blogArticleService.getArticleById(id);
         return ResultUtils.success(articleById,"查询文章详情成功");
     }
@@ -91,7 +91,7 @@ public class ArticleController {
     @ApiOperation(value = "根据标题获取文章是否已经存在")
     @PostMapping("/titleExist")
     public BaseResponse<Boolean> getArticleInfoByTitle(@RequestBody TitleExistRequest titleExistRequest){
-        Integer id = titleExistRequest.getId();
+        Long id = titleExistRequest.getId();
         String articleTitle = titleExistRequest.getArticleTitle();
         Boolean articleInfoByTitle = blogArticleService.getArticleInfoByTitle(id, articleTitle);
         return ResultUtils.success(articleInfoByTitle,"文章查询结果");
@@ -106,7 +106,7 @@ public class ArticleController {
      */
     @ApiOperation(value = "公开或隐藏文章")
     @PutMapping("/isPublic/{id}/{status}")
-    public BaseResponse<Boolean> toggleArticlePublic(@PathVariable Integer id,@PathVariable Integer status){
+    public BaseResponse<Boolean> toggleArticlePublic(@PathVariable Long id,@PathVariable Integer status){
         String message;
         Boolean aBoolean = blogArticleService.toggleArticlePublic(id, status);
         if (status == 1) {
@@ -126,7 +126,7 @@ public class ArticleController {
      */
     @ApiOperation(value = "恢复文章")
     @PutMapping("/revert/{id}")
-    public BaseResponse<Boolean> revertArticle(@PathVariable Integer id){
+    public BaseResponse<Boolean> revertArticle(@PathVariable Long id){
         Boolean aBoolean = blogArticleService.revertArticle(id);
         return ResultUtils.success(aBoolean,"恢复文章成功");
     }
@@ -141,7 +141,7 @@ public class ArticleController {
      */
     @ApiOperation(value = "根据id删除文章")
     @DeleteMapping("/delete/{id}/{status}")
-    public BaseResponse<Boolean> deleteArticle(@PathVariable Integer id,@PathVariable Integer status) throws QiniuException {
+    public BaseResponse<Boolean> deleteArticle(@PathVariable Long id,@PathVariable Integer status) throws QiniuException {
         if (status == 3) {
             // 删除七牛云文章封面图片
             String oldCover = blogArticleService.getArticleCoverById(id);
@@ -219,18 +219,18 @@ public class ArticleController {
                                   finalArticle.getOriginUrl(),
                                   finalArticle.getArticleDescription(),
                                   mdImgList);
-            Integer id = category.getId();
+            Long id = category.getId();
             String categoryName = category.getCategoryName();
 
             // 如果分类不存在，则先创建分类
-            Integer categoryOrReturn = createCategoryOrReturn(id, categoryName);
+            Long categoryOrReturn = createCategoryOrReturn(id, categoryName);
             articleRest.setCategoryId(categoryOrReturn);
 
             // 先创建文章 拿到文章的id
             BlogArticle newArticle = blogArticleService.createArticle(articleRest);
 
             // tag和标签进行关联
-            Integer newArticleId = newArticle.getId();
+            Long newArticleId = newArticle.getId();
             List<BlogArticleTag> articleTagByArticleId =
                     createArticleTagByArticleId(newArticleId, tagList);
 
@@ -249,7 +249,7 @@ public class ArticleController {
      */
     @ApiOperation(value = "修改文章置顶状态")
     @PutMapping("/updateTop/{id}/{isTop}")
-    public BaseResponse<Boolean> updateTop(@PathVariable Integer id,@PathVariable Integer isTop){
+    public BaseResponse<Boolean> updateTop(@PathVariable Long id,@PathVariable Integer isTop){
         Boolean aBoolean = blogArticleService.updateTop(id, isTop);
 
         return ResultUtils.success(aBoolean,"修改文章置顶状态成功");
@@ -280,7 +280,7 @@ public class ArticleController {
      */
     @ApiOperation(value = "根据文章获取上下一篇文章 和推荐文章")
     @GetMapping("/getRecommendArticleById/{id}")
-    public BaseResponse<RecommendResult> getRecommendArticleById(@PathVariable Integer id){
+    public BaseResponse<RecommendResult> getRecommendArticleById(@PathVariable Long id){
         if(id == null){
             throw new BusinessException(ErrorCode.NULL_ERROR);
         }
@@ -333,10 +333,10 @@ public class ArticleController {
      */
     @ApiOperation(value = "前台 分页获取该标签下文章的简略信息")
     @PostMapping("/getArticleListByTagId")
-    public BaseResponse<PageInfoResult<BlogArticle>> getArticleListByTagId(@RequestBody Map<String,Integer> request){
-        Integer id = request.get("id");
-        Integer current = request.get("current");
-        Integer size = request.get("size");
+    public BaseResponse<PageInfoResult<BlogArticle>> getArticleListByTagId(@RequestBody Map<String,Long> request){
+        Long id = request.get("id");
+        Integer current = Math.toIntExact(request.get("current"));
+        Integer size = Math.toIntExact(request.get("size"));
 
         if(id == null){
             throw new BusinessException(ErrorCode.NULL_ERROR);
@@ -381,7 +381,7 @@ public class ArticleController {
      */
     @ApiOperation(value = "文章点赞")
     @PutMapping("/like/{id}")
-    public BaseResponse<Boolean> articleLike(@PathVariable Integer id){
+    public BaseResponse<Boolean> articleLike(@PathVariable Long id){
         Boolean aBoolean = blogArticleService.articleLike(id);
         return ResultUtils.success(aBoolean,"点赞成功");
     }
@@ -394,7 +394,7 @@ public class ArticleController {
      */
     @ApiOperation(value = "取消文章点赞")
     @PutMapping("/cancelLike/{id}")
-    public BaseResponse<Boolean> cancelArticleLike(@PathVariable Integer id){
+    public BaseResponse<Boolean> cancelArticleLike(@PathVariable Long id){
         Boolean aBoolean = blogArticleService.cancelArticleLike(id);
         return ResultUtils.success(aBoolean,"取消点赞成功");
     }
@@ -408,7 +408,7 @@ public class ArticleController {
      */
     @ApiOperation(value = "增加文章阅读时长")
     @PutMapping("/addReadingDuration/{id}/{duration}")
-    public BaseResponse<Boolean> addReadingDuration(@PathVariable Integer id,@PathVariable Integer duration){
+    public BaseResponse<Boolean> addReadingDuration(@PathVariable Long id,@PathVariable Integer duration){
         Boolean aBoolean = blogArticleService.addReadingDuration(id, duration);
         return ResultUtils.success(aBoolean,"增加阅读时长成功");
     }
@@ -421,8 +421,8 @@ public class ArticleController {
      * @param categoryName
      * @return
      */
-    public Integer createCategoryOrReturn(Integer id,String categoryName){
-        Integer finalId;
+    public Long createCategoryOrReturn(Long id,String categoryName){
+        Long finalId;
         if (id != null) {
             finalId = id;
         } else {
@@ -448,7 +448,7 @@ public class ArticleController {
      * @param tagList
      * @return
      */
-    public List<BlogArticleTag> createArticleTagByArticleId(Integer articleId, List<BlogTag> tagList){
+    public List<BlogArticleTag> createArticleTagByArticleId(Long articleId, List<BlogTag> tagList){
         List<BlogArticleTag> articleTags = null;
 
         //// TODO: 2023-11-19 实现异步操作
@@ -484,7 +484,7 @@ public class ArticleController {
             ArrayList<BlogArticleTag> articleTagList = new ArrayList<>();
             for (BlogTag blogTag : tagList){
                 BlogArticleTag articleTag = new BlogArticleTag();
-                articleTag.setArticleId(Integer.valueOf(articleId));
+                articleTag.setArticleId(articleId);
                 articleTag.setTagId(blogTag.getId());
                 articleTagList.add(articleTag);
             }

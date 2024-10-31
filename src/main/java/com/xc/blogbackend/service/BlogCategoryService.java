@@ -20,7 +20,7 @@ public interface BlogCategoryService extends IService<BlogCategory> {
      * @param categoryId
      * @return
      */
-    String getCategoryNameById(Integer categoryId);
+    String getCategoryNameById(Long categoryId);
 
     /**
      * 根据类型获取分类数据字典
@@ -69,7 +69,7 @@ public interface BlogCategoryService extends IService<BlogCategory> {
      * @param categoryName
      * @return
      */
-    Boolean updateCategory(Integer id,String categoryName);
+    Boolean updateCategory(Long id,String categoryName);
 
     /**
      * 删除分类
@@ -77,5 +77,5 @@ public interface BlogCategoryService extends IService<BlogCategory> {
      * @param idList
      * @return
      */
-    Boolean deleteCategories(List<Integer> idList);
+    Boolean deleteCategories(List<Long> idList);
 }

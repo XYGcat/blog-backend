@@ -31,14 +31,14 @@ public class BlogArticleTagServiceImpl extends ServiceImpl<BlogArticleTagMapper,
     private BlogTagMapper blogTagMapper;
 
     @Override
-    public List<Integer> getArticleIdListByTagId(int tagId) {
+    public List<Long> getArticleIdListByTagId(Long tagId) {
         QueryWrapper<BlogArticleTag> queryWrapper = new QueryWrapper<>();
         queryWrapper.select("article_id");
         queryWrapper.eq("tag_id",tagId);
         List<BlogArticleTag> articleTags = blogArticleTagMapper.selectList(queryWrapper);
 
         // 创建一个 Set 用于存储唯一的文章 ID
-        Set<Integer> articleIdList = new HashSet<>();
+        Set<Long> articleIdList = new HashSet<>();
 
         // 遍历结果列表，将文章 ID 添加到集合中
         articleTags.forEach(v -> {
@@ -53,14 +53,14 @@ public class BlogArticleTagServiceImpl extends ServiceImpl<BlogArticleTagMapper,
     }
 
     @Override
-    public Map<String, Object> getTagListByArticleId(Integer articleId) {
+    public Map<String, Object> getTagListByArticleId(Long articleId) {
         // 查询关联的标签 ID 列表
         QueryWrapper<BlogArticleTag> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("article_id",articleId);
         queryWrapper.select("tag_id");
         List<BlogArticleTag> articleTags = blogArticleTagMapper.selectList(queryWrapper);
 
-        List<Integer> tagIdList = articleTags.stream().map(BlogArticleTag::getTagId).collect(Collectors.toList());
+        List<Long> tagIdList = articleTags.stream().map(BlogArticleTag::getTagId).collect(Collectors.toList());
 
         // 根据标签 ID 列表获取标签信息
         List<BlogTag> tagList = blogTagMapper.selectBatchIds(tagIdList);
@@ -90,7 +90,7 @@ public class BlogArticleTagServiceImpl extends ServiceImpl<BlogArticleTagMapper,
     }
 
     @Override
-    public Integer deleteArticleTag(Integer articleId) {
+    public Integer deleteArticleTag(Long articleId) {
         QueryWrapper<BlogArticleTag> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("article_id",articleId);
         int deleteById = blogArticleTagMapper.delete(queryWrapper);

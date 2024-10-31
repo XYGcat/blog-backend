@@ -19,7 +19,7 @@ public interface BlogNotifyService extends IService<BlogNotify> {
      * @param userId
      * @return
      */
-    PageInfoResult<BlogNotify> getNotifyList(Integer current, Integer size, Integer userId);
+    PageInfoResult<BlogNotify> getNotifyList(Integer current, Integer size, Long userId);
 
     /**
      * 新增消息通知
@@ -30,7 +30,7 @@ public interface BlogNotifyService extends IService<BlogNotify> {
      * @param message
      * @return
      */
-    BlogNotify addNotify(Integer userId,Integer type,Integer toId,String message);
+    BlogNotify addNotify(Long userId,Integer type,Long toId,String message);
 
     /**
      * 已阅消息通知
@@ -38,7 +38,7 @@ public interface BlogNotifyService extends IService<BlogNotify> {
      * @param id
      * @return
      */
-    Boolean updateNotify(Integer id);
+    Boolean updateNotify(Long id);
 
     /**
      * 删除消息通知
@@ -46,5 +46,5 @@ public interface BlogNotifyService extends IService<BlogNotify> {
      * @param id
      * @return
      */
-    Boolean deleteNotifys(Integer id);
+    Boolean deleteNotifys(Long id);
 }

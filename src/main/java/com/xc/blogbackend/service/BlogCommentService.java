@@ -20,7 +20,7 @@ public interface BlogCommentService extends IService<BlogComment> {
      * @param type
      * @return
      */
-    Long getCommentTotal(Integer forId,Integer type);
+    Long getCommentTotal(Long forId,Integer type);
 
     /**
      * 前台分页获取父级评论
@@ -66,7 +66,7 @@ public interface BlogCommentService extends IService<BlogComment> {
      * @param id
      * @return
      */
-    Boolean thumbUpComment(Integer id);
+    Boolean thumbUpComment(Long id);
 
     /**
      * 取消点赞评论
@@ -74,7 +74,7 @@ public interface BlogCommentService extends IService<BlogComment> {
      * @param id
      * @return
      */
-    Boolean cancelThumbUp(Integer id);
+    Boolean cancelThumbUp(Long id);
 
     /**
      * 前台删除评论
@@ -83,5 +83,5 @@ public interface BlogCommentService extends IService<BlogComment> {
      * @param parentId
      * @return
      */
-    Boolean deleteComment(Integer id,Integer parentId);
+    Boolean deleteComment(Long id,Long parentId);
 }

@@ -51,7 +51,7 @@ public class TalkController {
      */
     @ApiOperation(value = "根据id 获取说说详情")
     @GetMapping("/getTalkById/{id}")
-    public BaseResponse<BlogTalk> getTalkById(@PathVariable Integer id){
+    public BaseResponse<BlogTalk> getTalkById(@PathVariable Long id){
         BlogTalk talkById = blogTalkService.getTalkById(id);
         return ResultUtils.success(talkById,"获取说说详情成功");
     }
@@ -78,7 +78,7 @@ public class TalkController {
      */
     @ApiOperation(value = "修改说说公开置顶状态")
     @PutMapping("/toggleTop/{id}/{isTop}")
-    public BaseResponse<Boolean> toggleTop(@PathVariable Integer id,@PathVariable Integer isTop){
+    public BaseResponse<Boolean> toggleTop(@PathVariable Long id,@PathVariable Integer isTop){
         String message;
         if (isTop == 1) {
             message = "置顶";
@@ -98,7 +98,7 @@ public class TalkController {
      */
     @ApiOperation(value = "修改说说公开私密状态")
     @PutMapping("/togglePublic/{id}/{status}")
-    public BaseResponse<Boolean> togglePublic(@PathVariable Integer id,@PathVariable Integer status){
+    public BaseResponse<Boolean> togglePublic(@PathVariable Long id,@PathVariable Integer status){
         String message;
         if (status == 1) {
             message = "公开";
@@ -118,7 +118,7 @@ public class TalkController {
      */
     @ApiOperation(value = "删除说说")
     @DeleteMapping("/deleteTalkById/{id}/{status}")
-    public BaseResponse<Boolean> deleteTalkById(@PathVariable Integer id,@PathVariable Integer status){
+    public BaseResponse<Boolean> deleteTalkById(@PathVariable Long id,@PathVariable Integer status){
         String message;
         if (status == 3) {
             message = "删除";
@@ -137,7 +137,7 @@ public class TalkController {
      */
     @ApiOperation(value = "恢复说说")
     @PutMapping("/revertTalk/{id}")
-    public BaseResponse<Boolean> revertTalk(@PathVariable Integer id){
+    public BaseResponse<Boolean> revertTalk(@PathVariable Long id){
         Boolean aBoolean = blogTalkService.revertTalk(id);
         return ResultUtils.success(aBoolean,"恢复说说成功");
     }
@@ -151,9 +151,9 @@ public class TalkController {
      */
     @ApiOperation(value = "发布说说")
     @PostMapping("/publishTalk")
-    public BaseResponse<Map<String,Integer>> publishTalk(@RequestBody BlogTalk blogTalk){
+    public BaseResponse<Map<String,Long>> publishTalk(@RequestBody BlogTalk blogTalk){
         BlogTalk publishTalk = blogTalkService.publishTalk(blogTalk);
-        HashMap<String, Integer> hashMap = new HashMap<>();
+        HashMap<String, Long> hashMap = new HashMap<>();
         hashMap.put("id",publishTalk.getId());
         return ResultUtils.success(hashMap,"发布说说成功");
     }
@@ -167,10 +167,10 @@ public class TalkController {
      */
     @ApiOperation(value = "前台 获取说说列表")
     @PostMapping("/blogGetTalkList")
-    public BaseResponse<PageInfoResult<BlogTalk>> blogGetTalkList(@RequestBody Map<String,Integer> request){
-        Integer current = request.get("current");
-        Integer size = request.get("size");
-        Integer userId = request.get("user_id");
+    public BaseResponse<PageInfoResult<BlogTalk>> blogGetTalkList(@RequestBody Map<String,Long> request){
+        Integer current = Math.toIntExact(request.get("current"));
+        Integer size = Math.toIntExact(request.get("size"));
+        Long userId = request.get("user_id");
         PageInfoResult<BlogTalk> talkPageInfoResult = blogTalkService.blogGetTalkList(current, size, userId);
         return ResultUtils.success(talkPageInfoResult,"获取说说列表成功");
     }
@@ -183,7 +183,7 @@ public class TalkController {
      */
     @ApiOperation(value = "说说点赞")
     @PutMapping("/like/{id}")
-    public BaseResponse<Boolean> talkLike(@PathVariable Integer id){
+    public BaseResponse<Boolean> talkLike(@PathVariable Long id){
         Boolean aBoolean = blogTalkService.talkLike(id);
         return ResultUtils.success(aBoolean,"点赞成功");
     }
@@ -196,7 +196,7 @@ public class TalkController {
      */
     @ApiOperation(value = "取消点赞")
     @PutMapping("/cancelLike/{id}")
-    public BaseResponse<Boolean> cancelTalkLike(@PathVariable Integer id){
+    public BaseResponse<Boolean> cancelTalkLike(@PathVariable Long id){
         Boolean aBoolean = blogTalkService.cancelTalkLike(id);
         return ResultUtils.success(aBoolean,"取消点赞成功");
     }

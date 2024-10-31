@@ -17,7 +17,7 @@ public class BgResource implements Serializable {
      * 主键ID
      */
     @TableId(type = IdType.ASSIGN_ID)
-    private Integer id;
+    private Long id;
 
     /**
      * 分类ID

@@ -31,7 +31,7 @@ public class BlogUser implements Serializable {
      * 
      */
     @TableId(type = IdType.ASSIGN_ID)
-    private Integer id;
+    private Long id;
 
     /**
      * 账号，唯一

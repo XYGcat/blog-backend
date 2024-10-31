@@ -13,7 +13,7 @@ import java.io.Serializable;
 public class ArticleListByContent implements Serializable {
     private static final long serialVersionUID = 8354643003551073666L;
 
-    private Integer id;
+    private Long id;
     private String articleContent;
     private String articleTitle;
 }

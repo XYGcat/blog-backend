@@ -52,7 +52,7 @@ public class BlogMessageServiceImpl extends ServiceImpl<BlogMessageMapper, BlogM
 
     @Override
     public PageInfoResult<BlogMessage> getMessageList
-            (Integer current, Integer size, String message, List<String> time,String tag,Integer userId) {
+            (Integer current, Integer size, String message, List<String> time,String tag,Long userId) {
 
         QueryWrapper<BlogMessage> queryWrapper = new QueryWrapper<>();
         if (tag != null && !tag.isEmpty()) {
@@ -186,7 +186,8 @@ public class BlogMessageServiceImpl extends ServiceImpl<BlogMessageMapper, BlogM
 
         // 异步获取每一条的评论条数
         List<CompletableFuture<Long>> promiseCommentList = rows.stream()
-                .map(row -> CompletableFuture.supplyAsync(() -> blogCommentService.getCommentTotal(row.getId(), 3)))
+                .map(row -> CompletableFuture.supplyAsync(() ->
+                        blogCommentService.getCommentTotal(row.getId(), 3)))
                 .collect(Collectors.toList());
         // 等待所有异步任务完成并处理结果
         CompletableFuture<Void> allComments = CompletableFuture.allOf(promiseCommentList.toArray(new CompletableFuture[0]));
@@ -304,13 +305,13 @@ public class BlogMessageServiceImpl extends ServiceImpl<BlogMessageMapper, BlogM
     }
 
     @Override
-    public Integer deleteMessage(List<Integer> idList) {
-        int i = blogMessageMapper.deleteBatchIds(idList);
+    public Integer deleteMessage(List<Long> idList) {
+        int i = blogMessageMapper.deleteByIds(idList);
         return i;
     }
 
     @Override
-    public Boolean likeMessage(Integer id) {
+    public Boolean likeMessage(Long id) {
         BlogMessage blogMessage = blogMessageMapper.selectById(id);
         if (blogMessage != null) {
             blogMessage.setLikeTimes(blogMessage.getLikeTimes() + 1);
@@ -322,7 +323,7 @@ public class BlogMessageServiceImpl extends ServiceImpl<BlogMessageMapper, BlogM
     }
 
     @Override
-    public Boolean cancelLikeMessage(Integer id) {
+    public Boolean cancelLikeMessage(Long id) {
         BlogMessage blogMessage = blogMessageMapper.selectById(id);
         if (blogMessage != null) {
             blogMessage.setLikeTimes(blogMessage.getLikeTimes() - 1);

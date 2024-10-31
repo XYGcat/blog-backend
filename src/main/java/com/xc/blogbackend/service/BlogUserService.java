@@ -48,7 +48,7 @@ public interface BlogUserService extends IService<BlogUser> {
      * @param userId 用户id
      * @return
      */
-    BlogUser getOneUserInfo(Integer userId);
+    BlogUser getOneUserInfo(Long userId);
 
     /**
      * 分页查询用户列表
@@ -74,7 +74,7 @@ public interface BlogUserService extends IService<BlogUser> {
      * @param userId
      * @return
      */
-    String getAuthorNameById(Integer userId);
+    String getAuthorNameById(Long userId);
 
     /**
      * 用户自己修改用户信息
@@ -91,7 +91,7 @@ public interface BlogUserService extends IService<BlogUser> {
      * @param password
      * @return
      */
-    Boolean updatePassword(Integer id,String password,String password1);
+    Boolean updatePassword(Long id,String password,String password1);
 
     /**
      * 修改用户角色
@@ -100,5 +100,5 @@ public interface BlogUserService extends IService<BlogUser> {
      * @param role
      * @return
      */
-    Boolean updateRole(Integer id,Integer role);
+    Boolean updateRole(Long id,Integer role);
 }

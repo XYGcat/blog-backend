@@ -54,7 +54,7 @@ public class BlogConfigServiceImpl extends ServiceImpl<BlogConfigMapper, BlogCon
 
     @Override
     public Boolean updateConfig(BlogConfig blogConfig) {
-        Integer id = blogConfig.getId();
+        Long id = blogConfig.getId();
         BlogConfig config = blogConfigMapper.selectById(id);
         if (config != null) {
             int i = blogConfigMapper.updateById(blogConfig);

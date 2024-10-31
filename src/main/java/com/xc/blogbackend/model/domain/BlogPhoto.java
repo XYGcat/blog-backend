@@ -18,7 +18,7 @@ public class BlogPhoto implements Serializable {
      * 
      */
     @TableId(type = IdType.ASSIGN_ID)
-    private Integer id;
+    private Long id;
 
     /**
      * 相册 id 属于哪个相册

@@ -174,7 +174,7 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
 //                List<BlogTalkPhoto> v = future.get();
 //                if (!v.isEmpty()) {
 //                    for (BlogTalkPhoto photo : v) {
-//                        int index = findRowIndex(rows, photo.getTalk_id());
+//                        int index = findRowIndex(rows, photo.getTalkId());
 //                        if (index != -1) {
 //                            List<String> talkImgListResponse = v.stream()
 //                                                                .map(BlogTalkPhoto -> {
@@ -247,7 +247,7 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
         if (blogTalk.getId() != null) {
             List<BlogTalkPhoto> imgList = talkImgList.stream().map(img -> {
                 BlogTalkPhoto transformedImg = new BlogTalkPhoto();
-                transformedImg.setTalk_id(blogTalk.getId());
+                transformedImg.setTalkId(blogTalk.getId());
                 String imgurl = img.get("imgurl");
                 transformedImg.setUrl(img.get("imgurl"));
                 return transformedImg;
@@ -259,7 +259,7 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
     }
 
     @Override
-    public BlogTalk getTalkById(Integer id) {
+    public BlogTalk getTalkById(Long id) {
         BlogTalk blogTalk = blogTalkMapper.selectById(id);
         if (blogTalk != null) {
             List<BlogTalkPhoto> photos = blogTalkPhotoService.getPhotoByTalkId(id);
@@ -273,7 +273,7 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
     @Override
     @Transactional(rollbackFor = Exception.class)  //Spring 的事务管理，如果发生异常，会自动回滚事务
     public Boolean updateTalk(BlogTalk blogTalk) {
-        Integer id = blogTalk.getId();
+        Long id = blogTalk.getId();
         List<Map<String, String>> talkImgList = blogTalk.getTalkImgList();
         List<BlogTalkPhoto> imgList = new ArrayList<>();
 
@@ -284,7 +284,7 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
             if (aBoolean){
                 imgList = talkImgList.stream().map(img -> {
                     BlogTalkPhoto blogTalkPhoto = new BlogTalkPhoto();
-                    blogTalkPhoto.setTalk_id(id);
+                    blogTalkPhoto.setTalkId(id);
                     blogTalkPhoto.setUrl(img.get("url"));
                     return blogTalkPhoto;
                 }).collect(Collectors.toList());
@@ -299,7 +299,7 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
     }
 
     @Override
-    public Boolean toggleTop(Integer id, Integer isTop) {
+    public Boolean toggleTop(Long id, Integer isTop) {
         BlogTalk blogTalk = new BlogTalk();
         blogTalk.setIsTop(isTop);
         UpdateWrapper<BlogTalk> updateWrapper = new UpdateWrapper<>();
@@ -309,7 +309,7 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
     }
 
     @Override
-    public Boolean togglePublic(Integer id, Integer status) {
+    public Boolean togglePublic(Long id, Integer status) {
         BlogTalk blogTalk = new BlogTalk();
         blogTalk.setStatus(status);
         UpdateWrapper<BlogTalk> updateWrapper = new UpdateWrapper<>();
@@ -320,7 +320,7 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
 
     @Override
     @Transactional(rollbackFor = Exception.class)  //Spring 的事务管理，如果发生异常，会自动回滚事务
-    public Boolean deleteTalkById(Integer id, Integer status) {
+    public Boolean deleteTalkById(Long id, Integer status) {
         int res;
         if (status == 1 || status == 2) {
             BlogTalk blogTalk = new BlogTalk();
@@ -336,7 +336,7 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
     }
 
     @Override
-    public Boolean revertTalk(Integer id) {
+    public Boolean revertTalk(Long id) {
         BlogTalk blogTalk = new BlogTalk();
         blogTalk.setStatus(1);
         UpdateWrapper<BlogTalk> updateWrapper = new UpdateWrapper<>();
@@ -346,7 +346,7 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
     }
 
     @Override
-    public PageInfoResult<BlogTalk> blogGetTalkList(Integer current, Integer size, Integer userId) {
+    public PageInfoResult<BlogTalk> blogGetTalkList(Integer current, Integer size, Long userId) {
 
         QueryWrapper<BlogTalk> queryWrapper = new QueryWrapper<>();    // 构建查询条件
         queryWrapper.eq("status", 1);
@@ -436,7 +436,7 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
     }
 
     @Override
-    public Boolean talkLike(Integer id) {
+    public Boolean talkLike(Long id) {
         BlogTalk blogTalk = blogTalkMapper.selectById(id);
         if (blogTalk != null) {
             Integer like_times = blogTalk.getLike_times();
@@ -449,7 +449,7 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
     }
 
     @Override
-    public Boolean cancelTalkLike(Integer id) {
+    public Boolean cancelTalkLike(Long id) {
         BlogTalk blogTalk = blogTalkMapper.selectById(id);
         if (blogTalk != null) {
             Integer like_times = blogTalk.getLike_times();

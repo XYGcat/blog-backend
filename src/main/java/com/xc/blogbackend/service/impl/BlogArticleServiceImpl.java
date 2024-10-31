@@ -79,8 +79,8 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
         Integer isTop = articleRequest.getIsTop();
         int current = articleRequest.getCurrent();
         int size = articleRequest.getSize();
-        Integer tagId = articleRequest.getTagId();
-        Integer categoryId = articleRequest.getCategoryId();
+        Long tagId = articleRequest.getTagId();
+        Long categoryId = articleRequest.getCategoryId();
 
         // 构建查询条件
         QueryWrapper<BlogArticle> queryWrapper = new QueryWrapper<>();
@@ -89,7 +89,8 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
             queryWrapper.like("article_title", "%" + articleTitle + "%");
         }
         // 如果创建时间不为空，使用between范围查询
-        if (createTime != null && createTime.size() == 2 && createTime.get(0) != null && createTime.get(1) != null) {
+        if (createTime != null && createTime.size() == 2 && createTime.get(0) != null &&
+                createTime.get(1) != null) {
             queryWrapper.between("created_at", createTime.get(0), createTime.get(1));
         }
         // 如果是否置顶不为空，使用eq精确查询
@@ -108,7 +109,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
         }
         // 如果标签id不为空，根据标签id查文章
         if (tagId != null) {
-            List<Integer> articleIdList = blogArticleTagService.getArticleIdListByTagId(tagId);
+            List<Long> articleIdList = blogArticleTagService.getArticleIdListByTagId(tagId);
             // 如果文章id列表不为空，使用in范围查询
             if (articleIdList != null && !articleIdList.isEmpty()) {
                 queryWrapper.in("id", articleIdList);
@@ -199,7 +200,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
     }
 
     @Override
-    public Boolean getArticleInfoByTitle(Integer id, String articleTitle) {
+    public Boolean getArticleInfoByTitle(Long id, String articleTitle) {
         QueryWrapper<BlogArticle> queryWrapper = new QueryWrapper<>();
         queryWrapper.select("id");
         queryWrapper.eq("article_title",articleTitle);
@@ -226,7 +227,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
     }
 
     @Override
-    public BlogArticle getArticleById(Integer articleId) {
+    public BlogArticle getArticleById(Long articleId) {
         if (articleId == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR,"为空");
         }
@@ -255,14 +256,14 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
     }
 
     @Override
-    public String getMdImgList(Integer articleId) {
+    public String getMdImgList(Long articleId) {
         BlogArticle blogArticle = blogArticleMapper.selectById(articleId);
         String mdImgList = blogArticle.getMdImgList();
         return mdImgList;
     }
 
     @Override
-    public BlogArticle getArticle(Integer articleId) {
+    public BlogArticle getArticle(Long articleId) {
         BlogArticle blogArticle = blogArticleMapper.selectById(articleId);
         return blogArticle;
     }
@@ -277,7 +278,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
 
         // 转换为BlogArticle对象
         BlogArticle articleRest = PaddingUtils.mapToBlogArticle(request);
-        Integer articleId = articleRest.getId();
+        Long articleId = articleRest.getId();
         String articleTitle = articleRest.getArticleTitle();
 
         // 获取数据库中的旧文章信息
@@ -364,7 +365,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
         blogArticleTagService.deleteArticleTag(articleRest.getId());
 
         // 判断新的分类是新增的还是已经存在的 并且返回分类id
-        Integer categoryOrReturn = createCategoryOrReturn(category.getId(),category.getCategoryName());
+        Long categoryOrReturn = createCategoryOrReturn(category.getId(),category.getCategoryName());
         articleRest.setCategoryId(categoryOrReturn);
 
         // 创建新的标签和文章关联
@@ -378,13 +379,13 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
     }
 
     @Override
-    public String getArticleCoverById(Integer articleId) {
+    public String getArticleCoverById(Long articleId) {
         BlogArticle blogArticle = blogArticleMapper.selectById(articleId);
         return blogArticle.getArticleCover();
     }
 
     @Override
-    public Boolean toggleArticlePublic(Integer id, Integer status) {
+    public Boolean toggleArticlePublic(Long id, Integer status) {
         if (status == 2) {
             status = 1;
         } else {
@@ -400,7 +401,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
     }
 
     @Override
-    public Boolean revertArticle(Integer id) {
+    public Boolean revertArticle(Long id) {
         BlogArticle blogArticle = new BlogArticle();
         blogArticle.setStatus(1);
         UpdateWrapper<BlogArticle> updateWrapper = new UpdateWrapper<>();
@@ -410,7 +411,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
     }
 
     @Override
-    public Boolean updateTop(Integer id, Integer isTop) {
+    public Boolean updateTop(Long id, Integer isTop) {
         BlogArticle blogArticle = new BlogArticle();
         blogArticle.setIsTop(isTop);
         blogArticle.setId(id);
@@ -420,7 +421,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
 
     @Override
     @Transactional(rollbackFor = Exception.class)  //Spring 的事务管理，如果发生异常，会自动回滚事务
-    public Boolean deleteArticle(Integer id, Integer status) {
+    public Boolean deleteArticle(Long id, Integer status) {
         if (status != 3) {
             BlogArticle blogArticle = new BlogArticle();
             blogArticle.setStatus(3);
@@ -517,7 +518,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
     }
 
     @Override
-    public RecommendResult getRecommendArticleById(Integer articleId) {
+    public RecommendResult getRecommendArticleById(Long articleId) {
         // 上一篇文章id
         QueryWrapper<BlogArticle> queryWrapper = new QueryWrapper<>();
         queryWrapper.lt("id",articleId);
@@ -550,10 +551,10 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
             contentNext = blogArticleMapper.selectOne(queryWrapper);
         }
         Map<String, Object> tagListByArticleId = blogArticleTagService.getTagListByArticleId(articleId);
-        List<Integer> tagIdList = (List<Integer>) tagListByArticleId.get("tagIdList");
-        List<Integer> articleIdList = new ArrayList<>();
-        for (Integer tagId : tagIdList){
-            List<Integer> listByTagId = blogArticleTagService.getArticleIdListByTagId(tagId);
+        List<Long> tagIdList = (List<Long>) tagListByArticleId.get("tagIdList");
+        List<Long> articleIdList = new ArrayList<>();
+        for (Long tagId : tagIdList){
+            List<Long> listByTagId = blogArticleTagService.getArticleIdListByTagId(tagId);
             if (listByTagId != null) {
                 articleIdList.addAll(listByTagId);
             }
@@ -667,8 +668,8 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
     }
 
     @Override
-    public PageInfoResult<BlogArticle> getArticleListByTagId(Integer current, Integer size, Integer tagId) {
-        List<Integer> tagIdList = blogArticleTagService.getArticleIdListByTagId(tagId);
+    public PageInfoResult<BlogArticle> getArticleListByTagId(Integer current, Integer size, Long tagId) {
+        List<Long> tagIdList = blogArticleTagService.getArticleIdListByTagId(tagId);
 
         QueryWrapper<BlogArticle> queryWrapper = new QueryWrapper<>();    // 构建查询条件
         queryWrapper.eq("status", 1);
@@ -751,7 +752,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
     }
 
     @Override
-    public Boolean articleLike(Integer id) {
+    public Boolean articleLike(Long id) {
         BlogArticle blogArticle = blogArticleMapper.selectById(id);
         if (blogArticle != null){
             Integer thumbsUpTimes = blogArticle.getThumbsUpTimes();
@@ -763,7 +764,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
     }
 
     @Override
-    public Boolean cancelArticleLike(Integer id) {
+    public Boolean cancelArticleLike(Long id) {
         BlogArticle blogArticle = blogArticleMapper.selectById(id);
         if (blogArticle != null){
             Integer thumbsUpTimes = blogArticle.getThumbsUpTimes();
@@ -775,7 +776,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
     }
 
     @Override
-    public Boolean addReadingDuration(Integer id, Integer duration) {
+    public Boolean addReadingDuration(Long id, Integer duration) {
         BlogArticle blogArticle = blogArticleMapper.selectById(id);
         if (blogArticle != null){
             Double readingDuration = blogArticle.getReadingDuration();
@@ -793,8 +794,8 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
      * @param categoryName
      * @return
      */
-    public Integer createCategoryOrReturn(Integer id,String categoryName){
-        Integer finalId;
+    public Long createCategoryOrReturn(Long id,String categoryName){
+        Long finalId;
         if (id != null) {
             finalId = id;
         } else {
@@ -820,7 +821,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
      * @param tagList
      * @return
      */
-    public List<BlogArticleTag> createArticleTagByArticleId(Integer articleId, List<BlogTag> tagList){
+    public List<BlogArticleTag> createArticleTagByArticleId(Long articleId, List<BlogTag> tagList){
         List<BlogArticleTag> articleTags = null;
 
         //// TODO: 2023-11-19 实现异步操作
@@ -856,7 +857,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
             ArrayList<BlogArticleTag> articleTagList = new ArrayList<>();
             for (BlogTag blogTag : tagList){
                 BlogArticleTag articleTag = new BlogArticleTag();
-                articleTag.setArticleId(Integer.valueOf(articleId));
+                articleTag.setArticleId(articleId);
                 articleTag.setTagId(blogTag.getId());
                 articleTagList.add(articleTag);
             }

@@ -23,5 +23,5 @@ public class PageRequest implements Serializable {
     private String siteName;   // 网站名称
     private Integer status;      // 状态
     private String tag;          // 标签
-    private Integer userId;     // 用户id
+    private Long userId;     // 用户id
 }

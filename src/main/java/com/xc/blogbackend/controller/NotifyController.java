@@ -33,10 +33,10 @@ public class NotifyController {
      */
     @ApiOperation(value = "条件分页获取消息推送")
     @PostMapping("/getNotifyList")
-    public BaseResponse<PageInfoResult<BlogNotify>> getNotifyList(@RequestBody Map<String,Integer> request){
-        Integer current = request.get("current");
-        Integer size = request.get("size");
-        Integer userId = request.get("userId");
+    public BaseResponse<PageInfoResult<BlogNotify>> getNotifyList(@RequestBody Map<String,Long> request){
+        Integer current = Math.toIntExact(request.get("current"));
+        Integer size = Math.toIntExact(request.get("size"));
+        Long userId = request.get("userId");
         PageInfoResult<BlogNotify> notifyList = blogNotifyService.getNotifyList(current, size, userId);
         return ResultUtils.success(notifyList,"分页查找消息通知成功");
     }
@@ -49,7 +49,7 @@ public class NotifyController {
      */
     @ApiOperation(value = "修改消息推送")
     @PutMapping("/update/{id}")
-    public BaseResponse<Boolean> updateNotify(@PathVariable Integer id){
+    public BaseResponse<Boolean> updateNotify(@PathVariable Long id){
         Boolean aBoolean = blogNotifyService.updateNotify(id);
         return ResultUtils.success(aBoolean,"已阅消息通知成功");
     }
@@ -62,7 +62,7 @@ public class NotifyController {
      */
     @ApiOperation(value = "删除消息推送")
     @PutMapping("/delete/{id}")
-    public BaseResponse<Boolean> deleteNotifys(@PathVariable Integer id){
+    public BaseResponse<Boolean> deleteNotifys(@PathVariable Long id){
         Boolean aBoolean = blogNotifyService.deleteNotifys(id);
         return ResultUtils.success(aBoolean,"删除消息通知成功");
     }

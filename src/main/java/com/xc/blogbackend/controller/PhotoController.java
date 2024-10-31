@@ -12,6 +12,7 @@ import com.xc.blogbackend.utils.StringManipulation;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
+
 import javax.annotation.Resource;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
@@ -46,7 +47,7 @@ public class PhotoController {
     public BaseResponse<PageInfoResult<BlogPhoto>> getPhotosByAlbumId(@RequestBody Map<String,Object> request){
         Integer current = (Integer) request.get("current");
         Integer size = (Integer) request.get("size");
-        Integer id = (Integer) request.get("id");
+        Long id = (Long) request.get("id");
         Integer status = (Integer) request.get("status");
 
         PageInfoResult<BlogPhoto> photosByAlbumId = blogPhotoService.getPhotosByAlbumId(current, size, id, status);
@@ -63,7 +64,7 @@ public class PhotoController {
      */
     @ApiOperation(value = "前台 根据相册id获取相册的所有图片")
     @GetMapping("/getAllPhotosByAlbumId/{id}")
-    public BaseResponse<List<BlogPhoto>> getAllPhotosByAlbumId(@PathVariable Integer id){
+    public BaseResponse<List<BlogPhoto>> getAllPhotosByAlbumId(@PathVariable Long id){
         List<BlogPhoto> allPhotosByAlbumId = blogPhotoService.getAllPhotosByAlbumId(id);
         for (BlogPhoto v : allPhotosByAlbumId){
             try {
@@ -102,7 +103,7 @@ public class PhotoController {
         List<BlogPhoto> imgList = request.getImgList();
         Integer type = request.getType();
 
-        List<Integer> idList = imgList.stream().map(v -> {
+        List<Long> idList = imgList.stream().map(v -> {
             return v.getId();
         }).collect(Collectors.toList());
         Boolean deletePhotos = blogPhotoService.deletePhotos(idList, type);
@@ -127,8 +128,8 @@ public class PhotoController {
      */
     @ApiOperation(value = "批量恢复图片")
     @PutMapping("/revert")
-    public BaseResponse<Boolean> revertPhotos(@RequestBody Map<String,List<Integer>> request){
-        List<Integer> idList = request.get("idList");
+    public BaseResponse<Boolean> revertPhotos(@RequestBody Map<String,List<Long>> request){
+        List<Long> idList = request.get("idList");
         Boolean aBoolean = blogPhotoService.revertPhotos(idList);
         return ResultUtils.success(aBoolean,"恢复图片成功");
     }

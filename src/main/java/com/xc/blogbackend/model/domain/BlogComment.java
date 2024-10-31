@@ -19,7 +19,7 @@ public class BlogComment implements Serializable {
      * 作者id
      */
     @TableField(exist = false)
-    private Integer authorId;
+    private Long authorId;
 
     /**
      * 是否点赞
@@ -37,19 +37,19 @@ public class BlogComment implements Serializable {
      * id
      */
     @TableId(type = IdType.ASSIGN_ID)
-    private Integer id;
+    private Long id;
 
     /**
      * 评论父级id
      */
     @TableField(value = "parent_id")
-    private Integer parentId;
+    private Long parentId;
 
     /**
      * 评论的对象id 比如说说id、文章id等
      */
     @TableField(value = "for_id")
-    private Integer forId;
+    private Long forId;
 
     /**
      * 评论类型 1 文章 2 说说 3 留言 ...
@@ -61,7 +61,7 @@ public class BlogComment implements Serializable {
      * 评论人id
      */
     @TableField(value = "from_id")
-    private Integer fromId;
+    private Long fromId;
 
     /**
      * 评论人昵称
@@ -79,7 +79,7 @@ public class BlogComment implements Serializable {
      * 被回复的人id
      */
     @TableField(value = "to_id")
-    private Integer toId;
+    private Long toId;
 
     /**
      * 被回复人的昵称

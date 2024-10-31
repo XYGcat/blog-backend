@@ -24,7 +24,7 @@ public interface BlogMessageService extends IService<BlogMessage> {
      * @return
      */
     PageInfoResult<BlogMessage> getMessageList
-    (Integer current, Integer size, String message, List<String> time,String tag,Integer userId);
+    (Integer current, Integer size, String message, List<String> time,String tag,Long userId);
 
     /**
      * 获取热门的标签
@@ -55,7 +55,7 @@ public interface BlogMessageService extends IService<BlogMessage> {
      * @param idList
      * @return
      */
-    Integer deleteMessage(List<Integer> idList);
+    Integer deleteMessage(List<Long> idList);
 
     /**
      * 点赞留言
@@ -63,7 +63,7 @@ public interface BlogMessageService extends IService<BlogMessage> {
      * @param id
      * @return
      */
-    Boolean likeMessage(Integer id);
+    Boolean likeMessage(Long id);
 
     /**
      * 取消点赞留言
@@ -71,5 +71,5 @@ public interface BlogMessageService extends IService<BlogMessage> {
      * @param id
      * @return
      */
-    Boolean cancelLikeMessage(Integer id);
+    Boolean cancelLikeMessage(Long id);
 }

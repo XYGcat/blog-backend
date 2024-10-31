@@ -29,7 +29,7 @@ public class BlogCategoryServiceImpl extends ServiceImpl<BlogCategoryMapper, Blo
     private BlogCategoryMapper blogCategoryMapper;
 
     @Override
-    public String getCategoryNameById(Integer categoryId) {
+    public String getCategoryNameById(Long categoryId) {
         BlogCategory category = blogCategoryMapper.selectById(categoryId);
         return category != null ? category.getCategoryName() : null;
     }
@@ -64,7 +64,7 @@ public class BlogCategoryServiceImpl extends ServiceImpl<BlogCategoryMapper, Blo
         category.setSort(categoryReqDto.getSort());
         blogCategoryMapper.insert(category);
 
-        Integer id = category.getId();
+        Long id = category.getId();
         BlogCategory blogCategory = blogCategoryMapper.selectById(id);
         return blogCategory;
     }
@@ -106,7 +106,7 @@ public class BlogCategoryServiceImpl extends ServiceImpl<BlogCategoryMapper, Blo
     }
 
     @Override
-    public Boolean updateCategory(Integer id, String categoryName) {
+    public Boolean updateCategory(Long id, String categoryName) {
         BlogCategory blogCategory = new BlogCategory();
         blogCategory.setCategoryName(categoryName);
         UpdateWrapper<BlogCategory> updateWrapper = new UpdateWrapper<>();
@@ -116,8 +116,8 @@ public class BlogCategoryServiceImpl extends ServiceImpl<BlogCategoryMapper, Blo
     }
 
     @Override
-    public Boolean deleteCategories(List<Integer> idList) {
-        int batchIds = blogCategoryMapper.deleteBatchIds(idList);
+    public Boolean deleteCategories(List<Long> idList) {
+        int batchIds = blogCategoryMapper.deleteByIds(idList);
         return batchIds > 0;
     }
 }

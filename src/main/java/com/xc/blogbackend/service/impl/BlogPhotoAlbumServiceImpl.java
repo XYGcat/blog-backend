@@ -84,7 +84,7 @@ public class BlogPhotoAlbumServiceImpl extends ServiceImpl<BlogPhotoAlbumMapper,
     }
 
     @Override
-    public BlogPhotoAlbum getOneAlbum(Integer id, String albumName) {
+    public BlogPhotoAlbum getOneAlbum(Long id, String albumName) {
         QueryWrapper<BlogPhotoAlbum> queryWrapper = new QueryWrapper<>();
         if (id != null) {
             queryWrapper.eq("id",id);
@@ -97,7 +97,7 @@ public class BlogPhotoAlbumServiceImpl extends ServiceImpl<BlogPhotoAlbumMapper,
     }
 
     @Override
-    public Boolean updateAlbum(Integer id, String albumName, String albumCover, String description) {
+    public Boolean updateAlbum(Long id, String albumName, String albumCover, String description) {
         BlogPhotoAlbum blogPhotoAlbum = new BlogPhotoAlbum();
         blogPhotoAlbum.setAlbumCover(albumCover);
         blogPhotoAlbum.setAlbumName(albumName);
@@ -112,7 +112,7 @@ public class BlogPhotoAlbumServiceImpl extends ServiceImpl<BlogPhotoAlbumMapper,
     }
 
     @Override
-    public Boolean deleteAlbum(Integer id) {
+    public Boolean deleteAlbum(Long id) {
         int deleteById = blogPhotoAlbumMapper.deleteById(id);
         // 删除相册下的图片
         Boolean aBoolean = blogPhotoService.deletePhotosByAlbumId(id);

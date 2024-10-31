@@ -18,7 +18,7 @@ public class BlogNotify implements Serializable {
      * 
      */
     @TableId(type = IdType.ASSIGN_ID)
-    private Integer id;
+    private Long id;
 
     /**
      * 通知内容
@@ -30,7 +30,7 @@ public class BlogNotify implements Serializable {
      * 通知给谁
      */
     @TableField(value = "user_id")
-    private Integer userId;
+    private Long userId;
 
     /**
      * 通知类型 1 文章 2 说说 3 留言 4 友链
@@ -42,7 +42,7 @@ public class BlogNotify implements Serializable {
      * 说说或者是文章的id 用于跳转
      */
     @TableField(value = "to_id")
-    private Integer toId;
+    private Long toId;
 
     /**
      * 是否被查看 1 没有 2 已经查看

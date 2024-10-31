@@ -18,8 +18,8 @@ public class ArticleRequest implements Serializable {
     private int current = 1;
     private int size = 10;
     private String articleTitle;
-    private Integer tagId;
-    private Integer categoryId;
+    private Long tagId;
+    private Long categoryId;
     private Integer isTop;
     private Integer status;
     private List<String> createTime = new ArrayList<>();

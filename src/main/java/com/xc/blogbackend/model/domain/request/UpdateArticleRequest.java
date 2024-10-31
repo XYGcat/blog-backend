@@ -29,10 +29,10 @@ public class UpdateArticleRequest implements Serializable {
         private List<BlogTag> tagList; // 标签列表
         private List<String> tagNameList;
 
-        private Integer id;
+        private Long id;
         private String articleTitle;
-        private Integer authorId;
-        private Integer categoryId;
+        private Long authorId;
+        private Long categoryId;
         private String articleContent;
         private String articleCover;
         private Integer isTop;

@@ -158,7 +158,7 @@ public class BlogUserServiceImpl extends ServiceImpl<BlogUserMapper, BlogUser>
     }
 
     @Override
-    public BlogUser getOneUserInfo(Integer userId) {
+    public BlogUser getOneUserInfo(Long userId) {
         QueryWrapper<BlogUser> queryWrapper = new QueryWrapper<>();
         if (userId == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR,"为空");
@@ -216,7 +216,7 @@ public class BlogUserServiceImpl extends ServiceImpl<BlogUserMapper, BlogUser>
     }
 
     @Override
-    public String getAuthorNameById(Integer userId) {
+    public String getAuthorNameById(Long userId) {
         BlogUser blogUser = blogUserMapper.selectById(userId);
 
         return blogUser != null ? blogUser.getNickName() : null;
@@ -224,7 +224,7 @@ public class BlogUserServiceImpl extends ServiceImpl<BlogUserMapper, BlogUser>
 
     @Override
     public Boolean updateOwnUserInfo(Map<String, Object> request) {
-        Integer id = (Integer) request.get("id");
+        Long id = (Long) request.get("id");
         String avatar = (String) request.get("avatar");
         String nickName = (String) request.get("nick_name");
         String qq = (String) request.get("qq");
@@ -241,7 +241,7 @@ public class BlogUserServiceImpl extends ServiceImpl<BlogUserMapper, BlogUser>
     }
 
     @Override
-    public Boolean updatePassword(Integer id, String password,String password1) {
+    public Boolean updatePassword(Long id, String password,String password1) {
         //1.校验
         //密码不能为空
         if (StringUtils.isAnyBlank(password1)){
@@ -266,7 +266,7 @@ public class BlogUserServiceImpl extends ServiceImpl<BlogUserMapper, BlogUser>
     }
 
     @Override
-    public Boolean updateRole(Integer id, Integer role) {
+    public Boolean updateRole(Long id, Integer role) {
         BlogUser blogUser = new BlogUser();
         blogUser.setRole(role);
         UpdateWrapper<BlogUser> updateWrapper = new UpdateWrapper<>();

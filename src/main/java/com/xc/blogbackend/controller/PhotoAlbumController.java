@@ -81,7 +81,7 @@ public class PhotoAlbumController {
     @ApiOperation(value = "修改相册")
     @PutMapping("/update")
     public BaseResponse<Boolean> updateAlbum(@RequestBody Map<String,Object> request){
-        Integer id = (Integer) request.get("id");
+        Long id = (Long) request.get("id");
         String albumName = (String) request.get("album_name");
         String albumCover = (String) request.get("album_cover");
         String description = (String) request.get("description");
@@ -112,7 +112,7 @@ public class PhotoAlbumController {
     @ApiOperation(value = "删除相册")
     @DeleteMapping("/delete/{id}")
     @Transactional(rollbackFor = Exception.class)  //Spring 的事务管理，如果发生异常，会自动回滚事务
-    public BaseResponse<Boolean> deleteAlbum(@PathVariable Integer id){
+    public BaseResponse<Boolean> deleteAlbum(@PathVariable Long id){
         BlogPhotoAlbum oneAlbum = blogPhotoAlbumService.getOneAlbum(id, null);
 
         Boolean aBoolean = qiniu.deleteFile(StringManipulation.subString(oneAlbum.getAlbumCover()));

@@ -18,7 +18,7 @@ public class BlogLike implements Serializable {
      * 
      */
     @TableId(type = IdType.ASSIGN_ID)
-    private Integer id;
+    private Long id;
 
     /**
      * 点赞类型 1 文章 2 说说 3 留言 4 评论
@@ -30,13 +30,13 @@ public class BlogLike implements Serializable {
      * 点赞的id 文章id 说说id 留言id
      */
     @TableField(value = "for_id")
-    private Integer forId;
+    private Long forId;
 
     /**
      * 点赞用户id
      */
     @TableField(value = "user_id")
-    private Integer userId;
+    private Long userId;
 
     /**
      * 创建时间，插入时自动填充

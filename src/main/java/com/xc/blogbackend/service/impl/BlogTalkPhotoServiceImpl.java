@@ -32,16 +32,16 @@ public class BlogTalkPhotoServiceImpl extends ServiceImpl<BlogTalkPhotoMapper, B
     private Qiniu qiniu;
 
     @Override
-    public List<BlogTalkPhoto> getPhotoByTalkId(Integer talk_id) {
+    public List<BlogTalkPhoto> getPhotoByTalkId(Long talkId) {
         QueryWrapper<BlogTalkPhoto> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("talk_id",talk_id);
+        queryWrapper.eq("talk_id",talkId);
         List<BlogTalkPhoto> talkPhotos = blogTalkPhotoMapper.selectList(queryWrapper);
         //返回一个经过处理的对象数组
         if (talkPhotos != null) {
             List<BlogTalkPhoto> talkPhotosList = new ArrayList<>();
             for (BlogTalkPhoto blogTalkPhoto : talkPhotos){
                 BlogTalkPhoto talkPhoto = new BlogTalkPhoto();
-                talkPhoto.setTalk_id(blogTalkPhoto.getTalk_id());
+                talkPhoto.setTalkId(blogTalkPhoto.getTalkId());
                 talkPhoto.setUrl(blogTalkPhoto.getUrl());
                 talkPhotosList.add(talkPhoto);
             }
@@ -57,10 +57,10 @@ public class BlogTalkPhotoServiceImpl extends ServiceImpl<BlogTalkPhotoMapper, B
     }
 
     @Override
-    public Boolean deleteTalkPhoto(Integer talk_id) {
+    public Boolean deleteTalkPhoto(Long talkId) {
         List<String> keys = new ArrayList<>();
         QueryWrapper<BlogTalkPhoto> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("talk_id",talk_id);
+        queryWrapper.eq("talk_id",talkId);
         queryWrapper.select("url");
         List<BlogTalkPhoto> talkPhotos = blogTalkPhotoMapper.selectList(queryWrapper);
 
@@ -71,7 +71,7 @@ public class BlogTalkPhotoServiceImpl extends ServiceImpl<BlogTalkPhotoMapper, B
         Boolean deleteFile = qiniu.deleteFile(keys);
 
         queryWrapper.clear();
-        queryWrapper.eq("talk_id",talk_id);
+        queryWrapper.eq("talk_id",talkId);
         int delete = blogTalkPhotoMapper.delete(queryWrapper);
 
         return delete > 0;

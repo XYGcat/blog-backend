@@ -18,19 +18,19 @@ public class BlogArticleTag implements Serializable {
      * 
      */
     @TableId(type = IdType.ASSIGN_ID)
-    private Integer id;
+    private Long id;
 
     /**
      * 文章id
      */
     @TableField(value = "article_id")
-    private Integer articleId;
+    private Long articleId;
 
     /**
      * 标签id
      */
     @TableField(value = "tag_id")
-    private Integer tagId;
+    private Long tagId;
 
     /**
      * 创建时间，插入时自动填充

@@ -46,7 +46,7 @@ public class MessageController {
         String message = request.getMessage();
         List<String> time = request.getTime();
         String tag = request.getTag();
-        Integer userId = request.getUserId();
+        Long userId = request.getUserId();
 
         PageInfoResult<BlogMessage> messageList = blogMessageService.getMessageList
                 (current, size, message, time,tag,userId);
@@ -75,7 +75,7 @@ public class MessageController {
     @ApiOperation(value = "新增留言")
     @PostMapping("/add")
     public BaseResponse<Boolean> addMessage(@RequestBody BlogMessage blogMessage){
-        Integer userId = blogMessage.getUserId();
+        Long userId = blogMessage.getUserId();
         String message = blogMessage.getMessage();
         String nickName = blogMessage.getNickName();
         if (userId == null) {
@@ -85,7 +85,7 @@ public class MessageController {
 
         // 发布消息推送
         if (userId != 1) {
-            blogNotifyService.addNotify(1, 3, null, "您收到了来自于：" + nickName + "的留言:" + message);
+            blogNotifyService.addNotify(1L, 3, null, "您收到了来自于：" + nickName + "的留言:" + message);
         }
 
         return ResultUtils.success(aBoolean,"发布成功");
@@ -112,8 +112,8 @@ public class MessageController {
      */
     @ApiOperation(value = "删除留言")
     @PutMapping("/delete")
-    public BaseResponse<Integer> deleteMessage(@RequestBody Map<String,List<Integer>> request){
-        List<Integer> idList = request.get("idList");
+    public BaseResponse<Integer> deleteMessage(@RequestBody Map<String,List<Long>> request){
+        List<Long> idList = request.get("idList");
         Integer integer = blogMessageService.deleteMessage(idList);
         return ResultUtils.success(integer,"删除留言成功");
     }
@@ -125,7 +125,7 @@ public class MessageController {
      * @return
      */
     @PutMapping("/like/{id}")
-    public BaseResponse<Boolean> likeMessage(@PathVariable Integer id){
+    public BaseResponse<Boolean> likeMessage(@PathVariable Long id){
         Boolean aBoolean = blogMessageService.likeMessage(id);
         return ResultUtils.success(aBoolean,"留言点赞成功");
     }
@@ -138,7 +138,7 @@ public class MessageController {
      */
     @ApiOperation(value = "取消点赞留言")
     @PutMapping("/cancelLike/{id}")
-    public BaseResponse<Boolean> cancelLikeMessage(@PathVariable Integer id){
+    public BaseResponse<Boolean> cancelLikeMessage(@PathVariable Long id){
         Boolean aBoolean = blogMessageService.cancelLikeMessage(id);
         return ResultUtils.success(aBoolean,"取消留言点赞成功");
     }

@@ -63,7 +63,7 @@ public class LinksController {
 
         if(id == null){
             BlogNotify blogNotify = blogNotifyService.addNotify
-                    (1, 4, null, "您的收到了来自于：" + siteName + "的友链申请，点我去后台审核！");
+                    (1L, 4, null, "您的收到了来自于：" + siteName + "的友链申请，点我去后台审核！");
         }
 
         if(id != null){

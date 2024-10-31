@@ -19,7 +19,7 @@ public class BlogPhotoAlbum implements Serializable {
      * 
      */
     @TableId(type = IdType.ASSIGN_ID)
-    private Integer id;
+    private Long id;
 
     /**
      * 相册名称

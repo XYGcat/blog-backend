@@ -11,9 +11,9 @@ import java.util.Objects;
  * @author 星尘
  */
 public class FindRowIndex {
-    public static Integer findRowIndex(List<BlogTalk> rows,Integer talk_id){
+    public static Integer findRowIndex(List<BlogTalk> rows,Long talkId){
         for (int i = 0; i < rows.size(); i++) {
-            if (Objects.equals(rows.get(i).getId(), talk_id)) {
+            if (Objects.equals(rows.get(i).getId(), talkId)) {
                 return i;
             }
         }

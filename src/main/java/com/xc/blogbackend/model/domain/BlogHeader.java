@@ -18,7 +18,7 @@ public class BlogHeader implements Serializable {
      * id
      */
     @TableId(type = IdType.ASSIGN_ID)
-    private Integer id;
+    private Long id;
 
     /**
      * 背景图

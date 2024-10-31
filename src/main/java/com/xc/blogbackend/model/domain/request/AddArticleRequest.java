@@ -21,11 +21,11 @@ public class AddArticleRequest implements Serializable {
 
     @Data
     public static class ArticleDate{
-        private Integer id; // 文章 ID
+        private Long id; // 文章 ID
         private String articleTitle; // 文章标题
         private BlogCategory category; // 文章所属的分类信息
         private List<BlogTag> tagList; // 标签列表
-        private Integer authorId; // 作者 ID
+        private Long authorId; // 作者 ID
         private String articleContent; // 文章内容
         private String articleCover; // 文章封面
         private Integer isTop; // 是否置顶，1 表示置顶，2 表示取消置顶

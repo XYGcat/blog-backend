@@ -40,9 +40,9 @@ public class CommentController {
      */
     @ApiOperation(value = "获取评论总条数")
     @PostMapping("/getCommentTotal")
-    public BaseResponse<Long> getCommentTotal(@RequestBody Map<String,Integer> request){
-        Integer forId = request.get("for_id");
-        Integer type = request.get("type");
+    public BaseResponse<Long> getCommentTotal(@RequestBody Map<String,Long> request){
+        Long forId = request.get("for_id");
+        Integer type = Math.toIntExact(request.get("type"));
         Long commentTotal = blogCommentService.getCommentTotal(forId, type);
         return ResultUtils.success(commentTotal,"获取评论总条数成功");
     }
@@ -103,10 +103,10 @@ public class CommentController {
         String clientIp = IpUtils.getClientIp(httpServletRequest);
         BlogComment comment = blogCommentService.createComment(blogComment, clientIp);
         // from_id表示当前登陆人id 发表评论的人和当前登录人不一样才进行消息提示 author_id表示当前被评论的作者的id
-        Integer fromId = blogComment.getFromId();
-        Integer authorId = blogComment.getAuthorId();
+        Long fromId = blogComment.getFromId();
+        Long authorId = blogComment.getAuthorId();
         Integer type = blogComment.getType();
-        Integer forId = blogComment.getForId();
+        Long forId = blogComment.getForId();
         String fromName = blogComment.getFromName();
         String content = blogComment.getContent();
         String typeName = CurrentTypeName.getCurrentTypeName(blogComment.getType());
@@ -132,12 +132,12 @@ public class CommentController {
 
         BlogComment comment = blogCommentService.applyComment(blogComment, clientIp);
 
-        Integer fromId = blogComment.getFromId();
-        Integer authorId = blogComment.getAuthorId();
+        Long fromId = blogComment.getFromId();
+        Long authorId = blogComment.getAuthorId();
         Integer type = blogComment.getType();
-        Integer forId = blogComment.getForId();
+        Long forId = blogComment.getForId();
         String fromName = blogComment.getFromName();
-        Integer toId = blogComment.getToId();
+        Long toId = blogComment.getToId();
         String content = blogComment.getContent();
         String typeName = CurrentTypeName.getCurrentTypeName(blogComment.getType());
 
@@ -156,7 +156,7 @@ public class CommentController {
      */
     @ApiOperation(value = "点赞评论")
     @PutMapping("/thumbUp/{id}")
-    public BaseResponse<Boolean> thumbUpComment(@PathVariable Integer id){
+    public BaseResponse<Boolean> thumbUpComment(@PathVariable Long id){
         Boolean aBoolean = blogCommentService.thumbUpComment(id);
         return ResultUtils.success(aBoolean,"点赞成功");
     }
@@ -169,7 +169,7 @@ public class CommentController {
      */
     @ApiOperation(value = "取消点赞评论")
     @PutMapping("/cancelThumbUp/{id}")
-    public BaseResponse<Boolean> cancelThumbUp(@PathVariable Integer id){
+    public BaseResponse<Boolean> cancelThumbUp(@PathVariable Long id){
         Boolean aBoolean = blogCommentService.cancelThumbUp(id);
         return ResultUtils.success(aBoolean,"取消点赞成功");
     }
@@ -184,7 +184,7 @@ public class CommentController {
      */
     @ApiOperation(value = "前台后台 删除评论")
     @DeleteMapping("/delete/{id}/{parentId}")
-    public BaseResponse<Boolean> deleteComment(@PathVariable Integer id,@PathVariable Integer parentId){
+    public BaseResponse<Boolean> deleteComment(@PathVariable Long id,@PathVariable Long parentId){
         Boolean aBoolean = blogCommentService.deleteComment(id, parentId);
 
         return ResultUtils.success(aBoolean,"删除评论成功");

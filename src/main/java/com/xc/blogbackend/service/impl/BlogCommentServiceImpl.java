@@ -48,7 +48,7 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
     private BlogLikeService blogLikeService;
 
     @Override
-    public Long getCommentTotal(Integer forId, Integer type) {
+    public Long getCommentTotal(Long forId, Integer type) {
         QueryWrapper<BlogComment> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("for_id", forId).eq("type", type);
         Long count = blogCommentMapper.selectCount(queryWrapper);
@@ -60,8 +60,8 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
         Integer current = (Integer) request.get("current");
         Integer size = (Integer) request.get("size");
         Integer type = (Integer) request.get("type");
-        Integer forId = (Integer) request.get("for_id");
-        Integer userId = (Integer) request.get("user_id");
+        Long forId = (Long) request.get("for_id");
+        Long userId = (Long) request.get("user_id");
         String order = (String) request.get("order");
 
         QueryWrapper<BlogComment> queryWrapper = new QueryWrapper<>();
@@ -158,9 +158,9 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
         Integer current = (Integer) request.get("current");
         Integer size = (Integer) request.get("size");
         Integer type = (Integer) request.get("type");
-        Integer forId = (Integer) request.get("for_id");
-        Integer userId = (Integer) request.get("user_id");
-        Integer parentId = (Integer) request.get("parent_id");
+        Long forId = (Long) request.get("for_id");
+        Long userId = (Long) request.get("user_id");
+        Long parentId = (Long) request.get("parent_id");
 
         QueryWrapper<BlogComment> queryWrapper = new QueryWrapper<>();
         if (type != null){
@@ -393,7 +393,7 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
     }
 
     @Override
-    public Boolean thumbUpComment(Integer id) {
+    public Boolean thumbUpComment(Long id) {
         BlogComment blogComment = blogCommentMapper.selectById(id);
         if (blogComment != null) {
             Integer thumbsUp = blogComment.getThumbsUp();
@@ -405,7 +405,7 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
     }
 
     @Override
-    public Boolean cancelThumbUp(Integer id) {
+    public Boolean cancelThumbUp(Long id) {
         BlogComment blogComment = blogCommentMapper.selectById(id);
         if (blogComment != null) {
             Integer thumbsUp = blogComment.getThumbsUp();
@@ -417,7 +417,7 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
     }
 
     @Override
-    public Boolean deleteComment(Integer id, Integer parentId) {
+    public Boolean deleteComment(Long id, Long parentId) {
         // 如果有父级评论 就只删除这一条
         if (parentId > 0){
             int deleteById = blogCommentMapper.deleteById(id);

@@ -50,7 +50,7 @@ public class BlogHeaderServiceImpl extends ServiceImpl<BlogHeaderMapper, BlogHea
 
     @Override
     public Boolean addOrUpdateHeader(BlogHeader blogHeader) {
-        Integer id = blogHeader.getId();
+        Long id = blogHeader.getId();
         if (id != null){
             //删除七牛云旧图片
             BlogHeader selectById = blogHeaderMapper.selectById(id);

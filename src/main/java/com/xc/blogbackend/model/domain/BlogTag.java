@@ -18,7 +18,7 @@ public class BlogTag implements Serializable {
      * 
      */
     @TableId(type = IdType.ASSIGN_ID)
-    private Integer id;
+    private Long id;
 
     /**
      * 标签名称 唯一

@@ -18,7 +18,7 @@ public class BlogLinks implements Serializable {
      * 
      */
     @TableId(type = IdType.ASSIGN_ID)
-    private Integer id;
+    private Long id;
 
     /**
      * 网站名称

@@ -35,7 +35,7 @@ public interface BlogTalkService extends IService<BlogTalk> {
      * @param id
      * @return
      */
-    BlogTalk getTalkById(Integer id);
+    BlogTalk getTalkById(Long id);
 
     /**
      * 修改说说
@@ -52,7 +52,7 @@ public interface BlogTalkService extends IService<BlogTalk> {
      * @param isTop
      * @return
      */
-    Boolean toggleTop(Integer id,Integer isTop);
+    Boolean toggleTop(Long id,Integer isTop);
 
     /**
      * 切换说说公开性
@@ -61,7 +61,7 @@ public interface BlogTalkService extends IService<BlogTalk> {
      * @param status
      * @return
      */
-    Boolean togglePublic(Integer id,Integer status);
+    Boolean togglePublic(Long id,Integer status);
 
     /**
      * 删除说说
@@ -70,7 +70,7 @@ public interface BlogTalkService extends IService<BlogTalk> {
      * @param status
      * @return
      */
-    Boolean deleteTalkById(Integer id,Integer status);
+    Boolean deleteTalkById(Long id,Integer status);
 
     /**
      * 恢复说说
@@ -78,7 +78,7 @@ public interface BlogTalkService extends IService<BlogTalk> {
      * @param id
      * @return
      */
-    Boolean revertTalk(Integer id);
+    Boolean revertTalk(Long id);
 
     /**
      * 前台获取说说列表
@@ -88,7 +88,7 @@ public interface BlogTalkService extends IService<BlogTalk> {
      * @param userId
      * @return
      */
-    PageInfoResult<BlogTalk> blogGetTalkList(Integer current,Integer size,Integer userId);
+    PageInfoResult<BlogTalk> blogGetTalkList(Integer current,Integer size,Long userId);
 
     /**
      * 取消点赞
@@ -96,7 +96,7 @@ public interface BlogTalkService extends IService<BlogTalk> {
      * @param id
      * @return
      */
-    Boolean talkLike(Integer id);
+    Boolean talkLike(Long id);
 
     /**
      * 取消点赞
@@ -104,5 +104,5 @@ public interface BlogTalkService extends IService<BlogTalk> {
      * @param id
      * @return
      */
-    Boolean cancelTalkLike(Integer id);
+    Boolean cancelTalkLike(Long id);
 }

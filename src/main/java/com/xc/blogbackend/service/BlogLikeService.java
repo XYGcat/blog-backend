@@ -18,7 +18,7 @@ public interface BlogLikeService extends IService<BlogLike> {
      * @param userId
      * @return
      */
-    Boolean getIsLikeByIdAndType(Integer forId,Integer type,Integer userId);
+    Boolean getIsLikeByIdAndType(Long forId,Integer type,Long userId);
 
     /**
      * 点赞
@@ -28,7 +28,7 @@ public interface BlogLikeService extends IService<BlogLike> {
      * @param userId
      * @return
      */
-    Boolean addLike(Integer forId,Integer type,Integer userId);
+    Boolean addLike(Long forId,Integer type,Long userId);
 
     /**
      * 取消点赞
@@ -38,6 +38,6 @@ public interface BlogLikeService extends IService<BlogLike> {
      * @param userId
      * @return
      */
-    Boolean cancelLike(Integer forId,Integer type,Integer userId);
+    Boolean cancelLike(Long forId,Integer type,Long userId);
 
 }

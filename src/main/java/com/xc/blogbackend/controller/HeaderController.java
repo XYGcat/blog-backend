@@ -10,6 +10,7 @@ import com.xc.blogbackend.utils.StringManipulation;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
+
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +53,7 @@ public class HeaderController {
     @PostMapping("/addOrUpdate")
     public BaseResponse<Boolean> addOrUpdateHeader(@RequestBody BlogHeader blogHeader){
         String msg;
-        Integer id = blogHeader.getId();
+        Long id = blogHeader.getId();
         String route_name = blogHeader.getRoute_name();
 
         BlogHeader oneByPath = blogHeaderService.getOneByPath(route_name);

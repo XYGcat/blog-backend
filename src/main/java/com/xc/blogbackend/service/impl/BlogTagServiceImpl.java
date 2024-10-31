@@ -51,7 +51,7 @@ public class BlogTagServiceImpl extends ServiceImpl<BlogTagMapper, BlogTag>
         blogTagMapper.insert(blogTag);
 
         QueryWrapper<BlogTag> queryWrapper = new QueryWrapper<>();
-        Integer id = blogTag.getId();
+        Long id = blogTag.getId();
         BlogTag tag = blogTagMapper.selectById(id);
         return tag;
     }
@@ -104,7 +104,7 @@ public class BlogTagServiceImpl extends ServiceImpl<BlogTagMapper, BlogTag>
 
     @Override
     public Boolean deleteTags(List<Integer> idList) {
-        int batchIds = blogTagMapper.deleteBatchIds(idList);
+        int batchIds = blogTagMapper.deleteByIds(idList);
         return batchIds > 0;
     }
 }

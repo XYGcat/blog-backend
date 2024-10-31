@@ -78,7 +78,7 @@ public class CategoryController {
     @PutMapping("/update")
     public BaseResponse<Boolean> updateCategory(@RequestBody Map<String,Object> request){
         String categoryName = (String) request.get("category_name");
-        Integer id = (Integer) request.get("id");
+        Long id = (Long) request.get("id");
         Boolean aBoolean = blogCategoryService.updateCategory(id, categoryName);
         return ResultUtils.success(aBoolean,"修改分类成功");
     }
@@ -91,8 +91,8 @@ public class CategoryController {
      */
     @ApiOperation(value = "删除分类")
     @PostMapping("/delete")
-    public BaseResponse<Boolean> deleteCategories(@RequestBody Map<String,List<Integer>> request){
-        List<Integer> categoryIdList = request.get("categoryIdList");
+    public BaseResponse<Boolean> deleteCategories(@RequestBody Map<String,List<Long>> request){
+        List<Long> categoryIdList = request.get("categoryIdList");
         Boolean aBoolean = blogCategoryService.deleteCategories(categoryIdList);
         return ResultUtils.success(aBoolean,"删除分类成功");
     }

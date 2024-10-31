@@ -39,7 +39,7 @@ public interface BlogArticleService extends IService<BlogArticle> {
      * @param articleTitle
      * @return
      */
-    Boolean getArticleInfoByTitle(Integer id,String articleTitle);
+    Boolean getArticleInfoByTitle(Long id,String articleTitle);
 
     /**
      * 新增文章
@@ -55,7 +55,7 @@ public interface BlogArticleService extends IService<BlogArticle> {
      * @param articleId
      * @return
      */
-    BlogArticle getArticleById(Integer articleId);
+    BlogArticle getArticleById(Long articleId);
 
     /**
      * 根据文章id获取文章内容的图片链接
@@ -63,7 +63,7 @@ public interface BlogArticleService extends IService<BlogArticle> {
      * @param articleId
      * @return
      */
-    String getMdImgList(Integer articleId);
+    String getMdImgList(Long articleId);
 
     /**
      * 根据文章id获取文章信息
@@ -71,7 +71,7 @@ public interface BlogArticleService extends IService<BlogArticle> {
      * @param articleId
      * @return
      */
-    BlogArticle getArticle(Integer articleId);
+    BlogArticle getArticle(Long articleId);
 
     /**
      * 修改文章信息
@@ -87,7 +87,7 @@ public interface BlogArticleService extends IService<BlogArticle> {
      * @param articleId
      * @return
      */
-    String getArticleCoverById(Integer articleId);
+    String getArticleCoverById(Long articleId);
 
     /**
      * 公开或隐藏文章
@@ -96,7 +96,7 @@ public interface BlogArticleService extends IService<BlogArticle> {
      * @param status
      * @return
      */
-    Boolean toggleArticlePublic(Integer id,Integer status);
+    Boolean toggleArticlePublic(Long id,Integer status);
 
     /**
      * 恢复文章
@@ -104,7 +104,7 @@ public interface BlogArticleService extends IService<BlogArticle> {
      * @param id
      * @return
      */
-    Boolean revertArticle(Integer id);
+    Boolean revertArticle(Long id);
 
     /**
      * 修改文章置顶信息
@@ -113,7 +113,7 @@ public interface BlogArticleService extends IService<BlogArticle> {
      * @param isTop
      * @return
      */
-    Boolean updateTop(Integer id,Integer isTop);
+    Boolean updateTop(Long id,Integer isTop);
 
     /**
      * 删除文章
@@ -122,7 +122,7 @@ public interface BlogArticleService extends IService<BlogArticle> {
      * @param status
      * @return
      */
-    Boolean deleteArticle(Integer id,Integer status);
+    Boolean deleteArticle(Long id,Integer status);
 
     /**
      *博客前台获取文章列表
@@ -139,7 +139,7 @@ public interface BlogArticleService extends IService<BlogArticle> {
      * @param articleId 文章ID
      * @return  推荐文章列表
      */
-    RecommendResult getRecommendArticleById(Integer articleId);
+    RecommendResult getRecommendArticleById(Long articleId);
 
     /**
      * 时间轴
@@ -168,7 +168,7 @@ public interface BlogArticleService extends IService<BlogArticle> {
      * @param tagId
      * @return
      */
-    PageInfoResult<BlogArticle> getArticleListByTagId(Integer current,Integer size,Integer tagId);
+    PageInfoResult<BlogArticle> getArticleListByTagId(Integer current,Integer size,Long tagId);
 
     /**
      * 获取热门文章
@@ -191,7 +191,7 @@ public interface BlogArticleService extends IService<BlogArticle> {
      * @param id
      * @return
      */
-    Boolean articleLike(Integer id);
+    Boolean articleLike(Long id);
 
     /**
      * 取消文章点赞
@@ -199,7 +199,7 @@ public interface BlogArticleService extends IService<BlogArticle> {
      * @param id
      * @return
      */
-    Boolean cancelArticleLike(Integer id);
+    Boolean cancelArticleLike(Long id);
 
     /**
      * 文章增加阅读时长
@@ -208,6 +208,6 @@ public interface BlogArticleService extends IService<BlogArticle> {
      * @param duration
      * @return
      */
-    Boolean addReadingDuration(Integer id,Integer duration);
+    Boolean addReadingDuration(Long id,Integer duration);
 
 }

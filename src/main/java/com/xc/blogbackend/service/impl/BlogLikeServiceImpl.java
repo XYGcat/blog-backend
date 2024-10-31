@@ -24,7 +24,7 @@ public class BlogLikeServiceImpl extends ServiceImpl<BlogLikeMapper, BlogLike>
     private BlogLikeMapper blogLikeMapper;
 
     @Override
-    public Boolean getIsLikeByIdAndType(Integer forId, Integer type, Integer userId) {
+    public Boolean getIsLikeByIdAndType(Long forId, Integer type, Long userId) {
         QueryWrapper<BlogLike> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("for_id",forId)
                     .eq("type",type)
@@ -34,7 +34,7 @@ public class BlogLikeServiceImpl extends ServiceImpl<BlogLikeMapper, BlogLike>
     }
 
     @Override
-    public Boolean addLike(Integer forId, Integer type, Integer userId) {
+    public Boolean addLike(Long forId, Integer type, Long userId) {
         BlogLike blogLike = new BlogLike();
         blogLike.setForId(forId);
         blogLike.setUserId(userId);
@@ -44,7 +44,7 @@ public class BlogLikeServiceImpl extends ServiceImpl<BlogLikeMapper, BlogLike>
     }
 
     @Override
-    public Boolean cancelLike(Integer forId, Integer type, Integer userId) {
+    public Boolean cancelLike(Long forId, Integer type, Long userId) {
         QueryWrapper<BlogLike> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("for_id",forId);
         queryWrapper.eq("type",type);
