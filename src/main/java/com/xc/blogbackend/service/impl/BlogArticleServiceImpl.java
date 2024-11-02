@@ -227,15 +227,17 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
     @Override
     public BlogArticle getArticleById(Long articleId) {
         if (articleId == null) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR,"为空");
+            throw new BusinessException(ErrorCode.PARAMS_ERROR,"ID为空");
         }
         BlogArticle blogArticle = blogArticleMapper.selectById(articleId);
-        if (blogArticle != null) {
-            // 对浏览次数属性进行自增
-            blogArticle.setViewTimes(blogArticle.getViewTimes() + 1);
-            // 保存更新后的文章对象到数据库
-            blogArticleMapper.updateById(blogArticle);
+        if (ObjectUtil.isEmpty(blogArticle)) {
+            throw new BusinessException(ErrorCode.NULL_ERROR,"文章不存在");
         }
+        // 对浏览次数属性进行自增
+        blogArticle.setViewTimes(blogArticle.getViewTimes() + 1);
+        // 保存更新后的文章对象到数据库
+        blogArticleMapper.updateById(blogArticle);
+
         // 获取标签列表
         Map<String, Object> listByArticleId = blogArticleTagService.getTagListByArticleId(articleId);
         List<Long> tagIdList = (List<Long>) listByArticleId.get("tagIdList");

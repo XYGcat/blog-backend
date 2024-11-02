@@ -6,6 +6,7 @@ import com.xc.blogbackend.model.domain.request.CategoryReqDto;
 import com.xc.blogbackend.model.domain.result.PageInfoResult;
 
 import java.util.List;
+import java.util.Map;
 
 /**
 * @author XC
@@ -23,11 +24,11 @@ public interface BlogCategoryService extends IService<BlogCategory> {
     String getCategoryNameById(Long categoryId);
 
     /**
-     * 根据类型获取分类数据字典
+     * 根据参数获取分类数据字典
      *
      * @return
      */
-    List<BlogCategory> getCategoryDictionary(Integer type);
+    List<BlogCategory> getCategoryDictionary(Map<String,String> params);
 
     /**
      * 根据id或者分类名称获取分类信息

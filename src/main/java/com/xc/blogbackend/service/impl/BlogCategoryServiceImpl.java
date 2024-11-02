@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
 * @author XC
@@ -35,10 +37,13 @@ public class BlogCategoryServiceImpl extends ServiceImpl<BlogCategoryMapper, Blo
     }
 
     @Override
-    public List<BlogCategory> getCategoryDictionary(Integer type) {
+    public List<BlogCategory> getCategoryDictionary(Map<String,String> params) {
+        Integer categoryType = Integer.valueOf(params.get("categoryType"));
+        Integer level = Integer.valueOf(params.get("level"));
         QueryWrapper<BlogCategory> queryWrapper = new QueryWrapper<>();
         queryWrapper.select("id","category_name","category_type");
-        queryWrapper.eq("category_type",type);
+        Optional.ofNullable(categoryType).ifPresent(t -> queryWrapper.eq("category_type", t));
+        Optional.ofNullable(level).ifPresent(l -> queryWrapper.eq("level", l));
         List<BlogCategory> categories = blogCategoryMapper.selectList(queryWrapper);
         return categories;
     }

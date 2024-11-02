@@ -22,7 +22,7 @@ public class BgResource implements Serializable {
     /**
      * 分类ID
      */
-    private Integer categoryId;
+    private Long categoryId;
 
     /**
      * 网站名称

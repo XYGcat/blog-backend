@@ -32,10 +32,10 @@ public class CategoryController {
      *
      * @return
      */
-    @ApiOperation(value = "根据类型获取分类字典")
-    @GetMapping("/getCategoryDictionary/{type}")
-    public BaseResponse<List<BlogCategory>> getCategoryDictionary(@PathVariable Integer type){
-        List<BlogCategory> categoryDictionary = blogCategoryService.getCategoryDictionary(type);
+    @ApiOperation(value = "根据参数获取分类字典")
+    @GetMapping("/getCategoryDictionary")
+    public BaseResponse<List<BlogCategory>> getCategoryDictionary(@RequestParam Map<String,String> params){
+        List<BlogCategory> categoryDictionary = blogCategoryService.getCategoryDictionary(params);
         return ResultUtils.success(categoryDictionary);
     }
 

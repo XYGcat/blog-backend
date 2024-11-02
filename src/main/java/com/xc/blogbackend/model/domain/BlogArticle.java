@@ -54,7 +54,7 @@ public class BlogArticle implements Serializable {
     /**
      * 文章内容中的图片链接
      */
-    @TableField(value = "mdImgList")
+    @TableField(value = "md_img_list")
     private String mdImgList;
 
     /**
