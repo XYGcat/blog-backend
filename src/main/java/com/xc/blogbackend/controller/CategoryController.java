@@ -2,9 +2,10 @@ package com.xc.blogbackend.controller;
 
 import com.xc.blogbackend.common.BaseResponse;
 import com.xc.blogbackend.common.ResultUtils;
-import com.xc.blogbackend.model.domain.BlogCategory;
-import com.xc.blogbackend.model.domain.request.CategoryReqDto;
-import com.xc.blogbackend.model.domain.result.PageInfoResult;
+import com.xc.blogbackend.model.domain.entity.BlogCategory;
+import com.xc.blogbackend.model.domain.reqDto.CategoryReqDto;
+import com.xc.blogbackend.model.domain.resDto.CategoryResDto;
+import com.xc.blogbackend.model.domain.resDto.PageInfoResult;
 import com.xc.blogbackend.service.BlogCategoryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,8 +35,8 @@ public class CategoryController {
      */
     @ApiOperation(value = "根据参数获取分类字典")
     @GetMapping("/getCategoryDictionary")
-    public BaseResponse<List<BlogCategory>> getCategoryDictionary(@RequestParam Map<String,String> params){
-        List<BlogCategory> categoryDictionary = blogCategoryService.getCategoryDictionary(params);
+    public BaseResponse<List<CategoryResDto>> getCategoryDictionary(@RequestParam Map<String,String> params){
+        List<CategoryResDto> categoryDictionary = blogCategoryService.getCategoryDictionary(params);
         return ResultUtils.success(categoryDictionary);
     }
 

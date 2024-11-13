@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qiniu.common.QiniuException;
 import com.xc.blogbackend.mapper.BlogHeaderMapper;
-import com.xc.blogbackend.model.domain.BlogHeader;
+import com.xc.blogbackend.model.domain.entity.BlogHeader;
 import com.xc.blogbackend.service.BlogHeaderService;
 import com.xc.blogbackend.utils.Qiniu;
 import com.xc.blogbackend.utils.StringManipulation;

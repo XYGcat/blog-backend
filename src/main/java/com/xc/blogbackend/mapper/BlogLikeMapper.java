@@ -1,7 +1,7 @@
 package com.xc.blogbackend.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.xc.blogbackend.model.domain.BlogLike;
+import com.xc.blogbackend.model.domain.entity.BlogLike;
 
 /**
 * @author XC

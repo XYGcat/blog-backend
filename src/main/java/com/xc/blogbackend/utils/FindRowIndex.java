@@ -1,6 +1,6 @@
 package com.xc.blogbackend.utils;
 
-import com.xc.blogbackend.model.domain.BlogTalk;
+import com.xc.blogbackend.model.domain.entity.BlogTalk;
 
 import java.util.List;
 import java.util.Objects;

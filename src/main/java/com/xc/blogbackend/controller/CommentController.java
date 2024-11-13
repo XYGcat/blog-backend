@@ -2,8 +2,8 @@ package com.xc.blogbackend.controller;
 
 import com.xc.blogbackend.common.BaseResponse;
 import com.xc.blogbackend.common.ResultUtils;
-import com.xc.blogbackend.model.domain.BlogComment;
-import com.xc.blogbackend.model.domain.result.PageInfoResult;
+import com.xc.blogbackend.model.domain.entity.BlogComment;
+import com.xc.blogbackend.model.domain.resDto.PageInfoResult;
 import com.xc.blogbackend.service.BlogCommentService;
 import com.xc.blogbackend.service.BlogNotifyService;
 import com.xc.blogbackend.utils.CurrentTypeName;

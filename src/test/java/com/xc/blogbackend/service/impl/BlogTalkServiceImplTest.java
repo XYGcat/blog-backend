@@ -2,8 +2,8 @@ package com.xc.blogbackend.service.impl;
 
 import com.xc.blogbackend.mapper.BlogTalkMapper;
 import com.xc.blogbackend.mapper.BlogUserMapper;
-import com.xc.blogbackend.model.domain.BlogTalk;
-import com.xc.blogbackend.model.domain.BlogUser;
+import com.xc.blogbackend.model.domain.entity.BlogTalk;
+import com.xc.blogbackend.model.domain.entity.BlogUser;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 

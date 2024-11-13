@@ -1,7 +1,7 @@
 package com.xc.blogbackend.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.xc.blogbackend.model.domain.BlogRecommend;
+import com.xc.blogbackend.model.domain.entity.BlogRecommend;
 
 /**
 * @author XC

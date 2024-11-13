@@ -1,9 +1,9 @@
 package com.xc.blogbackend.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.xc.blogbackend.model.domain.BlogLinks;
-import com.xc.blogbackend.model.domain.request.PageRequest;
-import com.xc.blogbackend.model.domain.result.PageInfoResult;
+import com.xc.blogbackend.model.domain.entity.BlogLinks;
+import com.xc.blogbackend.model.domain.reqDto.PageRequest;
+import com.xc.blogbackend.model.domain.resDto.PageInfoResult;
 
 import java.util.List;
 import java.util.Map;

@@ -1,7 +1,7 @@
 package com.xc.blogbackend.handler;
 
 import com.xc.blogbackend.exception.BusinessException;
-import com.xc.blogbackend.model.domain.BlogUser;
+import com.xc.blogbackend.model.domain.entity.BlogUser;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 

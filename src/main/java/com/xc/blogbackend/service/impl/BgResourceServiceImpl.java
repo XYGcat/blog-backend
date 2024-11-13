@@ -3,7 +3,7 @@ package com.xc.blogbackend.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xc.blogbackend.mapper.BgResourceMapper;
-import com.xc.blogbackend.model.domain.BgResource;
+import com.xc.blogbackend.model.domain.entity.BgResource;
 import com.xc.blogbackend.service.BgResourceService;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +23,7 @@ public class BgResourceServiceImpl extends ServiceImpl<BgResourceMapper, BgResou
     private BgResourceMapper bgResourceMapper;
 
     @Override
-    public List<BgResource> getSiteToCategory(Integer categoryId) {
+    public List<BgResource> getSiteToCategory(Long categoryId) {
         QueryWrapper<BgResource> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("category_id",categoryId);
         List<BgResource> bgResources = bgResourceMapper.selectList(queryWrapper);

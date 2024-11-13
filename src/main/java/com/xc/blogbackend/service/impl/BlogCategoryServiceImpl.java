@@ -1,14 +1,17 @@
 package com.xc.blogbackend.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xc.blogbackend.mapper.BlogCategoryMapper;
-import com.xc.blogbackend.model.domain.BlogCategory;
-import com.xc.blogbackend.model.domain.request.CategoryReqDto;
-import com.xc.blogbackend.model.domain.result.PageInfoResult;
+import com.xc.blogbackend.model.domain.entity.BlogCategory;
+import com.xc.blogbackend.model.domain.reqDto.CategoryReqDto;
+import com.xc.blogbackend.model.domain.resDto.CategoryResDto;
+import com.xc.blogbackend.model.domain.resDto.PageInfoResult;
 import com.xc.blogbackend.service.BlogCategoryService;
+import com.xc.blogbackend.utils.PropertyCopyUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +19,7 @@ import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
 * @author XC
@@ -37,15 +41,33 @@ public class BlogCategoryServiceImpl extends ServiceImpl<BlogCategoryMapper, Blo
     }
 
     @Override
-    public List<BlogCategory> getCategoryDictionary(Map<String,String> params) {
+    public List<CategoryResDto> getCategoryDictionary(Map<String,String> params) {
         Integer categoryType = Integer.valueOf(params.get("categoryType"));
         Integer level = Integer.valueOf(params.get("level"));
         QueryWrapper<BlogCategory> queryWrapper = new QueryWrapper<>();
         queryWrapper.select("id","category_name","category_type");
+        queryWrapper.orderByAsc("sort");
+        // 根据参数进行查询条件设置
         Optional.ofNullable(categoryType).ifPresent(t -> queryWrapper.eq("category_type", t));
         Optional.ofNullable(level).ifPresent(l -> queryWrapper.eq("level", l));
+
         List<BlogCategory> categories = blogCategoryMapper.selectList(queryWrapper);
-        return categories;
+        // 将查询结果转换为CategoryResDto
+        List<CategoryResDto> categoryResDtos = PropertyCopyUtils.copyProperties(categories, CategoryResDto.class);
+        // 获取子分类
+        List<Long> categoryIdList = categoryResDtos.stream().map(CategoryResDto::getId).collect(Collectors.toList());
+        List<CategoryResDto> subCategoryList = getSubCategoryList(categoryIdList);
+        Map<Long, List<CategoryResDto>> parentIdList = subCategoryList.stream()
+                .collect(Collectors.groupingBy(CategoryResDto::getParentId));
+        // 设置子分类
+        categoryResDtos.forEach(categoryResDto -> {
+            List<CategoryResDto> subCategory = parentIdList.get(categoryResDto.getId());
+            if (CollUtil.isNotEmpty(subCategory)){
+                categoryResDto.setSubCategoryList(subCategory);
+            }
+        });
+
+        return categoryResDtos;
     }
 
     @Override
@@ -124,6 +146,19 @@ public class BlogCategoryServiceImpl extends ServiceImpl<BlogCategoryMapper, Blo
     public Boolean deleteCategories(List<Long> idList) {
         int batchIds = blogCategoryMapper.deleteByIds(idList);
         return batchIds > 0;
+    }
+
+    @Override
+    public List<CategoryResDto> getSubCategoryList(List<Long> categoryIdList) {
+        QueryWrapper<BlogCategory> queryWrapper = new QueryWrapper<>();
+        queryWrapper.in("parent_id", categoryIdList);
+        queryWrapper.orderByAsc("sort");
+        List<BlogCategory> subCategories = blogCategoryMapper.selectList(queryWrapper);
+
+        // 将BlogCategory转换为CategoryResDto
+        List<CategoryResDto> categoryResDtos = PropertyCopyUtils.copyProperties(subCategories, CategoryResDto.class);
+
+        return categoryResDtos;
     }
 }
 

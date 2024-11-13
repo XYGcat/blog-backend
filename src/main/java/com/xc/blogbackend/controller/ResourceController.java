@@ -2,7 +2,7 @@ package com.xc.blogbackend.controller;
 
 import com.xc.blogbackend.common.BaseResponse;
 import com.xc.blogbackend.common.ResultUtils;
-import com.xc.blogbackend.model.domain.BgResource;
+import com.xc.blogbackend.model.domain.entity.BgResource;
 import com.xc.blogbackend.service.BgResourceService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,7 +30,7 @@ public class ResourceController {
      */
     @ApiOperation(value = "根据分类获取站点")
     @GetMapping("/sites/{categoryId}")
-    public BaseResponse<List<BgResource>> getSiteToCategory(@PathVariable Integer categoryId) {
+    public BaseResponse<List<BgResource>> getSiteToCategory(@PathVariable Long categoryId) {
         List<BgResource> bgResourceList = bgResourceService.getSiteToCategory(categoryId);
         return ResultUtils.success(bgResourceList);
     }

@@ -1,6 +1,6 @@
 package com.xc.blogbackend.service;
 
-import com.xc.blogbackend.model.domain.BlogUser;
+import com.xc.blogbackend.model.domain.entity.BlogUser;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

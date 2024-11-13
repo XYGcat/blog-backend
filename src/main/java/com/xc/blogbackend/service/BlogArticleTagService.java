@@ -1,7 +1,7 @@
 package com.xc.blogbackend.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.xc.blogbackend.model.domain.BlogArticleTag;
+import com.xc.blogbackend.model.domain.entity.BlogArticleTag;
 
 import java.util.List;
 import java.util.Map;

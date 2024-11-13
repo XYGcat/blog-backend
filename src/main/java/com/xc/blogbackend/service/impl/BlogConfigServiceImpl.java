@@ -3,7 +3,7 @@ package com.xc.blogbackend.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xc.blogbackend.mapper.BlogConfigMapper;
-import com.xc.blogbackend.model.domain.BlogConfig;
+import com.xc.blogbackend.model.domain.entity.BlogConfig;
 import com.xc.blogbackend.service.BlogConfigService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

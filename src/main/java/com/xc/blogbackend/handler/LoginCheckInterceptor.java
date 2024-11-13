@@ -2,10 +2,11 @@ package com.xc.blogbackend.handler;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.xc.blogbackend.exception.BusinessException;
-import com.xc.blogbackend.model.domain.BlogUser;
+import com.xc.blogbackend.model.domain.entity.BlogUser;
 import com.xc.blogbackend.utils.JwtGenerator;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -19,7 +20,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
     // 进入controller层之前拦截请求
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-//        String requestURI = request.getRequestURI();
+//        String requestURI = reqDto.getRequestURI();
 //
 //        // 排除特定的请求路径，比如 "/api/user/login"
 //        if (loginExcludedPaths.stream().anyMatch(requestURI::contains)) {

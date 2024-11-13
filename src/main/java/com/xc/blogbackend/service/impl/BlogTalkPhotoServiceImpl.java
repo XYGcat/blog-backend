@@ -3,7 +3,7 @@ package com.xc.blogbackend.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xc.blogbackend.mapper.BlogTalkPhotoMapper;
-import com.xc.blogbackend.model.domain.BlogTalkPhoto;
+import com.xc.blogbackend.model.domain.entity.BlogTalkPhoto;
 import com.xc.blogbackend.service.BlogTalkPhotoService;
 import com.xc.blogbackend.utils.Qiniu;
 import com.xc.blogbackend.utils.StringManipulation;

@@ -4,6 +4,9 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 属性复制工具类
+ */
 public class PropertyCopyUtils {
 
     /**
@@ -18,7 +21,6 @@ public class PropertyCopyUtils {
         if (source == null || targetClass == null) {
             throw new RuntimeException("Source and target class cannot be null");
         }
-
         try {
             // 创建目标对象实例
             T target = targetClass.getDeclaredConstructor().newInstance();
@@ -32,10 +34,8 @@ public class PropertyCopyUtils {
                 if ("serialVersionUID".equals(sourceField.getName())) {
                     continue;
                 }
-
                 // 设置源字段为可访问，允许访问私有字段
                 sourceField.setAccessible(true);
-
                 // 试图在目标对象中找到与源字段同名的字段
                 try {
                     Field targetField = targetClass.getDeclaredField(sourceField.getName());

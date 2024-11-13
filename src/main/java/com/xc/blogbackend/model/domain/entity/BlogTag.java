@@ -1,0 +1,50 @@
+package com.xc.blogbackend.model.domain.entity;
+
+import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
+
+/**
+ * 
+ * @TableName bg_tag
+ */
+@TableName(value ="bg_tag")
+@Data
+public class BlogTag implements Serializable {
+    /**
+     * 
+     */
+    @TableId(type = IdType.ASSIGN_ID)
+    private Long id;
+
+    /**
+     * 标签名称 唯一
+     */
+    @TableField(value = "tag_name")
+    private String tagName;
+
+    /**
+     * 标签类型（1：文章；2：资源导航）
+     */
+    private Integer tagType;
+
+    /**
+     * 创建时间，插入时自动填充
+     */
+    @TableField(fill = FieldFill.INSERT)
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+    private LocalDateTime createdAt;
+
+    /**
+     * 更新时间，插入和更新时自动填充
+     */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+    private LocalDateTime updatedAt;
+
+    @TableField(exist = false)
+    private static final long serialVersionUID = 1L;
+}

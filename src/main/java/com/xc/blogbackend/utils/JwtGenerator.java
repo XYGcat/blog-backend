@@ -1,6 +1,6 @@
 package com.xc.blogbackend.utils;
 
-import com.xc.blogbackend.model.domain.BlogUser;
+import com.xc.blogbackend.model.domain.entity.BlogUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;

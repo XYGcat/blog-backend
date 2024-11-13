@@ -2,9 +2,9 @@ package com.xc.blogbackend.controller;
 
 import com.xc.blogbackend.common.BaseResponse;
 import com.xc.blogbackend.common.ResultUtils;
-import com.xc.blogbackend.model.domain.BlogMessage;
-import com.xc.blogbackend.model.domain.request.PageRequest;
-import com.xc.blogbackend.model.domain.result.PageInfoResult;
+import com.xc.blogbackend.model.domain.entity.BlogMessage;
+import com.xc.blogbackend.model.domain.reqDto.PageRequest;
+import com.xc.blogbackend.model.domain.resDto.PageInfoResult;
 import com.xc.blogbackend.service.BlogMessageService;
 import com.xc.blogbackend.service.BlogNotifyService;
 import com.xc.blogbackend.utils.RandomUsernameGenerator;

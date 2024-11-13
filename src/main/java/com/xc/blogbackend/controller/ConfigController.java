@@ -5,7 +5,7 @@ import com.xc.blogbackend.common.BaseResponse;
 import com.xc.blogbackend.common.ErrorCode;
 import com.xc.blogbackend.common.ResultUtils;
 import com.xc.blogbackend.exception.BusinessException;
-import com.xc.blogbackend.model.domain.BlogConfig;
+import com.xc.blogbackend.model.domain.entity.BlogConfig;
 import com.xc.blogbackend.service.BlogConfigService;
 import com.xc.blogbackend.utils.Qiniu;
 import com.xc.blogbackend.utils.StringManipulation;

@@ -1,8 +1,8 @@
 package com.xc.blogbackend.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.xc.blogbackend.model.domain.BlogRecommend;
 import com.xc.blogbackend.mapper.BlogRecommendMapper;
+import com.xc.blogbackend.model.domain.entity.BlogRecommend;
 import com.xc.blogbackend.service.BlogRecommendService;
 import org.springframework.stereotype.Service;
 

@@ -1,0 +1,57 @@
+package com.xc.blogbackend.model.domain.entity;
+
+import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
+
+/**
+ * 
+ * @TableName bg_like
+ */
+@TableName(value ="bg_like")
+@Data
+public class BlogLike implements Serializable {
+    /**
+     * 
+     */
+    @TableId(type = IdType.ASSIGN_ID)
+    private Long id;
+
+    /**
+     * 点赞类型 1 文章 2 说说 3 留言 4 评论
+     */
+    @TableField(value = "type")
+    private Integer type;
+
+    /**
+     * 点赞的id 文章id 说说id 留言id
+     */
+    @TableField(value = "for_id")
+    private Long forId;
+
+    /**
+     * 点赞用户id
+     */
+    @TableField(value = "user_id")
+    private Long userId;
+
+    /**
+     * 创建时间，插入时自动填充
+     */
+    @TableField(fill = FieldFill.INSERT)
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+    private LocalDateTime createdAt;
+
+    /**
+     * 更新时间，插入和更新时自动填充
+     */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+    private LocalDateTime updatedAt;
+
+    @TableField(exist = false)
+    private static final long serialVersionUID = 1L;
+}

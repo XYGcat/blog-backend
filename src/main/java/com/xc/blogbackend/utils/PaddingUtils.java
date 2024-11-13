@@ -1,7 +1,7 @@
 package com.xc.blogbackend.utils;
 
-import com.xc.blogbackend.model.domain.BlogArticle;
-import com.xc.blogbackend.model.domain.request.UpdateArticleRequest;
+import com.xc.blogbackend.model.domain.entity.BlogArticle;
+import com.xc.blogbackend.model.domain.reqDto.UpdateArticleRequest;
 
 /**
  * 填充实体类属性

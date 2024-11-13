@@ -1,13 +1,13 @@
 package com.xc.blogbackend.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.xc.blogbackend.model.domain.BlogArticle;
-import com.xc.blogbackend.model.domain.request.ArticleRequest;
-import com.xc.blogbackend.model.domain.request.UpdateArticleRequest;
-import com.xc.blogbackend.model.domain.result.ArticleListByContent;
-import com.xc.blogbackend.model.domain.result.ArticleResDto;
-import com.xc.blogbackend.model.domain.result.PageInfoResult;
-import com.xc.blogbackend.model.domain.result.RecommendResult;
+import com.xc.blogbackend.model.domain.entity.BlogArticle;
+import com.xc.blogbackend.model.domain.reqDto.ArticleRequest;
+import com.xc.blogbackend.model.domain.reqDto.UpdateArticleRequest;
+import com.xc.blogbackend.model.domain.resDto.ArticleListByContent;
+import com.xc.blogbackend.model.domain.resDto.ArticleResDto;
+import com.xc.blogbackend.model.domain.resDto.PageInfoResult;
+import com.xc.blogbackend.model.domain.resDto.RecommendResult;
 
 import java.util.List;
 

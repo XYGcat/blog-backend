@@ -2,10 +2,10 @@ package com.xc.blogbackend.controller;
 
 import com.xc.blogbackend.common.BaseResponse;
 import com.xc.blogbackend.common.ResultUtils;
-import com.xc.blogbackend.model.domain.BlogLinks;
-import com.xc.blogbackend.model.domain.BlogNotify;
-import com.xc.blogbackend.model.domain.request.PageRequest;
-import com.xc.blogbackend.model.domain.result.PageInfoResult;
+import com.xc.blogbackend.model.domain.entity.BlogLinks;
+import com.xc.blogbackend.model.domain.entity.BlogNotify;
+import com.xc.blogbackend.model.domain.reqDto.PageRequest;
+import com.xc.blogbackend.model.domain.resDto.PageInfoResult;
 import com.xc.blogbackend.service.BlogLinksService;
 import com.xc.blogbackend.service.BlogNotifyService;
 import io.swagger.annotations.Api;

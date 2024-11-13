@@ -1,7 +1,7 @@
 package com.xc.blogbackend.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.xc.blogbackend.model.domain.BgResource;
+import com.xc.blogbackend.model.domain.entity.BgResource;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ public interface BgResourceService extends IService<BgResource> {
      * @param categoryId
      * @return
      */
-    List<BgResource> getSiteToCategory(Integer categoryId);
+    List<BgResource> getSiteToCategory(Long categoryId);
 
     /**
      * 添加站点

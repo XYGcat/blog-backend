@@ -4,9 +4,9 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xc.blogbackend.mapper.BlogHeaderMapper">
 
-    <resultMap id="BaseResultMap" type="com.xc.blogbackend.model.domain.BlogHeader">
+    <resultMap id="BaseResultMap" type="com.xc.blogbackend.model.domain.entity.BlogHeader">
             <id property="id" column="id" jdbcType="INTEGER"/>
-            <result property="bg_url" column="bg_url" jdbcType="VARCHAR"/>
+            <result property="bgUrl" column="bg_url" jdbcType="VARCHAR"/>
             <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
             <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
             <result property="route_name" column="route_name" jdbcType="VARCHAR"/>

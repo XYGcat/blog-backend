@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xc.blogbackend.mapper.BlogConfigMapper">
 
-    <resultMap id="BaseResultMap" type="com.xc.blogbackend.model.domain.BlogConfig">
+    <resultMap id="BaseResultMap" type="com.xc.blogbackend.model.domain.entity.BlogConfig">
             <id property="id" column="id" jdbcType="INTEGER"/>
             <result property="bgName" column="bg_name" jdbcType="VARCHAR"/>
             <result property="bgAvatar" column="bg_avatar" jdbcType="VARCHAR"/>

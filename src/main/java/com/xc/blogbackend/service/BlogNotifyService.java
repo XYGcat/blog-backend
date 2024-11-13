@@ -1,8 +1,8 @@
 package com.xc.blogbackend.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.xc.blogbackend.model.domain.BlogNotify;
-import com.xc.blogbackend.model.domain.result.PageInfoResult;
+import com.xc.blogbackend.model.domain.entity.BlogNotify;
+import com.xc.blogbackend.model.domain.resDto.PageInfoResult;
 
 /**
 * @author XC

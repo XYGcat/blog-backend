@@ -2,7 +2,7 @@ package com.xc.blogbackend.controller;
 
 import com.xc.blogbackend.common.BaseResponse;
 import com.xc.blogbackend.common.ResultUtils;
-import com.xc.blogbackend.model.domain.result.StatisticResult;
+import com.xc.blogbackend.model.domain.resDto.StatisticResult;
 import com.xc.blogbackend.service.BlogArticleService;
 import com.xc.blogbackend.service.BlogCategoryService;
 import com.xc.blogbackend.service.BlogTagService;

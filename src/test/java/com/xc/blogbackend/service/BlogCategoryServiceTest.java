@@ -1,6 +1,6 @@
 package com.xc.blogbackend.service;
 
-import com.xc.blogbackend.model.domain.BlogCategory;
+import com.xc.blogbackend.model.domain.entity.BlogCategory;
 import com.xc.blogbackend.service.impl.BlogCategoryServiceImpl;
 import org.junit.jupiter.api.Test;
 

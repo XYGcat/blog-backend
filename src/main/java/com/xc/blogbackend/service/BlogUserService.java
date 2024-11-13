@@ -1,8 +1,8 @@
 package com.xc.blogbackend.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.xc.blogbackend.model.domain.BlogUser;
-import com.xc.blogbackend.model.domain.result.PageInfoResult;
+import com.xc.blogbackend.model.domain.entity.BlogUser;
+import com.xc.blogbackend.model.domain.resDto.PageInfoResult;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;

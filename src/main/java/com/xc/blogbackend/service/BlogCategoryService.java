@@ -1,9 +1,10 @@
 package com.xc.blogbackend.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.xc.blogbackend.model.domain.BlogCategory;
-import com.xc.blogbackend.model.domain.request.CategoryReqDto;
-import com.xc.blogbackend.model.domain.result.PageInfoResult;
+import com.xc.blogbackend.model.domain.entity.BlogCategory;
+import com.xc.blogbackend.model.domain.reqDto.CategoryReqDto;
+import com.xc.blogbackend.model.domain.resDto.CategoryResDto;
+import com.xc.blogbackend.model.domain.resDto.PageInfoResult;
 
 import java.util.List;
 import java.util.Map;
@@ -28,7 +29,7 @@ public interface BlogCategoryService extends IService<BlogCategory> {
      *
      * @return
      */
-    List<BlogCategory> getCategoryDictionary(Map<String,String> params);
+    List<CategoryResDto> getCategoryDictionary(Map<String,String> params);
 
     /**
      * 根据id或者分类名称获取分类信息
@@ -79,4 +80,12 @@ public interface BlogCategoryService extends IService<BlogCategory> {
      * @return
      */
     Boolean deleteCategories(List<Long> idList);
+
+    /**
+     * 获取子分类
+     *
+     * @param categoryIdList
+     * @return
+     */
+    List<CategoryResDto> getSubCategoryList(List<Long> categoryIdList);
 }
