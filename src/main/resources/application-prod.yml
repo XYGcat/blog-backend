@@ -2,8 +2,8 @@ spring:
   # DataSource Config
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://47.96.141.111:3306/blog
-    username: xc
+    url: jdbc:mysql://www.xcstardust.com:3306/blog
+    username: root
     password: 318807
 
 logging:

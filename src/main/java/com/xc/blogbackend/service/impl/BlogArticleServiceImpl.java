@@ -276,9 +276,8 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
     @Transactional(rollbackFor = Exception.class)  //Spring 的事务管理，如果发生异常，会自动回滚事务
     public Boolean updateArticle(UpdateArticleRequest request) {
         // 提取前端传入的数据
-        UpdateArticleRequest.ArticleDate requestArticle = request.getArticle();
-        List<BlogTag> tagList = requestArticle.getTagList();
-        BlogCategory category = requestArticle.getCategory();
+        List<BlogTag> tagList = request.getTagList();
+        BlogCategory category = request.getCategory();
 
         // 转换为BlogArticle对象
         BlogArticle articleRest = PaddingUtils.mapToBlogArticle(request);
@@ -298,7 +297,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
 
         // 监测文章内容中图片链接的变化，以此删除七牛云图片
         List<String> oldMdImgList = new ArrayList<>();
-        List<String> newMdImgList = requestArticle.getMdImgList();
+        List<String> newMdImgList = request.getMdImgList();
         String oldMdImg = oldArticle.getMdImgList();
 
         // 判断旧文章图片链接是否为空

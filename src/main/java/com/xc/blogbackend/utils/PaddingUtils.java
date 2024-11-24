@@ -11,27 +11,26 @@ import com.xc.blogbackend.model.domain.reqDto.UpdateArticleRequest;
 public class PaddingUtils {
     public static BlogArticle mapToBlogArticle(UpdateArticleRequest updateArticleRequest) {
         BlogArticle blogArticle = new BlogArticle();
-        UpdateArticleRequest.ArticleDate articleDate = updateArticleRequest.getArticle();
 
-        String mdImgList = String.valueOf(articleDate.getMdImgList());
+        String mdImgList = String.valueOf(updateArticleRequest.getMdImgList());
 
-        blogArticle.setId(articleDate.getId());
-        blogArticle.setArticleTitle(articleDate.getArticleTitle());
-        blogArticle.setAuthorId(articleDate.getAuthorId());
-        blogArticle.setCategoryId(articleDate.getCategory().getId()); // 可能需要进一步处理
-        blogArticle.setArticleContent(articleDate.getArticleContent());
-        blogArticle.setArticleCover(articleDate.getArticleCover());
-        blogArticle.setIsTop(articleDate.getIsTop());
-        blogArticle.setStatus(articleDate.getStatus());
-        blogArticle.setType(articleDate.getType());
-        blogArticle.setOriginUrl(articleDate.getOriginUrl());
-//        blogArticle.setCreatedAt(articleDate.getCreatedAt());
-//        blogArticle.setUpdatedAt(articleDate.getUpdatedAt());
-        blogArticle.setViewTimes(articleDate.getViewTimes());
-        blogArticle.setArticleDescription(articleDate.getArticleDescription());
-        blogArticle.setThumbsUpTimes(articleDate.getThumbsUpTimes());
-        blogArticle.setReadingDuration(articleDate.getReadingDuration());
-        blogArticle.setArticleOrder(articleDate.getArticleOrder());
+        blogArticle.setId(updateArticleRequest.getId());
+        blogArticle.setArticleTitle(updateArticleRequest.getArticleTitle());
+        blogArticle.setAuthorId(updateArticleRequest.getAuthorId());
+        blogArticle.setCategoryId(updateArticleRequest.getCategory().getId()); // 可能需要进一步处理
+        blogArticle.setArticleContent(updateArticleRequest.getArticleContent());
+        blogArticle.setArticleCover(updateArticleRequest.getArticleCover());
+        blogArticle.setIsTop(updateArticleRequest.getIsTop());
+        blogArticle.setStatus(updateArticleRequest.getStatus());
+        blogArticle.setType(updateArticleRequest.getType());
+        blogArticle.setOriginUrl(updateArticleRequest.getOriginUrl());
+//        blogArticle.setCreatedAt(updateArticleRequest.getCreatedAt());
+//        blogArticle.setUpdatedAt(updateArticleRequest.getUpdatedAt());
+        blogArticle.setViewTimes(updateArticleRequest.getViewTimes());
+        blogArticle.setArticleDescription(updateArticleRequest.getArticleDescription());
+        blogArticle.setThumbsUpTimes(updateArticleRequest.getThumbsUpTimes());
+        blogArticle.setReadingDuration(updateArticleRequest.getReadingDuration());
+        blogArticle.setArticleOrder(updateArticleRequest.getArticleOrder());
         blogArticle.setMdImgList(mdImgList);
 
         // 其他属性的设置

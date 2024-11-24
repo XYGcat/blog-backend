@@ -8,16 +8,16 @@ package com.xc.blogbackend.common;
 public class ResultUtils {
     /**
      * 成功
-     * @param result
+     * @param data
      * @return
      * @param <T>
      */
-    public static <T> BaseResponse<T> success(T result){
-        return new BaseResponse<>(0,result,"OK");
+    public static <T> BaseResponse<T> success(T data){
+        return new BaseResponse<>(0,data,"OK");
     }
 
-    public static <T> BaseResponse<T> success(T result, String message){
-        return new BaseResponse<>(0,result,message);
+    public static <T> BaseResponse<T> success(T data, String message){
+        return new BaseResponse<>(0,data,message);
     }
 
     /**

@@ -37,7 +37,7 @@ public class ConfigController {
      * @return
      */
     @ApiOperation(value = "获取网站设置")
-    @GetMapping("/getdata")
+    @GetMapping("/getSiteConfig")
     public BaseResponse<BlogConfig> getConfig(){
         BlogConfig config = blogConfigService.getConfig();
 
