@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xc.blogbackend.mapper.BgMenuMapper">
+
+    <resultMap id="BaseResultMap" type="com.xc.blogbackend.model.domain.entity.BgMenu">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="menu_code" column="menu_code" jdbcType="VARCHAR"/>
+            <result property="parent_id" column="parent_id" jdbcType="BIGINT"/>
+            <result property="node_type" column="node_type" jdbcType="TINYINT"/>
+            <result property="icon_url" column="icon_url" jdbcType="VARCHAR"/>
+            <result property="sort" column="sort" jdbcType="INTEGER"/>
+            <result property="link_url" column="link_url" jdbcType="VARCHAR"/>
+            <result property="level" column="level" jdbcType="INTEGER"/>
+            <result property="path" column="path" jdbcType="VARCHAR"/>
+            <result property="is_delete" column="is_delete" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,name,menu_code,
+        parent_id,node_type,icon_url,
+        sort,link_url,level,
+        path,is_delete
+    </sql>
+</mapper>
