@@ -599,7 +599,7 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
         // 获取分页数据
         List<BlogArticle> rows = articlePage.getRecords();
         // 将属性拷贝到ArticleResDto
-        List<ArticleResDto> articleResDtos = PropertyCopyUtils.copyProperties(rows, ArticleResDto.class);
+        List<ArticleResDto> articleResDtos = FieldCopyUtils.copyProperties(rows, ArticleResDto.class);
         // 获取通知总数
         long count = articlePage.getTotal();
 

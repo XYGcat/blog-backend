@@ -12,7 +12,7 @@ import com.xc.blogbackend.model.domain.reqDto.CategoryReqDto;
 import com.xc.blogbackend.model.domain.resDto.CategoryResDto;
 import com.xc.blogbackend.model.domain.resDto.PageInfoResult;
 import com.xc.blogbackend.service.BlogCategoryService;
-import com.xc.blogbackend.utils.PropertyCopyUtils;
+import com.xc.blogbackend.utils.FieldCopyUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -57,7 +57,7 @@ public class BlogCategoryServiceImpl extends ServiceImpl<BlogCategoryMapper, Blo
 
         List<BlogCategory> categories = blogCategoryMapper.selectList(queryWrapper);
         // 将查询结果转换为CategoryResDto
-        List<CategoryResDto> categoryResDtos = PropertyCopyUtils.copyProperties(categories, CategoryResDto.class);
+        List<CategoryResDto> categoryResDtos = FieldCopyUtils.copyProperties(categories, CategoryResDto.class);
         // 获取子分类
         List<Long> categoryIdList = categoryResDtos.stream().map(CategoryResDto::getId).collect(Collectors.toList());
         List<CategoryResDto> subCategoryList = getSubCategoryList(categoryIdList);
@@ -160,7 +160,7 @@ public class BlogCategoryServiceImpl extends ServiceImpl<BlogCategoryMapper, Blo
         List<BlogCategory> subCategories = blogCategoryMapper.selectList(queryWrapper);
 
         // 将BlogCategory转换为CategoryResDto
-        List<CategoryResDto> categoryResDtos = PropertyCopyUtils.copyProperties(subCategories, CategoryResDto.class);
+        List<CategoryResDto> categoryResDtos = FieldCopyUtils.copyProperties(subCategories, CategoryResDto.class);
 
         return categoryResDtos;
     }

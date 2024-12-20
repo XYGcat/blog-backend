@@ -1,24 +1,22 @@
-package com.xc.blogbackend.model.domain.entity;
+package com.xc.blogbackend.model.domain.vo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.util.List;
 
-/**
- * 菜单表
- * @TableName bg_menu
- */
-@TableName(value ="bg_menu")
 @Data
-public class BgMenu implements Serializable {
+@EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
+public class MenuVo implements Serializable {
+
+    private static final long serialVersionUID = 4878699844365669050L;
+
     /**
      * 主键
      */
-    @TableId(type = IdType.ASSIGN_ID)
     private Long id;
 
     /**
@@ -67,10 +65,7 @@ public class BgMenu implements Serializable {
     private String path;
 
     /**
-     * 是否删除 1：已删除；0：未删除
+     * 子菜单集合
      */
-    private Integer isDelete;
-
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
+    List<MenuVo> childMenu;
 }

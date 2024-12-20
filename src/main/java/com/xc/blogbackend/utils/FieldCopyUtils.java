@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 属性复制工具类
+ * 字段复制工具类
  */
-public class PropertyCopyUtils {
+public class FieldCopyUtils {
 
     /**
      * 复制源对象的属性到新创建的目标对象，仅复制相同类型和相同字段名的值

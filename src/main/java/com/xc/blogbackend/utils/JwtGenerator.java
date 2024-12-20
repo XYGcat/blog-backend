@@ -1,6 +1,7 @@
 package com.xc.blogbackend.utils;
 
 import com.xc.blogbackend.model.domain.entity.BlogUser;
+import com.xc.blogbackend.model.domain.resDto.LoginResDto;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -47,7 +48,7 @@ public class JwtGenerator {
      * @param blogUser
      * @return
      */
-    public static String generateToken(BlogUser blogUser) {
+    public static String generateToken(LoginResDto blogUser) {
         // 设置头部信息
 //		Map<String, Object> header = new HashMap<String, Object>();
 //		header.put("typ", "JWT");

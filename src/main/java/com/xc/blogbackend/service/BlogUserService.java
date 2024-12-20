@@ -2,6 +2,7 @@ package com.xc.blogbackend.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xc.blogbackend.model.domain.entity.BlogUser;
+import com.xc.blogbackend.model.domain.resDto.LoginResDto;
 import com.xc.blogbackend.model.domain.resDto.PageInfoResult;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,7 +23,7 @@ public interface BlogUserService extends IService<BlogUser> {
      * @param request
      * @return 脱敏后的用户信息
      */
-    BlogUser userLogin(String username, String password,String ip, HttpServletRequest request);
+    LoginResDto userLogin(String username, String password, String ip, HttpServletRequest request);
 
     /**
      * 用户注册

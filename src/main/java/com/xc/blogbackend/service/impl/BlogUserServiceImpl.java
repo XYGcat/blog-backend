@@ -9,8 +9,12 @@ import com.xc.blogbackend.contant.BlogUserConstant;
 import com.xc.blogbackend.exception.BusinessException;
 import com.xc.blogbackend.mapper.BlogUserMapper;
 import com.xc.blogbackend.model.domain.entity.BlogUser;
+import com.xc.blogbackend.model.domain.resDto.LoginResDto;
 import com.xc.blogbackend.model.domain.resDto.PageInfoResult;
+import com.xc.blogbackend.model.domain.vo.MenuVo;
+import com.xc.blogbackend.service.BgMenuService;
 import com.xc.blogbackend.service.BlogUserService;
+import com.xc.blogbackend.utils.FieldCopyUtils;
 import com.xc.blogbackend.utils.IpUtils;
 import com.xc.blogbackend.utils.RandomUsernameGenerator;
 import lombok.extern.slf4j.Slf4j;
@@ -41,8 +45,11 @@ public class BlogUserServiceImpl extends ServiceImpl<BlogUserMapper, BlogUser>
     @Resource
     private BlogUserMapper blogUserMapper;
 
+    @Resource
+    private BgMenuService bgMenuService;
+
     @Override
-    public BlogUser userLogin(String username, String password,String ip, HttpServletRequest request){
+    public LoginResDto userLogin(String username, String password,String ip, HttpServletRequest request){
         //1.校验
         //账户密码不能为空
         if (StringUtils.isAnyBlank(username,password)){
@@ -74,20 +81,20 @@ public class BlogUserServiceImpl extends ServiceImpl<BlogUserMapper, BlogUser>
             throw new BusinessException(ErrorCode.PARAMS_ERROR,"用户不存在");
         }
         //更新插入ip
-//        BlogUser blogUser = new BlogUser();
-//        blogUser.setIp(ip);
-//        blogUser.setId(user.getId());
-//        boolean saveResult = this.updateById(blogUser);
         UpdateWrapper<BlogUser> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("id", user.getId()).set("ip", ip);
         this.update(updateWrapper);
 
-        //3.用户脱敏
-        BlogUser safetyUser = getSafetyUser(user);
-        //4.记录用户的登录态
-        request.getSession().setAttribute(USER_LOGIN_STATE,safetyUser);
+        //获取用户菜单
+        List<MenuVo> menuVos = bgMenuService.roleQueryMenus(user.getId());
 
-        return safetyUser;
+        LoginResDto loginResDto = FieldCopyUtils.copyProperties(user, LoginResDto.class);
+        loginResDto.setMenus(menuVos);
+
+        //4.记录用户的登录态
+        request.getSession().setAttribute(USER_LOGIN_STATE,loginResDto);
+
+        return loginResDto;
     }
 
     @Override

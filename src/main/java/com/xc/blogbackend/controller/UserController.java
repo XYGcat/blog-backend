@@ -6,8 +6,9 @@ import com.xc.blogbackend.common.ErrorCode;
 import com.xc.blogbackend.common.ResultUtils;
 import com.xc.blogbackend.exception.BusinessException;
 import com.xc.blogbackend.model.domain.entity.BlogUser;
-import com.xc.blogbackend.model.domain.reqDto.UserLoginRequest;
 import com.xc.blogbackend.model.domain.reqDto.UserRegisterRequest;
+import com.xc.blogbackend.model.domain.reqDto.loginReqDto;
+import com.xc.blogbackend.model.domain.resDto.LoginResDto;
 import com.xc.blogbackend.model.domain.resDto.PageInfoResult;
 import com.xc.blogbackend.service.BlogUserService;
 import com.xc.blogbackend.utils.IpUtils;
@@ -45,23 +46,23 @@ public class UserController {
     /**
      * 登录接口
      *
-     * @param userLoginRequest
+     * @param loginReqDto
      * @param request
      * @return
      */
     @ApiOperation(value = "登录接口")
     @PostMapping("/login")
-    public BaseResponse<BlogUser> userLogin(@RequestBody UserLoginRequest userLoginRequest, HttpServletRequest request){
+    public BaseResponse<LoginResDto> userLogin(@RequestBody loginReqDto loginReqDto, HttpServletRequest request){
         String ipAddress = IpUtils.getClientIp(request);
-        String username = userLoginRequest.getUsername();
-        String password = userLoginRequest.getPassword();
+        String username = loginReqDto.getUsername();
+        String password = loginReqDto.getPassword();
         if(StringUtils.isAnyBlank(username,password)){
             throw new BusinessException(ErrorCode.PARAMS_ERROR,"请输入账号密码！");
         }
         if (username.equals("admin")) {
             if (password.equals(ADMIN_PASSWORD)) {
 
-                BlogUser blogUser = new BlogUser();
+                LoginResDto blogUser = new LoginResDto();
                 blogUser.setUsername("admin");
                 blogUser.setNickName("超级管理员");
                 blogUser.setRole(1);
@@ -77,7 +78,7 @@ public class UserController {
                 throw new BusinessException(ErrorCode.PARAMS_ERROR,"管理员账号/密码错误！");
             }
         }else{
-            BlogUser blogUser = blogUserService.userLogin(username, password,ipAddress, request);
+            LoginResDto blogUser = blogUserService.userLogin(username, password,ipAddress, request);
 
             //创建Token
             String token = JwtGenerator.generateToken(blogUser);
