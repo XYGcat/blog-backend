@@ -16,6 +16,7 @@ import com.xc.blogbackend.utils.Qiniu;
 import com.xc.blogbackend.utils.StringManipulation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -416,21 +417,18 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
         return false;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public Boolean deleteComment(Long id, Long parentId) {
-        // 如果有父级评论 就只删除这一条
-        if (parentId > 0){
-            int deleteById = blogCommentMapper.deleteById(id);
-            return deleteById > 0;
-        }
-        // 如果没有父级评论 就删除这条评论 以及子级评论
-        else {
-            int deleteById = blogCommentMapper.deleteById(id);
+        //删除当前评论
+        int deleteById = blogCommentMapper.deleteById(id);
+        //删除当前评论的子评论
+        if (parentId <= 0) {
             QueryWrapper<BlogComment> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("parent_id",id);
-            int delete = blogCommentMapper.delete(queryWrapper);
-            return deleteById > 0;
+            queryWrapper.eq("parent_id", id);
+            blogCommentMapper.delete(queryWrapper);
         }
+        return deleteById > 0;
     }
 }
 

@@ -1,6 +1,7 @@
 package com.xc.blogbackend.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -43,12 +44,15 @@ public class BlogCategoryServiceImpl extends ServiceImpl<BlogCategoryMapper, Blo
     @Override
     public List<CategoryResDto> getCategoryDictionary(Map<String,String> params) {
         Integer categoryType = Integer.valueOf(params.get("categoryType"));
-        Integer level = Integer.valueOf(params.get("level"));
+        Integer level = null;
+        if(ObjectUtil.isNotEmpty(params.get("level"))){
+            level = Integer.valueOf(params.get("level"));
+        }
         QueryWrapper<BlogCategory> queryWrapper = new QueryWrapper<>();
         queryWrapper.select("id","category_name","category_type");
         queryWrapper.orderByAsc("sort");
         // 根据参数进行查询条件设置
-        Optional.ofNullable(categoryType).ifPresent(t -> queryWrapper.eq("category_type", t));
+        Optional.of(categoryType).ifPresent(t -> queryWrapper.eq("category_type", t));
         Optional.ofNullable(level).ifPresent(l -> queryWrapper.eq("level", l));
 
         List<BlogCategory> categories = blogCategoryMapper.selectList(queryWrapper);
