@@ -6,8 +6,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qiniu.common.QiniuException;
 import com.xc.blogbackend.mapper.BlogCommentMapper;
 import com.xc.blogbackend.model.domain.entity.BlogComment;
-import com.xc.blogbackend.model.domain.entity.BlogUser;
 import com.xc.blogbackend.model.domain.resDto.PageInfoResult;
+import com.xc.blogbackend.model.domain.vo.UserVo;
 import com.xc.blogbackend.service.BlogCommentService;
 import com.xc.blogbackend.service.BlogLikeService;
 import com.xc.blogbackend.service.BlogUserService;
@@ -91,10 +91,10 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
         }
 
         // 根据用户id获取用户当前的昵称和头像
-        List<CompletableFuture<BlogUser>> promiseList = new ArrayList<>();
+        List<CompletableFuture<UserVo>> promiseList = new ArrayList<>();
         for (BlogComment row : rows){
             if (row.getFromId() != null) {
-                CompletableFuture<BlogUser> res = CompletableFuture.supplyAsync(
+                CompletableFuture<UserVo> res = CompletableFuture.supplyAsync(
                         () -> blogUserService.getOneUserInfo(row.getFromId()));
                 promiseList.add(res);
             }
@@ -104,7 +104,7 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
         //方法一：使用 thenAccept 方法来处理完成后的操作，可以更加灵活地执行其他操作或链式调用其他方法
         allUsers.thenAccept(ignored -> {        //ignored:一个标识符
             for (int i = 0; i < rows.size(); i++) {
-                BlogUser blogUser = promiseList.get(i).join();
+                UserVo blogUser = promiseList.get(i).join();
                 //检查 CompletableFuture 是否以异常完成
                 if (blogUser != null) {
                     rows.get(i).setFromAvatar(blogUser.getAvatar());
@@ -186,10 +186,10 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
         }
 
         // 根据用户id获取用户当前的昵称和头像
-        List<CompletableFuture<BlogUser>> promiseList = new ArrayList<>();
+        List<CompletableFuture<UserVo>> promiseList = new ArrayList<>();
         for (BlogComment row : rows){
             if (row.getFromId() != null) {
-                CompletableFuture<BlogUser> res = CompletableFuture.supplyAsync(
+                CompletableFuture<UserVo> res = CompletableFuture.supplyAsync(
                         () -> blogUserService.getOneUserInfo(row.getFromId()));
                 promiseList.add(res);
             }
@@ -199,7 +199,7 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
         //方法一：使用 thenAccept 方法来处理完成后的操作，可以更加灵活地执行其他操作或链式调用其他方法
         fromAllUsers.thenAccept(ignored -> {        //ignored:一个标识符
             for (int i = 0; i < rows.size(); i++) {
-                BlogUser blogUser = promiseList.get(i).join();
+                UserVo blogUser = promiseList.get(i).join();
                 //检查 CompletableFuture 是否以异常完成
                 if (blogUser != null) {
                     rows.get(i).setFromAvatar(blogUser.getAvatar());
@@ -209,10 +209,10 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
         }).join(); // 等待用户信息异步任务完成
 
         // 根据用户id获取用户当前的昵称和头像
-        List<CompletableFuture<BlogUser>> promiseList2 = new ArrayList<>();
+        List<CompletableFuture<UserVo>> promiseList2 = new ArrayList<>();
         for (BlogComment row : rows){
             if (row.getToId() != null) {
-                CompletableFuture<BlogUser> res = CompletableFuture.supplyAsync(
+                CompletableFuture<UserVo> res = CompletableFuture.supplyAsync(
                         () -> blogUserService.getOneUserInfo(row.getToId()));
                 promiseList2.add(res);
             }
@@ -222,7 +222,7 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
         //方法一：使用 thenAccept 方法来处理完成后的操作，可以更加灵活地执行其他操作或链式调用其他方法
         toAllUsers.thenAccept(ignored -> {        //ignored:一个标识符
             for (int i = 0; i < rows.size(); i++) {
-                BlogUser blogUser = promiseList.get(i).join();
+                UserVo blogUser = promiseList.get(i).join();
                 //检查 CompletableFuture 是否以异常完成
                 if (blogUser != null) {
                     rows.get(i).setToAvatar(blogUser.getAvatar());
@@ -307,10 +307,10 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
         }
 
         // 根据用户from_id获取用户当前的昵称和头像
-        List<CompletableFuture<BlogUser>> promiseList = new ArrayList<>();
+        List<CompletableFuture<UserVo>> promiseList = new ArrayList<>();
         for (BlogComment row : rows){
             if (row.getFromId() != null) {
-                CompletableFuture<BlogUser> res = CompletableFuture.supplyAsync(
+                CompletableFuture<UserVo> res = CompletableFuture.supplyAsync(
                         () -> blogUserService.getOneUserInfo(row.getFromId()));
                 promiseList.add(res);
             }
@@ -320,7 +320,7 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
         //方法一：使用 thenAccept 方法来处理完成后的操作，可以更加灵活地执行其他操作或链式调用其他方法
         fromAllUsers.thenAccept(ignored -> {        //ignored:一个标识符
             for (int i = 0; i < rows.size(); i++) {
-                BlogUser blogUser = promiseList.get(i).join();
+                UserVo blogUser = promiseList.get(i).join();
                 //检查 CompletableFuture 是否以异常完成
                 if (blogUser != null) {
                     rows.get(i).setFromAvatar(blogUser.getAvatar());
@@ -330,10 +330,10 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
         }).join(); // 等待用户信息异步任务完成
 
         // 根据用户id获取用户当前的昵称和头像
-        List<CompletableFuture<BlogUser>> promiseList2 = new ArrayList<>();
+        List<CompletableFuture<UserVo>> promiseList2 = new ArrayList<>();
         for (BlogComment row : rows){
             if (row.getToId() != null) {
-                CompletableFuture<BlogUser> res = CompletableFuture.supplyAsync(
+                CompletableFuture<UserVo> res = CompletableFuture.supplyAsync(
                         () -> blogUserService.getOneUserInfo(row.getToId()));
                 promiseList2.add(res);
             }
@@ -343,7 +343,7 @@ public class BlogCommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogC
         //方法一：使用 thenAccept 方法来处理完成后的操作，可以更加灵活地执行其他操作或链式调用其他方法
         toAllUsers.thenAccept(ignored -> {        //ignored:一个标识符
             for (int i = 0; i < rows.size(); i++) {
-                BlogUser blogUser = promiseList.get(i).join();
+                UserVo blogUser = promiseList.get(i).join();
                 //检查 CompletableFuture 是否以异常完成
                 if (blogUser != null) {
                     rows.get(i).setToAvatar(blogUser.getAvatar());

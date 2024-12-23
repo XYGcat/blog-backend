@@ -1,6 +1,5 @@
-package com.xc.blogbackend.model.domain.resDto;
+package com.xc.blogbackend.model.domain.vo;
 
-import com.xc.blogbackend.model.domain.vo.MenuVo;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
@@ -8,11 +7,11 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * 登录返回对象
+ * 用户信息对象
  */
 @Data
-@ApiModel("登录返回对象")
-public class LoginResDto implements Serializable {
+@ApiModel("用户信息对象")
+public class UserVo implements Serializable {
 
     private static final long serialVersionUID = 8707436132498367035L;
 
@@ -34,12 +33,12 @@ public class LoginResDto implements Serializable {
     /**
      * 账号，唯一
      */
-    private String username;
+    private String userName;
 
     /**
-     * 用户角色 1 管理员 2 普通用户
+     * 用户角色
      */
-    private Integer role;
+    private List<String> roles;
 
     /**
      * 用户昵称

@@ -2,6 +2,10 @@ package com.xc.blogbackend.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.xc.blogbackend.model.domain.entity.BgUserRole;
+import com.xc.blogbackend.model.domain.vo.RoleVo;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
 * @author XC
@@ -11,6 +15,13 @@ import com.xc.blogbackend.model.domain.entity.BgUserRole;
 */
 public interface BgUserRoleMapper extends BaseMapper<BgUserRole> {
 
+    /**
+     * 根据用户id获取用户角色
+     *
+     * @param userId
+     * @return
+     */
+    List<RoleVo> getUserRole(@Param("userId") Long userId);
 }
 
 

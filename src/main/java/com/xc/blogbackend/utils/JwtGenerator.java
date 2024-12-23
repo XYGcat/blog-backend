@@ -1,7 +1,6 @@
 package com.xc.blogbackend.utils;
 
-import com.xc.blogbackend.model.domain.entity.BlogUser;
-import com.xc.blogbackend.model.domain.resDto.LoginResDto;
+import com.xc.blogbackend.model.domain.vo.UserVo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -10,6 +9,7 @@ import org.apache.tomcat.util.codec.binary.Base64;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import java.lang.reflect.Field;
 import java.time.Instant;
 import java.util.Date;
 import java.util.UUID;
@@ -45,10 +45,10 @@ public class JwtGenerator {
     /**
      * 生成 Token
      *
-     * @param blogUser
+     * @param userVo
      * @return
      */
-    public static String generateToken(LoginResDto blogUser) {
+    public static String generateToken(UserVo userVo) {
         // 设置头部信息
 //		Map<String, Object> header = new HashMap<String, Object>();
 //		header.put("typ", "JWT");
@@ -59,10 +59,12 @@ public class JwtGenerator {
 
         // 创建payload的私有声明（根据特定的业务需要添加，如果要拿这个做验证，一般是需要和jwt的接收方提前沟通好验证的方式）
         Claims claims = Jwts.claims();
-        claims.setSubject(blogUser.getUsername());  //jwt所面向的用户，放登录的用户名，一个json格式的字符串，可存放userid，roldid之类，作为用户的唯一标志
-        claims.put("nick_name", blogUser.getNickName());
-        claims.put("id", blogUser.getId());
-        claims.put("role", blogUser.getRole());
+        // jwt所面向的用户，放登录的用户名，一个json格式的字符串，可存放userid，roldid之类，作为用户的唯一标志
+        claims.setSubject(userVo.getUserName());
+        claims.put("nickName", userVo.getNickName());
+        claims.put("id", userVo.getId());
+        claims.put("userName", userVo.getUserName());
+        claims.put("roles", userVo.getRoles());
 
         // 设置令牌的过期时间
         Instant expirationInstant = Instant.now().plusSeconds(EXPIRE_TIME);
@@ -88,7 +90,7 @@ public class JwtGenerator {
      * @param token
      * @return
      */
-    public static BlogUser parseToken(String token) {
+    public static UserVo parseToken(String token) {
         try {
             if (token == null) {
                 throw new IllegalArgumentException("Token 不能为空");
@@ -116,13 +118,25 @@ public class JwtGenerator {
             }
 
             // 返回用户信息对象
-            BlogUser blogUser = new BlogUser();
-            blogUser.setUsername(body.getSubject());
-            blogUser.setNickName(body.get("nick_name", String.class));
-            blogUser.setId(body.get("id", Long.class));
-            blogUser.setRole(body.get("role", Integer.class));
+            UserVo userVo = new UserVo();
+            // 获取 UserVo 的所有字段
+            Field[] fields = UserVo.class.getDeclaredFields();
 
-            return blogUser;
+            for (Field field : fields) {
+                field.setAccessible(true);  // 确保可以访问私有字段
+
+                // 如果 Claims 中有对应的字段，则赋值
+                if (body.containsKey(field.getName())) {
+                    try {
+                        Object value = body.get(field.getName());
+                        field.set(userVo, value); // 给 UserVo 中的字段赋值
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace(); // 异常处理
+                    }
+                }
+            }
+
+            return userVo;
         }catch (Exception e){
             // 处理解析异常或者验证失败
             throw new RuntimeException("无效的 Token 或签名错误", e);

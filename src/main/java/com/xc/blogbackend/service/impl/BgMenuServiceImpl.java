@@ -8,8 +8,8 @@ import com.xc.blogbackend.mapper.BgMenuMapper;
 import com.xc.blogbackend.mapper.BgRoleMenuMapper;
 import com.xc.blogbackend.model.domain.entity.BgMenu;
 import com.xc.blogbackend.model.domain.entity.BgRoleMenu;
-import com.xc.blogbackend.model.domain.entity.BgUserRole;
 import com.xc.blogbackend.model.domain.vo.MenuVo;
+import com.xc.blogbackend.model.domain.vo.RoleVo;
 import com.xc.blogbackend.service.BgMenuService;
 import com.xc.blogbackend.service.BgRoleService;
 import org.apache.commons.lang3.StringUtils;
@@ -73,16 +73,17 @@ public class BgMenuServiceImpl extends ServiceImpl<BgMenuMapper, BgMenu>
 
     @Override
     public List<MenuVo> roleQueryMenus(Long userId) {
-        List<BgUserRole> userRoles = new ArrayList<>();
+        List<RoleVo> userRoles = new ArrayList<>();
 
         //1、先查询当前用户对应的角色
         if(userId == null){
-            userRoles.add(new BgUserRole().setRoleId(4L));
+            userRoles.add(new RoleVo().setRoleId(4L).setCode("visitor"));
         }else {
             userRoles = bgRoleService.getUserRole(userId);
         }
         if(!CollectionUtils.isEmpty(userRoles)){
             //2、通过角色查询菜单（默认取第一个角色）
+            // todo 后续优化
             LambdaQueryWrapper<BgRoleMenu> wrapper = new LambdaQueryWrapper<>();
             wrapper.eq(BgRoleMenu::getRoleId, userRoles.get(0).getRoleId());
             List<BgRoleMenu> roleMenus = roleMenuMapper.selectList(wrapper);

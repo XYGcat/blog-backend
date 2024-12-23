@@ -18,7 +18,6 @@ public class BlogUserServiceTest {
         BlogUser blogUser = new BlogUser();
         blogUser.setUsername("123456789");
         blogUser.setPassword("123456789.xc");
-        blogUser.setRole(0);
         blogUser.setNickName("xc");
 //        blogUser.setAvatar("");
         blogUser.setQq("1111");

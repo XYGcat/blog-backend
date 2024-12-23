@@ -1,12 +1,13 @@
 package com.xc.blogbackend.handler;
 
 import com.xc.blogbackend.exception.BusinessException;
-import com.xc.blogbackend.model.domain.entity.BlogUser;
+import com.xc.blogbackend.model.domain.vo.UserVo;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 import static com.xc.blogbackend.contant.BlogUserConstant.statusExcludedPaths;
 
@@ -28,11 +29,14 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         }
 
         //获取登录验证拦截器传递的用户信息
-        BlogUser user = (BlogUser) request.getAttribute("user");
+        UserVo user = (UserVo) request.getAttribute("user");
+        List<String> roles = user.getRoles();
 
-        if (user.getRole() != 1) {
-            throw new BusinessException(401,"普通用户仅限查看");
-        }
+        roles.forEach(role -> {
+            if (!role.equals("admin") && !role.equals("superAdmin")) {
+                throw new BusinessException(401,"普通用户仅限查看");
+            }
+        });
 
         return true;
     }

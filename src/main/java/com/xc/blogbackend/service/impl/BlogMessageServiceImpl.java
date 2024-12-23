@@ -6,8 +6,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qiniu.common.QiniuException;
 import com.xc.blogbackend.mapper.BlogMessageMapper;
 import com.xc.blogbackend.model.domain.entity.BlogMessage;
-import com.xc.blogbackend.model.domain.entity.BlogUser;
 import com.xc.blogbackend.model.domain.resDto.PageInfoResult;
+import com.xc.blogbackend.model.domain.vo.UserVo;
 import com.xc.blogbackend.service.BlogCommentService;
 import com.xc.blogbackend.service.BlogLikeService;
 import com.xc.blogbackend.service.BlogMessageService;
@@ -75,20 +75,20 @@ public class BlogMessageServiceImpl extends ServiceImpl<BlogMessageMapper, BlogM
         long count = messagePage.getTotal();
 
         // 异步根据用户user_id获取用户当前的昵称和头像
-        List<CompletableFuture<BlogUser>> promiseList = new ArrayList<>();
+        List<CompletableFuture<UserVo>> promiseList = new ArrayList<>();
         // 遍历每行数据
         for (BlogMessage row : rows) {
             if (row.getUserId() != null) {
                 // 如果用户ID存在，创建异步任务获取用户信息
-                CompletableFuture<BlogUser> res = CompletableFuture.supplyAsync(()
+                CompletableFuture<UserVo> res = CompletableFuture.supplyAsync(()
                         -> blogUserService.getOneUserInfo(row.getUserId()));
                 promiseList.add(res);
             } else {
                 // 如果用户ID不存在，设置默认值
-                BlogUser oneUserInfo = new BlogUser();
+                UserVo oneUserInfo = new UserVo();
                 oneUserInfo.setNickName(row.getNickName());
                 oneUserInfo.setAvatar("");
-                CompletableFuture<BlogUser> futureUserInfo = CompletableFuture.completedFuture(oneUserInfo);
+                CompletableFuture<UserVo> futureUserInfo = CompletableFuture.completedFuture(oneUserInfo);
                 promiseList.add(futureUserInfo);
             }
         }
@@ -98,7 +98,7 @@ public class BlogMessageServiceImpl extends ServiceImpl<BlogMessageMapper, BlogM
         //ignored:一个标识符
         allUsers.thenAccept(ignored -> {
             for (int i = 0; i < rows.size(); i++) {
-                BlogUser blogUser = promiseList.get(i).join();
+                UserVo blogUser = promiseList.get(i).join();
                 //检查 CompletableFuture 是否以异常完成
                 if (blogUser != null) {
                     rows.get(i).setNickName(blogUser.getNickName());

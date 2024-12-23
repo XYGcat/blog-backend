@@ -10,8 +10,8 @@ import com.xc.blogbackend.exception.BusinessException;
 import com.xc.blogbackend.mapper.BlogTalkMapper;
 import com.xc.blogbackend.model.domain.entity.BlogTalk;
 import com.xc.blogbackend.model.domain.entity.BlogTalkPhoto;
-import com.xc.blogbackend.model.domain.entity.BlogUser;
 import com.xc.blogbackend.model.domain.resDto.PageInfoResult;
+import com.xc.blogbackend.model.domain.vo.UserVo;
 import com.xc.blogbackend.service.BlogLikeService;
 import com.xc.blogbackend.service.BlogTalkPhotoService;
 import com.xc.blogbackend.service.BlogTalkService;
@@ -101,7 +101,7 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
         });
 
         // 异步获取用户信息
-        List<CompletableFuture<BlogUser>> userFutures = rows.stream()
+        List<CompletableFuture<UserVo>> userFutures = rows.stream()
                 .map(row -> CompletableFuture.supplyAsync(() -> blogUserService.getOneUserInfo(row.getUserId())))
                 .collect(Collectors.toList());
 
@@ -109,7 +109,7 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
         CompletableFuture<Void> allUsers = CompletableFuture.allOf(userFutures.toArray(new CompletableFuture[0]));
         allUsers.thenAccept(ignored -> {
             for (int i = 0; i < rows.size(); i++) {
-                BlogUser user = userFutures.get(i).join();
+                UserVo user = userFutures.get(i).join();
                 if (user != null) {
                     rows.get(i).setNickName(user.getNickName());
                     rows.get(i).setAvatar(user.getAvatar());
@@ -388,7 +388,7 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
         });
 
         // 异步获取用户信息
-        List<CompletableFuture<BlogUser>> userFutures = rows.stream()
+        List<CompletableFuture<UserVo>> userFutures = rows.stream()
                 .map(row -> CompletableFuture.supplyAsync(() -> blogUserService.getOneUserInfo(row.getUserId())))
                 .collect(Collectors.toList());
 
@@ -396,7 +396,7 @@ public class BlogTalkServiceImpl extends ServiceImpl<BlogTalkMapper, BlogTalk>
         CompletableFuture<Void> allUsers = CompletableFuture.allOf(userFutures.toArray(new CompletableFuture[0]));
         allUsers.thenAccept(ignored -> {
             for (int i = 0; i < rows.size(); i++) {
-                BlogUser user = userFutures.get(i).join();
+                UserVo user = userFutures.get(i).join();
                 if (user != null) {
                     rows.get(i).setNickName(user.getNickName());
                     rows.get(i).setAvatar(user.getAvatar());

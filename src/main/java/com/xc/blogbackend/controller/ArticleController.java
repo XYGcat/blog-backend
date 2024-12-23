@@ -19,6 +19,7 @@ import com.xc.blogbackend.service.BlogArticleService;
 import com.xc.blogbackend.service.BlogArticleTagService;
 import com.xc.blogbackend.service.BlogCategoryService;
 import com.xc.blogbackend.service.BlogTagService;
+import com.xc.blogbackend.utils.FieldCopyUtils;
 import com.xc.blogbackend.utils.Qiniu;
 import com.xc.blogbackend.utils.StringManipulation;
 import io.swagger.annotations.Api;
@@ -189,36 +190,26 @@ public class ArticleController {
     /**
      * 新增文章
      *
-     * @param addArticleRequest
+     * @param addArticleReqDto
      * @return
      */
     @ApiOperation(value = "新增文章")
     @PostMapping("/add")
     @Transactional(rollbackFor = Exception.class)  //Spring 的事务管理，如果发生异常，会自动回滚事务
-    public BaseResponse<List<BlogArticleTag>> createArticle(@RequestBody AddArticleRequest addArticleRequest){
-        AddArticleRequest.ArticleDate finalArticle = addArticleRequest.getFinalArticle();
-
-        String articleTitle = finalArticle.getArticleTitle();
-        Boolean byTitle = blogArticleService.getArticleInfoByTitle(finalArticle.getId(), articleTitle);
+    public BaseResponse<List<BlogArticleTag>> createArticle(@RequestBody AddArticleReqDto addArticleReqDto){
+        String articleTitle = addArticleReqDto.getArticleTitle();
+        Boolean byTitle = blogArticleService.getArticleInfoByTitle(addArticleReqDto.getId(), articleTitle);
         if (byTitle){
             throw new BusinessException(ErrorCode.PARAMS_ERROR,"已存在相同的文章标题");
         }
 
-        List<BlogTag> tagList = finalArticle.getTagList();
-        BlogCategory category = finalArticle.getCategory();
-        String mdImgList = String.valueOf(finalArticle.getMdImgList());
-        BlogArticle articleRest = new BlogArticle();
-        articleRest.setValues(finalArticle.getArticleTitle(),
-                              finalArticle.getAuthorId(),
-                              finalArticle.getArticleContent(),
-                              finalArticle.getArticleCover(),
-                              finalArticle.getIsTop(),
-                              finalArticle.getArticleOrder(),
-                              finalArticle.getStatus(),
-                              finalArticle.getType(),
-                              finalArticle.getOriginUrl(),
-                              finalArticle.getArticleDescription(),
-                              mdImgList);
+        List<BlogTag> tagList = addArticleReqDto.getTagList();
+        BlogCategory category = addArticleReqDto.getCategory();
+        String mdImgList = String.valueOf(addArticleReqDto.getMdImgList());
+
+        BlogArticle articleRest = FieldCopyUtils.copyProperties(addArticleReqDto, BlogArticle.class);
+        articleRest.setMdImgList(mdImgList);
+
         Long id = category.getId();
         String categoryName = category.getCategoryName();
 

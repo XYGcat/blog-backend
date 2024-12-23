@@ -1,11 +1,10 @@
 package com.xc.blogbackend.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xc.blogbackend.mapper.BgRoleMapper;
 import com.xc.blogbackend.mapper.BgUserRoleMapper;
 import com.xc.blogbackend.model.domain.entity.BgRole;
-import com.xc.blogbackend.model.domain.entity.BgUserRole;
+import com.xc.blogbackend.model.domain.vo.RoleVo;
 import com.xc.blogbackend.service.BgRoleService;
 import org.springframework.stereotype.Service;
 
@@ -28,10 +27,8 @@ public class BgRoleServiceImpl extends ServiceImpl<BgRoleMapper, BgRole>
     private BgUserRoleMapper bgUserRoleMapper;
 
     @Override
-    public List<BgUserRole> getUserRole(Long userId) {
-        LambdaQueryWrapper<BgUserRole> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(BgUserRole::getUserId,userId);
-        List<BgUserRole> userRoles = bgUserRoleMapper.selectList(wrapper);
+    public List<RoleVo> getUserRole(Long userId) {
+        List<RoleVo> userRoles = bgUserRoleMapper.getUserRole(userId);
         return userRoles;
     }
 }

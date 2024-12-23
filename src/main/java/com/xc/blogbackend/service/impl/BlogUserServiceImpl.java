@@ -9,10 +9,12 @@ import com.xc.blogbackend.contant.BlogUserConstant;
 import com.xc.blogbackend.exception.BusinessException;
 import com.xc.blogbackend.mapper.BlogUserMapper;
 import com.xc.blogbackend.model.domain.entity.BlogUser;
-import com.xc.blogbackend.model.domain.resDto.LoginResDto;
 import com.xc.blogbackend.model.domain.resDto.PageInfoResult;
 import com.xc.blogbackend.model.domain.vo.MenuVo;
+import com.xc.blogbackend.model.domain.vo.RoleVo;
+import com.xc.blogbackend.model.domain.vo.UserVo;
 import com.xc.blogbackend.service.BgMenuService;
+import com.xc.blogbackend.service.BgRoleService;
 import com.xc.blogbackend.service.BlogUserService;
 import com.xc.blogbackend.utils.FieldCopyUtils;
 import com.xc.blogbackend.utils.IpUtils;
@@ -29,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static com.xc.blogbackend.contant.BlogUserConstant.USER_LOGIN_STATE;
 
@@ -48,8 +51,11 @@ public class BlogUserServiceImpl extends ServiceImpl<BlogUserMapper, BlogUser>
     @Resource
     private BgMenuService bgMenuService;
 
+    @Resource
+    private BgRoleService bgRoleService;
+
     @Override
-    public LoginResDto userLogin(String username, String password,String ip, HttpServletRequest request){
+    public UserVo userLogin(String username, String password, String ip, HttpServletRequest request){
         //1.校验
         //账户密码不能为空
         if (StringUtils.isAnyBlank(username,password)){
@@ -87,9 +93,12 @@ public class BlogUserServiceImpl extends ServiceImpl<BlogUserMapper, BlogUser>
 
         //获取用户菜单
         List<MenuVo> menuVos = bgMenuService.roleQueryMenus(user.getId());
+        List<RoleVo> userRoles = bgRoleService.getUserRole(user.getId());
+        List<String> roles = userRoles.stream().map(RoleVo::getCode).collect(Collectors.toList());
 
-        LoginResDto loginResDto = FieldCopyUtils.copyProperties(user, LoginResDto.class);
+        UserVo loginResDto = FieldCopyUtils.copyProperties(user, UserVo.class);
         loginResDto.setMenus(menuVos);
+        loginResDto.setRoles(roles);
 
         //4.记录用户的登录态
         request.getSession().setAttribute(USER_LOGIN_STATE,loginResDto);
@@ -149,30 +158,15 @@ public class BlogUserServiceImpl extends ServiceImpl<BlogUserMapper, BlogUser>
     }
 
     @Override
-    public BlogUser getSafetyUser(BlogUser originUser) {
-        if(originUser == null){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR,"为空");
-        }
-        BlogUser safetUser = new BlogUser();
-        safetUser.setId(originUser.getId());
-        safetUser.setUsername(originUser.getUsername());
-        safetUser.setRole(originUser.getRole());
-        safetUser.setIp(originUser.getIp());
-        safetUser.setAvatar(originUser.getAvatar());
-        safetUser.setNickName(originUser.getNickName());
-        safetUser.setQq(originUser.getQq());
-        return safetUser;
-    }
-
-    @Override
-    public BlogUser getOneUserInfo(Long userId) {
+    public UserVo getOneUserInfo(Long userId) {
         QueryWrapper<BlogUser> queryWrapper = new QueryWrapper<>();
         if (userId == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR,"为空");
         }
         queryWrapper.eq("id",userId);
         BlogUser blogUser = blogUserMapper.selectOne(queryWrapper);
-        return getSafetyUser(blogUser);
+        UserVo userVo = FieldCopyUtils.copyProperties(blogUser, UserVo.class);
+        return userVo;
     }
 
     @Override
@@ -274,13 +268,14 @@ public class BlogUserServiceImpl extends ServiceImpl<BlogUserMapper, BlogUser>
 
     @Override
     public Boolean updateRole(Long id, Integer role) {
-        BlogUser blogUser = new BlogUser();
-        blogUser.setRole(role);
-        UpdateWrapper<BlogUser> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.eq("id",id);
-        int update = blogUserMapper.update(blogUser, updateWrapper);
-
-        return update > 0;
+//        BlogUser blogUser = new BlogUser();
+//        blogUser.setRole(role);
+//        UpdateWrapper<BlogUser> updateWrapper = new UpdateWrapper<>();
+//        updateWrapper.eq("id",id);
+//        int update = blogUserMapper.update(blogUser, updateWrapper);
+//
+//        return update > 0;
+        return false;
     }
 }
 

@@ -8,8 +8,8 @@ import com.xc.blogbackend.exception.BusinessException;
 import com.xc.blogbackend.model.domain.entity.BlogUser;
 import com.xc.blogbackend.model.domain.reqDto.UserRegisterRequest;
 import com.xc.blogbackend.model.domain.reqDto.loginReqDto;
-import com.xc.blogbackend.model.domain.resDto.LoginResDto;
 import com.xc.blogbackend.model.domain.resDto.PageInfoResult;
+import com.xc.blogbackend.model.domain.vo.UserVo;
 import com.xc.blogbackend.service.BlogUserService;
 import com.xc.blogbackend.utils.IpUtils;
 import com.xc.blogbackend.utils.JwtGenerator;
@@ -24,7 +24,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
-import static com.xc.blogbackend.contant.BlogUserConstant.ADMIN_PASSWORD;
 import static com.xc.blogbackend.contant.BlogUserConstant.USER_LOGIN_STATE;
 
 /**
@@ -52,40 +51,21 @@ public class UserController {
      */
     @ApiOperation(value = "登录接口")
     @PostMapping("/login")
-    public BaseResponse<LoginResDto> userLogin(@RequestBody loginReqDto loginReqDto, HttpServletRequest request){
+    public BaseResponse<UserVo> userLogin(@RequestBody loginReqDto loginReqDto, HttpServletRequest request){
         String ipAddress = IpUtils.getClientIp(request);
         String username = loginReqDto.getUsername();
         String password = loginReqDto.getPassword();
         if(StringUtils.isAnyBlank(username,password)){
             throw new BusinessException(ErrorCode.PARAMS_ERROR,"请输入账号密码！");
         }
-        if (username.equals("admin")) {
-            if (password.equals(ADMIN_PASSWORD)) {
 
-                LoginResDto blogUser = new LoginResDto();
-                blogUser.setUsername("admin");
-                blogUser.setNickName("超级管理员");
-                blogUser.setRole(1);
-                blogUser.setId(5201314L);
-                blogUser.setIp(ipAddress);
+        UserVo blogUser = blogUserService.userLogin(username, password,ipAddress, request);
 
-                // 生成token
-                String token = JwtGenerator.generateToken(blogUser);
-                blogUser.setToken(token);
+        //创建Token
+        String token = JwtGenerator.generateToken(blogUser);
+        blogUser.setToken(token);
 
-                return ResultUtils.success(blogUser);
-            } else {
-                throw new BusinessException(ErrorCode.PARAMS_ERROR,"管理员账号/密码错误！");
-            }
-        }else{
-            LoginResDto blogUser = blogUserService.userLogin(username, password,ipAddress, request);
-
-            //创建Token
-            String token = JwtGenerator.generateToken(blogUser);
-            blogUser.setToken(token);
-
-            return ResultUtils.success(blogUser);
-        }
+        return ResultUtils.success(blogUser);
     }
 
     /**
@@ -120,28 +100,20 @@ public class UserController {
      */
     @ApiOperation(value = "根据用户id获取用户信息")
     @GetMapping("/getUserInfoById/{id}")
-    public BaseResponse<BlogUser> getUserInfo(@PathVariable Long id){
+    public BaseResponse<UserVo> getUserInfo(@PathVariable Long id){
         if (id != null) {
-            if (id == 5201314) {
-                BlogUser blogUser = new BlogUser();
-                blogUser.setId(5201314L);
-                blogUser.setRole(1);
-                blogUser.setNickName("超级管理员");
-                return ResultUtils.success(blogUser);
-            } else {
-                //// TODO: 2023-11-20 过滤返回值
-                BlogUser userInfo = blogUserService.getOneUserInfo(id);
+            //// TODO: 2023-11-20 过滤返回值
+            UserVo userInfo = blogUserService.getOneUserInfo(id);
 
-                //添加七牛云访问Token
-                try {
-                    String url = qiniu.downloadUrl(userInfo.getAvatar());
-                    userInfo.setAvatar(url);
-                } catch (QiniuException e) {
-                    throw new RuntimeException(e);
-                }
-
-                return ResultUtils.success(userInfo);
+            //添加七牛云访问Token
+            try {
+                String url = qiniu.downloadUrl(userInfo.getAvatar());
+                userInfo.setAvatar(url);
+            } catch (QiniuException e) {
+                throw new RuntimeException(e);
             }
+
+            return ResultUtils.success(userInfo);
         }else{
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
@@ -177,7 +149,7 @@ public class UserController {
         Long id = (Long) request.get("id");
         String avatar = (String) request.get("avatar");
 
-        BlogUser userInfo = blogUserService.getOneUserInfo(id);
+        UserVo userInfo = blogUserService.getOneUserInfo(id);
 
         // 服务器删除原来的头像
         if (userInfo.getAvatar() != null && userInfo.getAvatar() != avatar) {

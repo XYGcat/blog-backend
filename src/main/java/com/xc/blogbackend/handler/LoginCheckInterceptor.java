@@ -2,7 +2,7 @@ package com.xc.blogbackend.handler;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.xc.blogbackend.exception.BusinessException;
-import com.xc.blogbackend.model.domain.entity.BlogUser;
+import com.xc.blogbackend.model.domain.vo.UserVo;
 import com.xc.blogbackend.utils.JwtGenerator;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -42,7 +42,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
                 ? authorization.replace("Bearer ", "")
                 : authorization;
 
-        BlogUser blogUser = JwtGenerator.parseToken(token);
+        UserVo blogUser = JwtGenerator.parseToken(token);
         if (ObjectUtil.isNotEmpty(blogUser)) {
             request.setAttribute("user", blogUser);
             return true;

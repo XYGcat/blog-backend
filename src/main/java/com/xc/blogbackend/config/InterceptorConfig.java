@@ -19,10 +19,11 @@ public class InterceptorConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        // 注册拦截器，并设置拦截路径
+        // 登录拦截器
         registry.addInterceptor(new LoginCheckInterceptor())
                 .addPathPatterns(loginInterceptPaths); // 设置需要拦截的路径
 
+        // 权限拦截器
         registry.addInterceptor(new AuthenticationInterceptor())
                 .addPathPatterns(statusInterceptPaths); // 设置需要拦截的路径
     }

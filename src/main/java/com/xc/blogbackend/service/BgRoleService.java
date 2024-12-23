@@ -2,7 +2,7 @@ package com.xc.blogbackend.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xc.blogbackend.model.domain.entity.BgRole;
-import com.xc.blogbackend.model.domain.entity.BgUserRole;
+import com.xc.blogbackend.model.domain.vo.RoleVo;
 
 import java.util.List;
 
@@ -18,5 +18,5 @@ public interface BgRoleService extends IService<BgRole> {
      * @param userId 用户id
      * @return 用户角色
      */
-    List<BgUserRole> getUserRole(Long userId);
+    List<RoleVo> getUserRole(Long userId);
 }

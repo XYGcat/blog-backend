@@ -2,8 +2,8 @@ package com.xc.blogbackend.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xc.blogbackend.model.domain.entity.BlogUser;
-import com.xc.blogbackend.model.domain.resDto.LoginResDto;
 import com.xc.blogbackend.model.domain.resDto.PageInfoResult;
+import com.xc.blogbackend.model.domain.vo.UserVo;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -23,7 +23,7 @@ public interface BlogUserService extends IService<BlogUser> {
      * @param request
      * @return 脱敏后的用户信息
      */
-    LoginResDto userLogin(String username, String password, String ip, HttpServletRequest request);
+    UserVo userLogin(String username, String password, String ip, HttpServletRequest request);
 
     /**
      * 用户注册
@@ -36,20 +36,12 @@ public interface BlogUserService extends IService<BlogUser> {
     Map<String,String> userRegister(String username, String password, String checkPassword, String ip);
 
     /**
-     * 用户脱敏
-     *
-     * @param originUser
-     * @return
-     */
-    BlogUser getSafetyUser(BlogUser originUser);
-
-    /**
      * 根据id查询用户信息
      *
      * @param userId 用户id
      * @return
      */
-    BlogUser getOneUserInfo(Long userId);
+    UserVo getOneUserInfo(Long userId);
 
     /**
      * 分页查询用户列表

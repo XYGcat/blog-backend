@@ -46,12 +46,6 @@ public class BlogUser implements Serializable {
     private String password;
 
     /**
-     * 用户角色 1 管理员 2 普通用户
-     */
-    @TableField(value = "role")
-    private Integer role;
-
-    /**
      * 用户昵称
      */
     @TableField(value = "nick_name")
