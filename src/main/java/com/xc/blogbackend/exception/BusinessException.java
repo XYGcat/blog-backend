@@ -1,6 +1,6 @@
 package com.xc.blogbackend.exception;
 
-import com.xc.blogbackend.common.ErrorCode;
+import com.xc.blogbackend.enums.ErrorCode;
 import lombok.Getter;
 
 /**
@@ -12,6 +12,7 @@ import lombok.Getter;
 public class BusinessException extends RuntimeException{
 
     private static final long serialVersionUID = -4390225209525539319L;
+
     /**
      * 错误码
      */

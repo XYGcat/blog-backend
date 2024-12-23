@@ -1,4 +1,4 @@
-package com.xc.blogbackend.common;
+package com.xc.blogbackend.enums;
 
 /**
  * 错误码

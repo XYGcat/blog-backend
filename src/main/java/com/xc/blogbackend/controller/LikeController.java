@@ -1,8 +1,8 @@
 package com.xc.blogbackend.controller;
 
 import com.xc.blogbackend.common.BaseResponse;
-import com.xc.blogbackend.common.ErrorCode;
 import com.xc.blogbackend.common.ResultUtils;
+import com.xc.blogbackend.enums.ErrorCode;
 import com.xc.blogbackend.service.BlogLikeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

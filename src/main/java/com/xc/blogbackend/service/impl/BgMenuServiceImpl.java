@@ -2,7 +2,7 @@ package com.xc.blogbackend.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.xc.blogbackend.common.ErrorCode;
+import com.xc.blogbackend.enums.ErrorCode;
 import com.xc.blogbackend.exception.BusinessException;
 import com.xc.blogbackend.mapper.BgMenuMapper;
 import com.xc.blogbackend.mapper.BgRoleMenuMapper;

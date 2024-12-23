@@ -2,8 +2,8 @@ package com.xc.blogbackend.controller;
 
 import com.qiniu.common.QiniuException;
 import com.xc.blogbackend.common.BaseResponse;
-import com.xc.blogbackend.common.ErrorCode;
 import com.xc.blogbackend.common.ResultUtils;
+import com.xc.blogbackend.enums.ErrorCode;
 import com.xc.blogbackend.exception.BusinessException;
 import com.xc.blogbackend.utils.ImageNamingUtil;
 import com.xc.blogbackend.utils.Qiniu;
@@ -11,6 +11,7 @@ import com.xc.blogbackend.utils.StringManipulation;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
+
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;

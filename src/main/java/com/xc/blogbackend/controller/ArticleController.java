@@ -2,9 +2,9 @@ package com.xc.blogbackend.controller;
 
 import com.qiniu.common.QiniuException;
 import com.xc.blogbackend.common.BaseResponse;
-import com.xc.blogbackend.common.ErrorCode;
 import com.xc.blogbackend.common.ResultUtils;
 import com.xc.blogbackend.enums.CategoryEnum;
+import com.xc.blogbackend.enums.ErrorCode;
 import com.xc.blogbackend.exception.BusinessException;
 import com.xc.blogbackend.model.domain.entity.BlogArticle;
 import com.xc.blogbackend.model.domain.entity.BlogArticleTag;

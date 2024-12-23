@@ -1,5 +1,6 @@
 package com.xc.blogbackend.common;
 
+import com.xc.blogbackend.enums.ErrorCode;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -12,6 +13,9 @@ import java.io.Serializable;
  */
 @Data
 public class BaseResponse<T> implements Serializable {
+
+    private static final long serialVersionUID = -7724436601248779897L;
+
     private int code;
 
     private T data;
@@ -36,6 +40,6 @@ public class BaseResponse<T> implements Serializable {
     }
 
     public BaseResponse(ErrorCode errorCode){
-        this(errorCode.getCode(),null,errorCode.getMessage(),errorCode.getDescription());
+        this(errorCode.getCode(),null, errorCode.getMessage(), errorCode.getDescription());
     }
 }
