@@ -1,8 +1,8 @@
 package com.xc.blogbackend.controller;
 
 import com.xc.blogbackend.common.BaseResponse;
-import com.xc.blogbackend.common.ErrorCode;
 import com.xc.blogbackend.common.ResultUtils;
+import com.xc.blogbackend.enums.ErrorCode;
 import com.xc.blogbackend.model.domain.entity.BlogHeader;
 import com.xc.blogbackend.service.BlogHeaderService;
 import com.xc.blogbackend.utils.Qiniu;
