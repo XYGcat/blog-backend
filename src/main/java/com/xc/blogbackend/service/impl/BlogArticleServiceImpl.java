@@ -33,6 +33,7 @@ import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.stream.Collectors;
 
 /**
 * @author XC
@@ -452,70 +453,40 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
         queryWrapper.orderByAsc("is_top")
                 .orderByAsc("article_order")
                 .orderByDesc("created_at");
-        // 设置属性过滤，排除 articleContent 和 originUrl 属性
+        // 设置属性过滤
         queryWrapper.select(BlogArticle.class, info -> !info.getColumn().equals("article_content")
                 && !info.getColumn().equals("origin_url"));
 
         // 创建Page对象，设置当前页和分页大小
         Page<BlogArticle> page = new Page<>(current, size);
-        // 获取文章列表，使用page方法传入Page对象和QueryWrapper对象
+        // 获取文章列表
         Page<BlogArticle> articlePage = blogArticleMapper.selectPage(page, queryWrapper);
         // 获取分页数据
-        List<BlogArticle> rows = articlePage.getRecords();
+        List<BlogArticle> articles = articlePage.getRecords();
         // 获取文章总数
-        Long count = articlePage.getTotal();
+        long count = articlePage.getTotal();
 
-        // 创建一个ExecutorService对象，根据你的需要选择合适的线程池大小
-        ExecutorService executorService = Executors.newFixedThreadPool(10);
+        List<Long> categoryIds = articles.stream().map(BlogArticle::getCategoryId).collect(Collectors.toList());
+        List<Long> articleIds = articles.stream().map(BlogArticle::getId).collect(Collectors.toList());
 
-        // 创建一个List<Future>对象，用于存储每个异步任务的返回值
-        List<Future<ArticleDTO>> promiseList = new ArrayList<>();
+        List<BlogCategory> categoryByIds = blogCategoryService.getCategoryByIds(categoryIds);
+        Map<Long, String> categoryMap = categoryByIds.stream()
+                .collect(Collectors.toMap(BlogCategory::getId, BlogCategory::getCategoryName));
 
-        // 遍历rows数组中的每个元素
-        for (BlogArticle v : rows) {
-            // 创建一个Callable对象，定义异步任务的逻辑
-            Callable<ArticleDTO> task = () -> {
-                // 调用其他方法或访问数据库，获取需要的数据
-                String categoryName = blogCategoryService.getCategoryNameById(v.getCategoryId());
-                Map<String, Object> tagList = blogArticleTagService.getTagListByArticleId(v.getId());
-                // 创建一个对象，存储数据
-                ArticleDTO articleDTO = new ArticleDTO();
-                articleDTO.setCategoryName(categoryName);
-                articleDTO.setTagList(tagList);
-                // 返回对象
-                return articleDTO;
-            };
-            // 将Callable对象提交给线程池执行，并将返回的Future对象添加到List对象中
-            Future<ArticleDTO> future = executorService.submit(task);
-            promiseList.add(future);
-        }
-
-        // 使用增强的 for 循环遍历 promiseList
-        for (Future<ArticleDTO> future : promiseList) {
-            try {
-                ArticleDTO res = future.get();
-                // 获取当前 future 的索引
-                int index = promiseList.indexOf(future);
-                if (index != -1) {
-                    // 直接在循环中修改 rows 的数据
-                    rows.get(index).setCategoryName(res.getCategoryName());
-                    rows.get(index).setTagNameList(res.getTagNameList());
-                    rows.get(index).setArticleCover(qiniu.downloadUrl(rows.get(index).getArticleCover()));
-                }
-            } catch (InterruptedException | ExecutionException | QiniuException e) {
-                // 处理可能抛出的异常
-                e.printStackTrace();
-            }
-        }
-        // 关闭线程池
-        executorService.shutdown();
+        articles.forEach(article -> {
+            article.setCategoryName(categoryMap.get(article.getCategoryId()));
+            Map<String, Object> tagList = blogArticleTagService.getTagListByArticleId(article.getId());
+            List<String> tagNameList = (List<String>) tagList.get("tagNameList");
+            article.setTagList(tagList);
+            article.setTagNameList(tagNameList);
+        });
 
         //添加返回值
         PageInfoResult<BlogArticle> pageInfoResult = new PageInfoResult<>();
         pageInfoResult.setSize(size);
         pageInfoResult.setCurrent(current);
         pageInfoResult.setTotal(count);
-        pageInfoResult.setList(rows);
+        pageInfoResult.setList(articles);
 
         return pageInfoResult;
     }

@@ -42,6 +42,12 @@ public class BlogCategoryServiceImpl extends ServiceImpl<BlogCategoryMapper, Blo
     }
 
     @Override
+    public List<BlogCategory> getCategoryByIds(List<Long> categoryIds) {
+        List<BlogCategory> categories = blogCategoryMapper.selectBatchIds(categoryIds);
+        return categories;
+    }
+
+    @Override
     public List<CategoryResDto> getCategoryDictionary(Map<String,String> params) {
         Integer categoryType = Integer.valueOf(params.get("categoryType"));
         Integer level = null;

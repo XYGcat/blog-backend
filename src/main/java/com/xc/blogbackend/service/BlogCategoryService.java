@@ -25,6 +25,14 @@ public interface BlogCategoryService extends IService<BlogCategory> {
     String getCategoryNameById(Long categoryId);
 
     /**
+     * 通过分类id列表获取分类信息
+     *
+     * @param categoryIds
+     * @return
+     */
+    List<BlogCategory> getCategoryByIds(List<Long> categoryIds);
+
+    /**
      * 根据参数获取分类数据字典
      *
      * @return

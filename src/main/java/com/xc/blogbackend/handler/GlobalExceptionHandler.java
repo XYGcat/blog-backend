@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<BaseResponse> handleException(Exception ex) {
-        BaseResponse<Object> response = new BaseResponse<>(5000, null, "内部服务器错误", "");
+        BaseResponse<Object> response = new BaseResponse<>(5000, null, "内部服务器错误", ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR); // 500 错误
     }
 }
