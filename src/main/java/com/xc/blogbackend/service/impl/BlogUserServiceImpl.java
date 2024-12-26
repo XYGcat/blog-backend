@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.xc.blogbackend.contant.BlogUserConstant;
+import com.xc.blogbackend.contant.UserConstant;
 import com.xc.blogbackend.enums.ErrorCode;
 import com.xc.blogbackend.exception.BusinessException;
 import com.xc.blogbackend.mapper.BlogUserMapper;
@@ -33,7 +33,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static com.xc.blogbackend.contant.BlogUserConstant.USER_LOGIN_STATE;
+import static com.xc.blogbackend.contant.UserConstant.USER_LOGIN_STATE;
 
 /**
 * @author XC
@@ -76,7 +76,7 @@ public class BlogUserServiceImpl extends ServiceImpl<BlogUserMapper, BlogUser>
             throw new BusinessException(ErrorCode.PARAMS_ERROR,"账户不能包含特殊字符");
         }
         //2.加密
-        String encryptPassword = DigestUtils.md5DigestAsHex((BlogUserConstant.SALT + password).getBytes());
+        String encryptPassword = DigestUtils.md5DigestAsHex((UserConstant.SALT + password).getBytes());
         //查询用户是否存在
         QueryWrapper<BlogUser> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("BINARY username",username);
@@ -139,7 +139,7 @@ public class BlogUserServiceImpl extends ServiceImpl<BlogUserMapper, BlogUser>
             throw new BusinessException(ErrorCode.PARAMS_ERROR,"账户不能重复");
         }
         //2.加密
-        String encryptPassword = DigestUtils.md5DigestAsHex((BlogUserConstant.SALT + password).getBytes());
+        String encryptPassword = DigestUtils.md5DigestAsHex((UserConstant.SALT + password).getBytes());
         //3.插入数据
         BlogUser blogUser = new BlogUser();
         blogUser.setUsername(username);
@@ -253,11 +253,11 @@ public class BlogUserServiceImpl extends ServiceImpl<BlogUserMapper, BlogUser>
             throw new BusinessException(ErrorCode.PARAMS_ERROR,"密码不小于8位");
         }
         //2.加密
-        String encryptPassword = DigestUtils.md5DigestAsHex((BlogUserConstant.SALT + password).getBytes());
+        String encryptPassword = DigestUtils.md5DigestAsHex((UserConstant.SALT + password).getBytes());
         BlogUser blogUser = blogUserMapper.selectById(id);
         String oldPassword = blogUser.getPassword();
         if (oldPassword.equals(encryptPassword)){
-            String newPassword =  DigestUtils.md5DigestAsHex((BlogUserConstant.SALT + password1).getBytes());
+            String newPassword =  DigestUtils.md5DigestAsHex((UserConstant.SALT + password1).getBytes());
             blogUser.setPassword(newPassword);
             int i = blogUserMapper.updateById(blogUser);
             return i > 0;

@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
-import static com.xc.blogbackend.contant.BlogUserConstant.statusExcludedPaths;
+import static com.xc.blogbackend.contant.UserConstant.statusExcludedPaths;
 
 /**
  * 身份验证拦截器

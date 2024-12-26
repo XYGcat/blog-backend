@@ -24,7 +24,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
-import static com.xc.blogbackend.contant.BlogUserConstant.USER_LOGIN_STATE;
+import static com.xc.blogbackend.contant.UserConstant.USER_LOGIN_STATE;
 
 /**
  *用户接口
