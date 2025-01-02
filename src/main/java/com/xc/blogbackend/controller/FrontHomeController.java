@@ -4,6 +4,7 @@ import com.xc.blogbackend.common.BaseResponse;
 import com.xc.blogbackend.common.ResultUtils;
 import com.xc.blogbackend.model.domain.vo.WeatherVo;
 import com.xc.blogbackend.service.FrontHomeService;
+import com.xc.blogbackend.utils.IpUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 前台_首页 Controller
@@ -41,19 +43,20 @@ public class FrontHomeController {
      */
     @ApiOperation(value = "获取今日天气信息")
     @GetMapping("/getWeatherCurrent")
-    public BaseResponse<WeatherVo> getWeatherCurrent(@RequestParam String city) {
+    public BaseResponse<WeatherVo> getWeatherCurrent(HttpServletRequest request) {
+        String city = IpUtils.getCityInfo(request);
         WeatherVo weatherCurrent = frontHomeService.getWeatherCurrent(city);
         return ResultUtils.success(weatherCurrent,"获取天气成功");
     }
 
     /**
      * 获取特定城市今天及未来天气信息
-     * @param city
      * @return
      */
     @ApiOperation(value = "获取今天及未来天气信息")
     @GetMapping("/getWeatherForecast")
-    public BaseResponse<WeatherVo> getWeatherForecast(@RequestParam String city) {
+    public BaseResponse<WeatherVo> getWeatherForecast(HttpServletRequest request) {
+        String city = IpUtils.getCityInfo(request);
         WeatherVo weatherForecast = frontHomeService.getWeatherForecast(city);
         return ResultUtils.success(weatherForecast,"获取天气成功");
     }

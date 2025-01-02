@@ -3,7 +3,9 @@ package com.xc.blogbackend.utils;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
 import com.xc.blogbackend.model.domain.IPAddressDomain;
+import org.apache.commons.lang3.StringUtils;
 import org.lionsoul.ip2region.xdb.Searcher;
+
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
@@ -125,4 +127,18 @@ public class IpUtils {
 //        searcher.close();
 //        return region;
 //    }
+
+    /**
+     * 获取城市信息
+     *
+     * @param request
+     * @return
+     */
+    public static String getCityInfo(HttpServletRequest request) {
+        String clientIp = getClientIp(request);
+        if (StringUtils.isEmpty(clientIp) || "127.0.0.1".equals(clientIp)){
+            return "长沙";
+        }
+        return getLocation(clientIp);
+    }
 }
