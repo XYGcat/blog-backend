@@ -2,6 +2,8 @@ package com.xc.blogbackend.service.impl;
 
 import com.xc.blogbackend.common.RollApiResponse;
 import com.xc.blogbackend.contant.RollApi;
+import com.xc.blogbackend.model.domain.vo.DailySentenceVo;
+import com.xc.blogbackend.model.domain.vo.ImageVo;
 import com.xc.blogbackend.model.domain.vo.WeatherVo;
 import com.xc.blogbackend.service.FrontHomeService;
 import org.springframework.core.ParameterizedTypeReference;
@@ -9,13 +11,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.text.MessageFormat;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 @Service
 public class FrontHomeServiceImpl implements FrontHomeService {
     @Override
-    public String getDailyWord() {
+    public DailySentenceVo getDailySentence() {
         WebClient webClient = WebClient.create();
 
         String url = MessageFormat.format(RollApi.ROLL_API_DAILY_WORD, RollApi.APP_ID, RollApi.APP_SECRET);
@@ -25,13 +28,16 @@ public class FrontHomeServiceImpl implements FrontHomeService {
                 .uri(url)
                 .retrieve()                                 // 提取响应
                 .bodyToMono(new ParameterizedTypeReference<RollApiResponse<List<Map<String, String>>>>() {})
-                .block();                                   // 阻塞等待结果
+                .block();
+
+        DailySentenceVo dailySentenceVo = new DailySentenceVo();
 
         if (response != null && response.getCode() == 1) {
-            return response.getData().get(0).get("content");
-        }else {
-            return "暂无~";
+            String text = response.getData().get(0).get("content");
+            dailySentenceVo.setText(text);
+            return dailySentenceVo;
         }
+        return null;
     }
 
     @Override
@@ -95,17 +101,22 @@ public class FrontHomeServiceImpl implements FrontHomeService {
     }
 
     @Override
-    public void getGirlImgList(int page) {
+    public List<ImageVo> getGirlImgList(int page) {
         WebClient webClient = WebClient.create();
 
-        String url = MessageFormat.format(RollApi.ROLL_API_WEATHER_CURRENT,page, RollApi.APP_ID, RollApi.APP_SECRET);
+        String url = MessageFormat.format(RollApi.ROLL_API_GIRL_IMG_LIST,page, RollApi.APP_ID, RollApi.APP_SECRET);
 
-        RollApiResponse<Map<String,String>> response = webClient
+        RollApiResponse<List<ImageVo>> response = webClient
                 .get()
                 .uri(url)
                 .retrieve()                                 // 提取响应
-                .bodyToMono(new ParameterizedTypeReference<RollApiResponse<Map<String,String>>>() {})
+                .bodyToMono(new ParameterizedTypeReference<RollApiResponse<List<ImageVo>>>() {})
                 .block();                                   // 阻塞等待结果
 
+        if (response != null && response.getCode() == 1) {
+            return response.getData();
+        }else {
+            return Collections.emptyList();
+        }
     }
 }

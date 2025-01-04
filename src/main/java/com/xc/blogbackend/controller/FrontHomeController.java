@@ -2,6 +2,8 @@ package com.xc.blogbackend.controller;
 
 import com.xc.blogbackend.common.BaseResponse;
 import com.xc.blogbackend.common.ResultUtils;
+import com.xc.blogbackend.model.domain.vo.DailySentenceVo;
+import com.xc.blogbackend.model.domain.vo.ImageVo;
 import com.xc.blogbackend.model.domain.vo.WeatherVo;
 import com.xc.blogbackend.service.FrontHomeService;
 import com.xc.blogbackend.utils.IpUtils;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Random;
 
 /**
  * 前台_首页 Controller
@@ -31,10 +35,10 @@ public class FrontHomeController {
      * @return
      */
     @ApiOperation(value = "获取每日一句")
-    @GetMapping("/getDailyWord")
-    public BaseResponse<String> getDailyWord() {
-        String dailyWord = frontHomeService.getDailyWord();
-        return ResultUtils.success(dailyWord,"获取每日一句成功");
+    @GetMapping("/getDailySentence")
+    public BaseResponse<DailySentenceVo> getDailySentence() {
+        DailySentenceVo dailySentence = frontHomeService.getDailySentence();
+        return ResultUtils.success(dailySentence,"获取每日一句成功");
     }
 
     /**
@@ -74,7 +78,10 @@ public class FrontHomeController {
 
     @ApiOperation(value = "获取美女图列表")
     @GetMapping("/getGirlImgList")
-    public void getGirlList(@RequestParam int page) {
-         frontHomeService.getGirlImgList(page);
+    public BaseResponse<List<ImageVo>> getGirlList(@RequestParam(required = false) Integer page) {
+        // 随机数
+        int nextInt = new Random().nextInt(50);
+        List<ImageVo> girlImgList = frontHomeService.getGirlImgList(nextInt + 1);
+        return ResultUtils.success(girlImgList,"获取图片列表成功");
     }
 }

@@ -1,6 +1,10 @@
 package com.xc.blogbackend.service;
 
+import com.xc.blogbackend.model.domain.vo.DailySentenceVo;
+import com.xc.blogbackend.model.domain.vo.ImageVo;
 import com.xc.blogbackend.model.domain.vo.WeatherVo;
+
+import java.util.List;
 
 public interface FrontHomeService {
 
@@ -8,7 +12,7 @@ public interface FrontHomeService {
      * 获取每日一句
      * @return
      */
-    String getDailyWord();
+    DailySentenceVo getDailySentence();
 
     /**
      * 获取今日天气信息
@@ -35,5 +39,5 @@ public interface FrontHomeService {
      * 获取girl图片列表
      * @return
      */
-    void getGirlImgList(int page);
+    List<ImageVo> getGirlImgList(int page);
 }
