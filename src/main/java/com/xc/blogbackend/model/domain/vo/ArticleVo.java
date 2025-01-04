@@ -1,4 +1,4 @@
-package com.xc.blogbackend.model.domain;
+package com.xc.blogbackend.model.domain.vo;
 
 import lombok.Data;
 
@@ -11,7 +11,9 @@ import java.util.Map;
  *
  */
 @Data
-public class ArticleDTO implements Serializable {
+public class ArticleVo implements Serializable {
+
+    private static final long serialVersionUID = -6058403189945945857L;
 
     private String categoryName; // 文章所属分类名
     private Map<String, Object> tagList; // 文章标签列表

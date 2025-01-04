@@ -12,7 +12,7 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 /**
  * Jackson 配置类，用于自定义序列化和反序列化
  */
-@Configuration // 声明这是一个配置类
+@Configuration
 public class JacksonConfig {
 
     @Bean // 声明这个方法返回一个 Bean，Spring 会管理这个 Bean 的生命周期

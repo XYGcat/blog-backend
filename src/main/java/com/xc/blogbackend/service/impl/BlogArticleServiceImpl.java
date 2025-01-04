@@ -10,7 +10,6 @@ import com.xc.blogbackend.enums.CategoryEnum;
 import com.xc.blogbackend.enums.ErrorCode;
 import com.xc.blogbackend.exception.BusinessException;
 import com.xc.blogbackend.mapper.BlogArticleMapper;
-import com.xc.blogbackend.model.domain.ArticleDTO;
 import com.xc.blogbackend.model.domain.entity.BlogArticle;
 import com.xc.blogbackend.model.domain.entity.BlogArticleTag;
 import com.xc.blogbackend.model.domain.entity.BlogCategory;
@@ -22,6 +21,7 @@ import com.xc.blogbackend.model.domain.resDto.ArticleListByContent;
 import com.xc.blogbackend.model.domain.resDto.ArticleResDto;
 import com.xc.blogbackend.model.domain.resDto.PageInfoResult;
 import com.xc.blogbackend.model.domain.resDto.RecommendResult;
+import com.xc.blogbackend.model.domain.vo.ArticleVo;
 import com.xc.blogbackend.service.*;
 import com.xc.blogbackend.utils.*;
 import lombok.extern.slf4j.Slf4j;
@@ -135,13 +135,13 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
         Long count = articlePage.getTotal();
 
 //        数据清理：假设需要保留的字段是 id、title 和 createdAt
-//        ArticleDTO 是自己定义的一个类，用于存储需要的字段
-//        List<ArticleDTO> cleanedRows = rows.stream().map(article -> {
-//            ArticleDTO articleDTO = new ArticleDTO();
+//        ArticleVo 是自己定义的一个类，用于存储需要的字段
+//        List<ArticleVo> cleanedRows = rows.stream().map(article -> {
+//            ArticleVo articleDTO = new ArticleVo();
 //            articleDTO.setId(article.getId());
 //            articleDTO.setTitle(article.getTitle());
 //            articleDTO.setCreatedAt(article.getCreatedAt());
-//            // 如果 ArticleDTO 中有其他需要的字段，也可以在这里设置
+//            // 如果 ArticleVo 中有其他需要的字段，也可以在这里设置
 //            return articleDTO;
 //        }).collect(Collectors.toList());
 
@@ -150,31 +150,31 @@ public class BlogArticleServiceImpl extends ServiceImpl<BlogArticleMapper, BlogA
         ExecutorService executorService = Executors.newFixedThreadPool(10);
 
         // 创建一个List<Future>对象，用于存储每个异步任务的返回值
-        List<Future<ArticleDTO>> promiseList = new ArrayList<>();
+        List<Future<ArticleVo>> promiseList = new ArrayList<>();
 
         // 遍历rows数组中的每个元素
         for (BlogArticle v : rows) {
             // 创建一个Callable对象，定义异步任务的逻辑
-            Callable<ArticleDTO> task = () -> {
+            Callable<ArticleVo> task = () -> {
                 // 调用其他方法或访问数据库，获取需要的数据
                 String categoryName = blogCategoryService.getCategoryNameById(v.getCategoryId());
                 Map<String, Object> tagList = blogArticleTagService.getTagListByArticleId(v.getId());
                 // 创建一个对象，存储数据
-                ArticleDTO articleDTO = new ArticleDTO();
-                articleDTO.setCategoryName(categoryName);
-                articleDTO.setTagList(tagList);
+                ArticleVo articleVo = new ArticleVo();
+                articleVo.setCategoryName(categoryName);
+                articleVo.setTagList(tagList);
                 // 返回对象
-                return articleDTO;
+                return articleVo;
             };
             // 将Callable对象提交给线程池执行，并将返回的Future对象添加到List对象中
-            Future<ArticleDTO> future = executorService.submit(task);
+            Future<ArticleVo> future = executorService.submit(task);
             promiseList.add(future);
         }
 
         // 使用增强的 for 循环遍历 promiseList
-        for (Future<ArticleDTO> future : promiseList) {
+        for (Future<ArticleVo> future : promiseList) {
             try {
-                ArticleDTO res = future.get();
+                ArticleVo res = future.get();
                 // 获取当前 future 的索引
                 int index = promiseList.indexOf(future);
                 if (index != -1) {

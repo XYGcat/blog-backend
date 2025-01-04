@@ -2,7 +2,7 @@ package com.xc.blogbackend.utils;
 
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
-import com.xc.blogbackend.model.domain.IPAddressDomain;
+import com.xc.blogbackend.model.domain.entity.IPAddressEntity;
 import org.apache.commons.lang3.StringUtils;
 import org.lionsoul.ip2region.xdb.Searcher;
 
@@ -66,7 +66,7 @@ public class IpUtils {
      * @return
      */
     public static String getLocation(String ip) {
-        IPAddressDomain location = new IPAddressDomain();
+        IPAddressEntity location = new IPAddressEntity();
         location.setIp(ip);
         try (InputStream inputStream = IpUtils.class.getResourceAsStream("/ip2region.xdb");) {
             byte[] bytes = IoUtil.readBytes(inputStream);
