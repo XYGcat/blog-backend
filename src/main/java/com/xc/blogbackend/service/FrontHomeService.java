@@ -6,6 +6,9 @@ import com.xc.blogbackend.model.domain.vo.WeatherVo;
 
 import java.util.List;
 
+/**
+ * 首页服务
+ */
 public interface FrontHomeService {
 
     /**

@@ -11,7 +11,7 @@ public class ImageVo{
     /**
      * 图片链接
      */
-    private String imgUrl;
+    private String imageUrl;
 
     /**
      * 图片尺寸

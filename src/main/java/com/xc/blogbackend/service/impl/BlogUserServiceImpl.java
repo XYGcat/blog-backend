@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.xc.blogbackend.contant.UserConstant;
+import com.xc.blogbackend.constant.UserConstant;
 import com.xc.blogbackend.enums.ErrorCode;
 import com.xc.blogbackend.exception.BusinessException;
 import com.xc.blogbackend.mapper.BlogUserMapper;
@@ -33,7 +33,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static com.xc.blogbackend.contant.UserConstant.USER_LOGIN_STATE;
+import static com.xc.blogbackend.constant.UserConstant.USER_LOGIN_STATE;
 
 /**
 * @author XC

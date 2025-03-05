@@ -14,7 +14,7 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.UUID;
 
-import static com.xc.blogbackend.contant.UserConstant.JWT_SECRET;
+import static com.xc.blogbackend.constant.UserConstant.JWT_SECRET;
 
 /**
  * 生成并解析Token的工具类

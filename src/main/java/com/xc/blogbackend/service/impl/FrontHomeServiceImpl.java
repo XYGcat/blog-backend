@@ -1,7 +1,7 @@
 package com.xc.blogbackend.service.impl;
 
 import com.xc.blogbackend.common.RollApiResponse;
-import com.xc.blogbackend.contant.RollApi;
+import com.xc.blogbackend.constant.RollApi;
 import com.xc.blogbackend.model.domain.vo.DailySentenceVo;
 import com.xc.blogbackend.model.domain.vo.ImageVo;
 import com.xc.blogbackend.model.domain.vo.WeatherVo;

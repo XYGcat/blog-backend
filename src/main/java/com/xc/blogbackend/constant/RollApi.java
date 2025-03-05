@@ -1,4 +1,4 @@
-package com.xc.blogbackend.contant;
+package com.xc.blogbackend.constant;
 
 /**
  * Roll Api接口

@@ -6,8 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import static com.xc.blogbackend.contant.UserConstant.loginInterceptPaths;
-import static com.xc.blogbackend.contant.UserConstant.statusInterceptPaths;
+import static com.xc.blogbackend.constant.UserConstant.loginInterceptPaths;
+import static com.xc.blogbackend.constant.UserConstant.statusInterceptPaths;
 
 /**
  * springboot注册拦截器
