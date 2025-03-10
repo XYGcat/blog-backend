@@ -20,7 +20,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
     // 进入controller层之前拦截请求
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         String requestURI = request.getRequestURI();
 
         // 排除特定的请求路径
