@@ -1,7 +1,8 @@
 package com.xc.blogbackend.config;
 
-import com.xc.blogbackend.handler.AuthenticationInterceptor;
+import com.xc.blogbackend.constant.UserConstant;
 import com.xc.blogbackend.handler.LoginCheckInterceptor;
+import com.xc.blogbackend.handler.PermissionInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -18,12 +19,10 @@ public class InterceptorConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         // 登录拦截器
         registry.addInterceptor(new LoginCheckInterceptor())
-                .addPathPatterns("/**")         // 匹配所有路径
-                .excludePathPatterns();         // 排除特定路径
+                .addPathPatterns(UserConstant.loginInterceptPaths);
 
         // 权限拦截器
-        registry.addInterceptor(new AuthenticationInterceptor())
-                .addPathPatterns("/**")
-                .excludePathPatterns();
+        registry.addInterceptor(new PermissionInterceptor())
+                .addPathPatterns("/**");
     }
 }

@@ -1,6 +1,8 @@
 package com.xc.blogbackend.handler;
 
 import cn.hutool.core.util.ObjectUtil;
+import com.xc.blogbackend.annotation.context.UserContext;
+import com.xc.blogbackend.enums.ErrorCode;
 import com.xc.blogbackend.exception.BusinessException;
 import com.xc.blogbackend.model.domain.vo.UserVo;
 import com.xc.blogbackend.utils.JwtGenerator;
@@ -20,12 +22,6 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
     // 进入controller层之前拦截请求
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-//        String requestURI = reqDto.getRequestURI();
-//
-//        // 排除特定的请求路径，比如 "/api/user/login"
-//        if (loginExcludedPaths.stream().anyMatch(requestURI::contains)) {
-//            return true; // 放行特定路径的请求
-//        }
 
         // 在这里编写逻辑来检查登录凭证，例如从请求中获取token或者session进行验证
         // 如果验证失败，可以设置响应状态码或者重定向到登录页面;如果验证成功，返回true，允许请求继续处理
@@ -42,13 +38,13 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
                 ? authorization.replace("Bearer ", "")
                 : authorization;
 
-        UserVo blogUser = JwtGenerator.parseToken(token);
-        if (ObjectUtil.isNotEmpty(blogUser)) {
-            request.setAttribute("user", blogUser);
-            return true;
+        UserVo userVo = JwtGenerator.parseToken(token);
+        if (ObjectUtil.isEmpty(userVo)) {
+            throw new BusinessException(ErrorCode.NO_LOGIN);
         }
+        UserContext.setUser(userVo); // 将用户信息放入 ThreadLocal
 
-        return false;
+        return true;
     }
 
     // 在请求处理之后进行拦截
@@ -60,6 +56,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
     // 在整个请求完成后进行拦截
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-        // 可以在这里进行一些资源清理操作等
+        // 清理 ThreadLocal，防止内存泄漏
+        UserContext.clear();
     }
 }

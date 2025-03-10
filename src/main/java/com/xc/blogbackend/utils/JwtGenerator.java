@@ -78,7 +78,7 @@ public class JwtGenerator {
         return Jwts.builder()
     //			.setHeader(header) // 设置头部信息
                 .setClaims(claims)  // 如果有私有声明，一定要先设置自己创建的这个私有声明，这是给builder的claim赋值，一旦写在标准的声明赋值之后，就是覆盖了那些标准的声明
-                .setId(JWT_ID) //jwt的唯一身份标识，根据业务需要，可以设置为一个不重复的值，主要用来作为一次性token，从而回避重放攻击
+                .setId(JWT_ID) // jwt的唯一身份标识，根据业务需要，可以设置为一个不重复的值，主要用来作为一次性token，从而回避重放攻击
                 .setExpiration(expirationDate)  // 设置过期时间
                 .signWith(key,signatureAlgorithm)   // 设置签名，使用的是签名算法和签名使用的秘钥
                 .compact();

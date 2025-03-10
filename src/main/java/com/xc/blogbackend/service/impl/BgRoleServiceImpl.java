@@ -21,15 +21,11 @@ public class BgRoleServiceImpl extends ServiceImpl<BgRoleMapper, BgRole>
     implements BgRoleService{
 
     @Resource
-    private BgRoleMapper bgRoleMapper;
-
-    @Resource
     private BgUserRoleMapper bgUserRoleMapper;
 
     @Override
     public List<RoleVo> getUserRole(Long userId) {
-        List<RoleVo> userRoles = bgUserRoleMapper.getUserRole(userId);
-        return userRoles;
+        return bgUserRoleMapper.getUserRole(userId);
     }
 }
 
