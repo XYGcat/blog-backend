@@ -1,6 +1,6 @@
-package com.xc.blogbackend.client;
+package com.xc.blogbackend.ai.client;
 
-import com.xc.blogbackend.listener.AiListener;
+import com.xc.blogbackend.ai.listener.AiListener;
 import com.xc.blogbackend.utils.AuthUtils;
 import lombok.Data;
 import lombok.SneakyThrows;

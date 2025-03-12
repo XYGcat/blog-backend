@@ -1,63 +1,50 @@
-package com.xc.blogbackend.service.impl;
+package com.xc.blogbackend.ai.service.impl;
 
-import com.xc.blogbackend.client.AiWebSocketClient;
-import com.xc.blogbackend.handler.AiChatRequestHandler;
-import com.xc.blogbackend.listener.AiListener;
-import com.xc.blogbackend.model.domain.ai.AiReqDto;
-import com.xc.blogbackend.model.domain.ai.AiResDto;
-import com.xc.blogbackend.model.domain.ai.ChatReqDto;
-import com.xc.blogbackend.service.AiService;
+import com.xc.blogbackend.ai.AiService;
+import com.xc.blogbackend.ai.client.AiWebSocketClient;
+import com.xc.blogbackend.ai.enums.AiModelEnum;
+import com.xc.blogbackend.ai.handler.AiChatRequestHandler;
+import com.xc.blogbackend.ai.listener.AiListener;
+import com.xc.blogbackend.ai.model.AiReqDto;
+import com.xc.blogbackend.ai.model.AiResDto;
+import com.xc.blogbackend.ai.model.ChatReqDto;
 import io.github.cdimascio.dotenv.Dotenv;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * AI接口实现
+ * Spark AI 的实现，bean 名称为 "SPARKAI"
  */
 @Slf4j
-@Service
-public class AiServiceImpl implements AiService {
+@Service("SPARKAI")
+public class SparkServiceImpl implements AiService {
 
-    private final String model = "SPARK";
-    private final Map<String, Map<String, String>> modelConfigs = new HashMap<>();
+    private final String appId;
+    private final String apiKey;
+    private final String apiSecret;
+    private final String apiHost;
+    private final String model;
 
 
-    // 构造函数中动态加载所有模型的 API Key
-    public AiServiceImpl() {
+    /**
+     * 构造函数，从环境变量中获取 Spark AI 的配置信息
+     */
+    public SparkServiceImpl() {
         Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
 
-        // 为不同的模型初始化配置
-        Map<String, String> sparkConfig = new HashMap<>();
-        sparkConfig.put("SPARK_APP_ID", dotenv.get("SPARK_APP_ID"));
-        sparkConfig.put("SPARK_APP_KEY", dotenv.get("SPARK_APP_KEY"));
-        sparkConfig.put("SPARK_API_SECRET", dotenv.get("SPARK_API_SECRET"));
-        sparkConfig.put("SPARK_API_HOST_WSS_V3_5", dotenv.get("SPARK_API_HOST_WSS_V3_5"));
-
-        Map<String, String> openAiConfig = new HashMap<>();
-        openAiConfig.put("OPENAI_API_BASE", dotenv.get("OPENAI_API_BASE"));
-        openAiConfig.put("OPENAI_API_KEY", dotenv.get("OPENAI_API_KEY"));
-        openAiConfig.put("OPENAI_API_VERSION", dotenv.get("OPENAI_API_VERSION"));
-        openAiConfig.put("OPENAI_API_MODEL", dotenv.get("OPENAI_API_MODEL"));
-
-        // 将每个模型的配置放入 Map 中
-        modelConfigs.put("SPARK", sparkConfig);
-        modelConfigs.put("OPENAI", openAiConfig);
+        this.appId = dotenv.get("SPARK_APP_ID");
+        this.apiKey = dotenv.get("SPARK_API_KEY");
+        this.apiSecret = dotenv.get("SPARK_API_SECRET");
+        this.apiHost = AiModelEnum.SPARK_MAX.getHost();
+        this.model = AiModelEnum.SPARK_MAX.getModel();
     }
 
     @Override
     public ResponseBodyEmitter chatProcess(ChatReqDto chatRequest) {
-        Map<String, String> modelConfig = modelConfigs.get(model);
-        String appId = modelConfig.get("SPARK_APP_ID");
-        String apiKey = modelConfig.get("SPARK_APP_KEY");
-        String apiSecret = modelConfig.get("SPARK_API_SECRET");
-        String apiHost = modelConfig.get("SPARK_API_HOST_WSS_V3_5");
-
         // 创建 ResponseBodyEmitter 实例
         ResponseBodyEmitter emitter = new ResponseBodyEmitter();
 
@@ -67,7 +54,7 @@ public class AiServiceImpl implements AiService {
 
             // 封装 Spark 请求参数
             AiChatRequestHandler aiChatRequestHandler = new AiChatRequestHandler();
-            AiReqDto aiReqDto = aiChatRequestHandler.handle(prompt, appId);
+            AiReqDto aiReqDto = aiChatRequestHandler.handle(prompt, appId, model);
 
             // 创建 SparkDeskClient 实例用于与 Spark 模型通信
             AiWebSocketClient aiWebSocketClient = AiWebSocketClient.builder()
@@ -99,5 +86,10 @@ public class AiServiceImpl implements AiService {
         });
 
         return emitter;
+    }
+
+    @Override
+    public String callAi(String prompt) {
+        return "";
     }
 }

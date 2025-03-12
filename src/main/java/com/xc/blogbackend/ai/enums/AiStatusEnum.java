@@ -1,4 +1,4 @@
-package com.xc.blogbackend.enums;
+package com.xc.blogbackend.ai.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum AiStatus {
+public enum AiStatusEnum {
 
     START(0), // 起始状态，取值为0。
 

@@ -1,10 +1,10 @@
-package com.xc.blogbackend.listener;
+package com.xc.blogbackend.ai.listener;
 
 import cn.hutool.json.JSONUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.xc.blogbackend.enums.AiStatus;
-import com.xc.blogbackend.model.domain.ai.AiReqDto;
-import com.xc.blogbackend.model.domain.ai.AiResDto;
+import com.xc.blogbackend.ai.enums.AiStatusEnum;
+import com.xc.blogbackend.ai.model.AiReqDto;
+import com.xc.blogbackend.ai.model.AiResDto;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Response;
@@ -108,7 +108,7 @@ public abstract class AiListener extends WebSocketListener {
      */
     private boolean isEnd(AiResDto response) {
         return response != null && response.getHeader() != null &&
-                AiStatus.END.getValue() == response.getHeader().getStatus();
+                AiStatusEnum.END.getValue() == response.getHeader().getStatus();
     }
 
     /**

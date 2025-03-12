@@ -1,4 +1,4 @@
-package com.xc.blogbackend.annotation.context;
+package com.xc.blogbackend.context;
 
 import com.xc.blogbackend.model.domain.vo.UserVo;
 

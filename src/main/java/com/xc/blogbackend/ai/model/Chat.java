@@ -1,4 +1,4 @@
-package com.xc.blogbackend.model.domain.ai;
+package com.xc.blogbackend.ai.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -13,7 +13,6 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true) // 指示在反序列化时忽略未知属性。
 public class Chat {
     /**
-     * 取值为[general,generalv2,generalv3,generalv3.5]
      * 指定访问的领域,generalv3.5指向V3.5版本。注意：不同的取值对应的url也不一样
      */
     private String domain;

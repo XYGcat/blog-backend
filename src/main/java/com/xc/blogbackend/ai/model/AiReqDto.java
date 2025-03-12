@@ -1,4 +1,4 @@
-package com.xc.blogbackend.model.domain.ai;
+package com.xc.blogbackend.ai.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

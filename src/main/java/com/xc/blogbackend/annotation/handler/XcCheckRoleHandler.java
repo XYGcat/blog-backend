@@ -2,7 +2,7 @@ package com.xc.blogbackend.annotation.handler;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.xc.blogbackend.annotation.XcCheckRole;
-import com.xc.blogbackend.annotation.context.UserContext;
+import com.xc.blogbackend.context.UserContext;
 import com.xc.blogbackend.enums.ErrorCode;
 import com.xc.blogbackend.exception.BusinessException;
 import com.xc.blogbackend.model.domain.vo.UserVo;

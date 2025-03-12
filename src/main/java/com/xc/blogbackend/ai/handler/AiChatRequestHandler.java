@@ -1,8 +1,8 @@
-package com.xc.blogbackend.handler;
+package com.xc.blogbackend.ai.handler;
 
-import com.xc.blogbackend.model.domain.ai.AiReqDto;
-import com.xc.blogbackend.model.domain.ai.Chat;
-import com.xc.blogbackend.model.domain.ai.Text;
+import com.xc.blogbackend.ai.model.AiReqDto;
+import com.xc.blogbackend.ai.model.Chat;
+import com.xc.blogbackend.ai.model.Text;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,7 +18,7 @@ public class AiChatRequestHandler {
      *
      * @param msg 用户输入
      */
-    public AiReqDto handle(String msg, String appId){
+    public AiReqDto handle(String msg, String appId, String model){
         // 构建请求头信息
         AiReqDto.InHeader header = AiReqDto.InHeader.builder()
                 .uid(UUID.randomUUID().toString().substring(0, 10)) // 设置用户ID为随机生成的10位字符串
@@ -28,7 +28,7 @@ public class AiChatRequestHandler {
         // 构建请求参数信息
         AiReqDto.Parameter parameter = AiReqDto.Parameter.builder()
                 .chat(Chat.builder()
-                        .domain("generalv3.5") // 设置访问的领域为V3.5版本
+                        .domain(model) // 设置访问的领域为V3.5版本
                         .maxTokens(2048) // 设置最大token数为2048
                         .temperature(0.3) // 设置温度为0.3
                         .build())
