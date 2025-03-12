@@ -1,6 +1,5 @@
 package com.xc.blogbackend.handler;
 
-import com.xc.blogbackend.constant.AiConstant;
 import com.xc.blogbackend.model.domain.ai.AiReqDto;
 import com.xc.blogbackend.model.domain.ai.Chat;
 import com.xc.blogbackend.model.domain.ai.Text;
@@ -19,11 +18,11 @@ public class AiChatRequestHandler {
      *
      * @param msg 用户输入
      */
-    public AiReqDto handle(String msg){
+    public AiReqDto handle(String msg, String appId){
         // 构建请求头信息
         AiReqDto.InHeader header = AiReqDto.InHeader.builder()
                 .uid(UUID.randomUUID().toString().substring(0, 10)) // 设置用户ID为随机生成的10位字符串
-                .appid(AiConstant.APP_ID) // 设置应用ID
+                .appid(appId) // 设置应用ID
                 .build();
 
         // 构建请求参数信息
