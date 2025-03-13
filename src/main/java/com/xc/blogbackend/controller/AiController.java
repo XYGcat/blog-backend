@@ -2,7 +2,7 @@ package com.xc.blogbackend.controller;
 
 import com.xc.blogbackend.ai.AiService;
 import com.xc.blogbackend.ai.factory.AiServiceFactory;
-import com.xc.blogbackend.ai.model.ChatReqDto;
+import com.xc.blogbackend.ai.model.spark.ChatRequest;
 import com.xc.blogbackend.common.BaseResponse;
 import com.xc.blogbackend.common.ResultUtils;
 import io.swagger.annotations.Api;
@@ -30,9 +30,9 @@ public class AiController {
 
     @ApiOperation(value = "AI对话")
     @PostMapping("/chat")
-    public ResponseBodyEmitter chatProcess(@RequestBody ChatReqDto chatRequest) {
+    public ResponseBodyEmitter chatProcess(@RequestBody ChatRequest chatRequest) {
         AiService aiService = aiServiceFactory.getAiService("SPARKAI");
-        return aiService.chatProcess(chatRequest);
+        return aiService.chatProcess(chatRequest, "generalv3.5");
     }
 
     /**

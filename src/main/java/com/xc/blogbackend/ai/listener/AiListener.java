@@ -2,9 +2,6 @@ package com.xc.blogbackend.ai.listener;
 
 import cn.hutool.json.JSONUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.xc.blogbackend.ai.enums.AiStatusEnum;
-import com.xc.blogbackend.ai.model.AiReqDto;
-import com.xc.blogbackend.ai.model.AiResDto;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Response;
@@ -18,22 +15,29 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * 抽象的 AI 监听器，用于处理 AI 模型返回的数据和错误信息。
+ * 子类需要实现 isSuccess()、isEnd()、onChatOutput()、onChatEnd() 等抽象方法。
+ *
+ * @param <REQ>  请求参数类型
+ * @param <RES>  响应参数类型
+ * @author xc
+ */
 @Slf4j
 @Getter
-public abstract class AiListener extends WebSocketListener {
+public abstract class AiListener<REQ, RES> extends WebSocketListener {
 
-    private List<AiResDto> aiResDtoList = new ArrayList<>();
-    private AiReqDto aiReqDto;
+    private List<RES> responseList = new ArrayList<>();
+    private REQ request;
 
     // 提前初始化 ObjectMapper，提高性能
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    protected static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     /**
-     * 构造方法，传入大模型参数
-     * @param aiReqDto 大模型请求参数
+     * 构造方法，传入泛型请求参数
      */
-    public AiListener(AiReqDto aiReqDto) {
-        this.aiReqDto = Objects.requireNonNull(aiReqDto, "aiReqDto 不能为空");
+    public AiListener(REQ request) {
+        this.request = Objects.requireNonNull(request, "request 不能为空");
     }
 
     /**
@@ -42,8 +46,7 @@ public abstract class AiListener extends WebSocketListener {
     @Override
     public final void onOpen(@NotNull WebSocket webSocket, @NotNull Response response) {
         log.info("WebSocket 连接成功");
-        super.onOpen(webSocket, response); // 调用父类方法
-        AiReqDto request = (aiReqDto != null) ? aiReqDto : this.getAiReqDto();
+        super.onOpen(webSocket, response);
 
         try {
             String jsonRequest = OBJECT_MAPPER.writeValueAsString(request);
@@ -59,29 +62,31 @@ public abstract class AiListener extends WebSocketListener {
      */
     @Override
     public final void onMessage(@NotNull WebSocket webSocket, @NotNull String text) {
-        AiResDto response = JSONUtil.toBean(text, AiResDto.class);
+        try {
+            RES response = JSONUtil.toBean(text, getResponseType());
+            if (!isSuccess(response)) {
+                handleError(webSocket, response);
+                return;
+            }
 
-        if (!isSuccess(response)) {
-            handleError(webSocket, response);
-            return;
-        }
+            responseList.add(response);
+            onChatOutput(response);
 
-        aiResDtoList.add(response);
-        onChatOutput(response);
-
-        if (isEnd(response)) {
-            closeWebSocket(webSocket, "星火模型返回结束");
-            onChatEnd(aiResDtoList);
-            onChatToken(response.getPayload().getUsage());
+            if (isEnd(response)) {
+                closeWebSocket(webSocket, "模型返回结束");
+                onChatEnd(responseList);
+            }
+        } catch (Exception e) {
+            log.error("解析 WebSocket 消息失败", e);
+            closeWebSocket(webSocket, "消息解析失败");
         }
     }
 
     /**
-     * 处理接收到的字节消息（默认不做处理，可在子类重写）
+     * 处理接收到的二进制消息（默认不做处理，可在子类重写）
      */
     @Override
     public void onMessage(@NotNull WebSocket webSocket, @NotNull ByteString bytes) {
-        super.onMessage(webSocket, bytes);
         log.info("收到二进制数据，长度: {}", bytes.size());
     }
 
@@ -96,27 +101,20 @@ public abstract class AiListener extends WebSocketListener {
     }
 
     /**
-     * 判断请求是否成功
+     * 判断请求是否成功（由子类实现）
      */
-    private boolean isSuccess(AiResDto response) {
-        return response != null && response.getHeader() != null &&
-                AiResDto.OutHeader.Code.SUCCESS.getValue() == response.getHeader().getCode();
-    }
+    protected abstract boolean isSuccess(RES response);
 
     /**
-     * 判断是否结束
+     * 判断是否结束（由子类实现）
      */
-    private boolean isEnd(AiResDto response) {
-        return response != null && response.getHeader() != null &&
-                AiStatusEnum.END.getValue() == response.getHeader().getStatus();
-    }
+    protected abstract boolean isEnd(RES response);
 
     /**
      * 处理错误信息
      */
-    private void handleError(WebSocket webSocket, AiResDto response) {
-        log.warn("调用大模型发生错误，错误码: {}，请求 ID: {}",
-                response.getHeader().getCode(), response.getHeader().getSid());
+    private void handleError(WebSocket webSocket, RES response) {
+        log.warn("调用大模型发生错误: {}", response);
         closeWebSocket(webSocket, "大模型调用异常");
         onChatError(response);
     }
@@ -130,30 +128,36 @@ public abstract class AiListener extends WebSocketListener {
         }
     }
 
+    /**
+     * 获取响应类型
+     * 子类可以实现此方法，返回具体的响应类型
+     */
+    protected abstract Class<RES> getResponseType();
+
     // --- 抽象方法，可由子类实现 ---
 
     /**
      * 处理 AI 模型返回的数据
      */
-    public abstract void onChatOutput(AiResDto aiResDto);
+    public abstract void onChatOutput(RES response);
 
     /**
      * 处理对话结束
      */
-    public abstract void onChatEnd(List<AiResDto> aiResDtoList);
+    public abstract void onChatEnd(List<RES> responseList);
 
     /**
      * 记录 token 消耗情况（可选实现）
      */
-    public void onChatToken(AiResDto.Usage usage) {
+    public void onChatToken(Object usage) {
         log.info("Token 消耗情况: {}", usage);
     }
 
     /**
      * 发送请求时的自定义参数（可选实现）
      */
-    public AiReqDto onChatSend() {
-        return this.aiReqDto;
+    public REQ onChatSend() {
+        return this.request;
     }
 
     /**
@@ -166,7 +170,7 @@ public abstract class AiListener extends WebSocketListener {
     /**
      * 处理 AI 模型错误响应（可选实现）
      */
-    public void onChatError(AiResDto aiResDto) {
-        log.warn("AI 模型返回错误: {}", aiResDto);
+    public void onChatError(RES response) {
+        log.warn("AI 模型返回错误: {}", response);
     }
 }

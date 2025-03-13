@@ -4,10 +4,10 @@ import com.xc.blogbackend.ai.AiService;
 import com.xc.blogbackend.ai.client.AiWebSocketClient;
 import com.xc.blogbackend.ai.enums.AiModelEnum;
 import com.xc.blogbackend.ai.handler.AiChatRequestHandler;
-import com.xc.blogbackend.ai.listener.AiListener;
-import com.xc.blogbackend.ai.model.AiReqDto;
-import com.xc.blogbackend.ai.model.AiResDto;
-import com.xc.blogbackend.ai.model.ChatReqDto;
+import com.xc.blogbackend.ai.listener.SparkListener;
+import com.xc.blogbackend.ai.model.spark.ChatRequest;
+import com.xc.blogbackend.ai.model.spark.SparkRequest;
+import com.xc.blogbackend.ai.model.spark.SparkResponse;
 import io.github.cdimascio.dotenv.Dotenv;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,7 +29,6 @@ public class SparkServiceImpl implements AiService {
     private final String apiHost;
     private final String model;
 
-
     /**
      * 构造函数，从环境变量中获取 Spark AI 的配置信息
      */
@@ -44,7 +43,7 @@ public class SparkServiceImpl implements AiService {
     }
 
     @Override
-    public ResponseBodyEmitter chatProcess(ChatReqDto chatRequest) {
+    public ResponseBodyEmitter chatProcess(ChatRequest chatRequest, String... aiModel) {
         // 创建 ResponseBodyEmitter 实例
         ResponseBodyEmitter emitter = new ResponseBodyEmitter();
 
@@ -54,7 +53,7 @@ public class SparkServiceImpl implements AiService {
 
             // 封装 Spark 请求参数
             AiChatRequestHandler aiChatRequestHandler = new AiChatRequestHandler();
-            AiReqDto aiReqDto = aiChatRequestHandler.handle(prompt, appId, model);
+            SparkRequest sparkRequest = aiChatRequestHandler.handle(prompt, appId, model);
 
             // 创建 SparkDeskClient 实例用于与 Spark 模型通信
             AiWebSocketClient aiWebSocketClient = AiWebSocketClient.builder()
@@ -65,11 +64,11 @@ public class SparkServiceImpl implements AiService {
                     .build();
 
             // 发起聊天请求并设置回调
-            aiWebSocketClient.chat(new AiListener(aiReqDto) {
+            aiWebSocketClient.chat(new SparkListener(sparkRequest) {
                 @Override
-                public void onChatOutput(AiResDto aiResDto) {
+                public void onChatOutput(SparkResponse sparkResponse) {
                     try {
-                        String content = aiResDto.getPayload().getChoices().getText().get(0).getContent();
+                        String content = sparkResponse.getPayload().getChoices().getText().get(0).getContent();
                         log.info("content: {}", content);
                         // 将响应内容发送给客户端
                         emitter.send(content);
@@ -79,17 +78,12 @@ public class SparkServiceImpl implements AiService {
                     }
                 }
                 @Override
-                public void onChatEnd(List<AiResDto> aiResDtoList) {
+                public void onChatEnd(List<SparkResponse> sparkResponseList) {
                     emitter.complete();
                 }
             });
         });
 
         return emitter;
-    }
-
-    @Override
-    public String callAi(String prompt) {
-        return "";
     }
 }
