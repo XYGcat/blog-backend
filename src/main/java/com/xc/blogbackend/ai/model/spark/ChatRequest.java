@@ -1,4 +1,4 @@
-package com.xc.blogbackend.ai.model;
+package com.xc.blogbackend.ai.model.spark;
 
 import lombok.Data;
 
@@ -6,7 +6,7 @@ import lombok.Data;
  * 聊天请求参数
  */
 @Data
-public class ChatReqDto {
+public class ChatRequest {
 
     // 聊天消息
     private String prompt;

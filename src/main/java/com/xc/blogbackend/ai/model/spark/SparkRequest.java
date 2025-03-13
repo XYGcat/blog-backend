@@ -1,4 +1,4 @@
-package com.xc.blogbackend.ai.model;
+package com.xc.blogbackend.ai.model.spark;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -19,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true) // 指示在反序列化时忽略未知属性
-public class AiReqDto {
+public class SparkRequest {
 
     private InHeader header;
     private Parameter parameter;

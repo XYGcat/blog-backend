@@ -1,4 +1,4 @@
-package com.xc.blogbackend.ai.model;
+package com.xc.blogbackend.ai.model.spark;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;

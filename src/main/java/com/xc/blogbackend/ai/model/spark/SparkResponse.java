@@ -1,4 +1,4 @@
-package com.xc.blogbackend.ai.model;
+package com.xc.blogbackend.ai.model.spark;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -9,12 +9,12 @@ import lombok.Getter;
 import java.util.List;
 
 /**
- * AI响应数据模型
+ * SparkAI的响应信息
  */
 @Data
 @AllArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class AiResDto {
+@JsonIgnoreProperties(ignoreUnknown = true) // 忽略JSON中多余的字段
+public class SparkResponse {
 
     // OutHeader对象，表示响应的头部信息
     private OutHeader header;
@@ -55,10 +55,9 @@ public class AiResDto {
          */
         @Getter
         @AllArgsConstructor
-        public enum Code { // Code枚举声明
-
+        public enum Code {
             SUCCESS(0), // 成功状态，错误码为0。
-
+            // 可扩展其他错误码
             ;
 
             private final int value; // 错误码的值。
@@ -72,7 +71,7 @@ public class AiResDto {
     @Data
     @AllArgsConstructor
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public class OutPayload {
+    public static class OutPayload {
 
         /**
          * 问答信息,用于表示选择的响应
@@ -91,7 +90,7 @@ public class AiResDto {
     @Data
     @AllArgsConstructor
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public class Choices {
+    public static class Choices {
 
         /**
          * 文本响应状态，取值为[0,1,2]; 0代表首个文本结果；1代表中间文本结果；2代表最后一个文本结果
@@ -115,14 +114,14 @@ public class AiResDto {
     @Data
     @AllArgsConstructor
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public class Usage {
+    public static class Usage {
 
         // 文本，用于表示使用情况中的文本信息
         private Text text;
 
         @Data
         @AllArgsConstructor
-        public class Text {
+        public static class Text {
 
             @JsonProperty("question_tokens")
             private Integer questionTokens; // 问题标记数，用于表示问题中的标记数量。
@@ -137,5 +136,4 @@ public class AiResDto {
             private Integer totalTokens; // 总标记数，用于表示总共的标记数量。
         }
     }
-
 }
