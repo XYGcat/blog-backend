@@ -1,5 +1,6 @@
 package com.xc.blogbackend.ai.model.openai;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
@@ -9,6 +10,7 @@ import java.util.List;
  * OpenAI 响应体
  */
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class OpenAiResponse {
 
     @JsonProperty("id")
@@ -29,6 +31,9 @@ public class OpenAiResponse {
     @JsonProperty("usage")
     private Usage usage;
 
+    @JsonProperty("system_fingerprint")
+    private String systemFingerprint;
+
     @Data
     public static class Delta {
 
@@ -45,20 +50,30 @@ public class OpenAiResponse {
     @Data
     public static class Choice {
 
-        @JsonProperty("delta")
-        private Delta delta;
-
         @JsonProperty("index")
-        private Integer index;
+        private Long index;
 
         @JsonProperty("finish_reason")
         private String finishReason;
 
         @JsonProperty("logprobs")
         private Object logprobs;
+
+        /**
+         * 请求参数stream为true返回是delta
+         */
+        @JsonProperty("delta")
+        private Message delta;
+
+        /**
+         * 请求参数stream为false返回是message
+         */
+        @JsonProperty("message")
+        private Message message;
     }
 
     @Data
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Usage {
 
         @JsonProperty("prompt_tokens")
