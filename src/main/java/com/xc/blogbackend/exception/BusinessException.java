@@ -1,5 +1,6 @@
 package com.xc.blogbackend.exception;
 
+import com.xc.blogbackend.ai.enums.AiErrorEnum;
 import com.xc.blogbackend.enums.ErrorCode;
 import lombok.Getter;
 
@@ -30,6 +31,11 @@ public class BusinessException extends RuntimeException{
 
     public BusinessException(ErrorCode errorCode, String message) {
         super(message);
+        this.code = errorCode.getCode();
+    }
+
+    public BusinessException(AiErrorEnum errorCode) {
+        super(errorCode.getMsg());
         this.code = errorCode.getCode();
     }
 }

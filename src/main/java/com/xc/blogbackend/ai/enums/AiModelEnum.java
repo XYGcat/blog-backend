@@ -16,11 +16,15 @@ public enum AiModelEnum {
     SPARK_MAX("generalv3.5", "https://spark-api.xf-yun.com/v3.5/chat"),
 
     // OPENAI
-    OPENAI("OPENAI", "https://api.openai.com/v1/chat/completions"),
+    /**
+     * 最新模型参考官方文档：
+     * <a href="https://platform.openai.com/docs/models/model-endpoint-compatibility">官方稳定模型列表</a>
+     */
+    OPENAI_GPT_3_5_TURBO("gpt-3.5-turbo", "https://api.openai.com/v1/chat/completions"),
 
     // 阿里云百炼
-    ALIYUN_DEEPSEEK_V3("deepseek-v3", "https://dashscope.aliyuncs.com/compatible-mode/v1"),
-    ALIYUN_DEEPSEEK_R1("deepseek-r1", "https://dashscope.aliyuncs.com/compatible-mode/v1"),
+    ALIYUN_DEEPSEEK_V3("deepseek-v3", "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions"),
+    ALIYUN_DEEPSEEK_R1("deepseek-r1", "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions"),
 
     ;
 
