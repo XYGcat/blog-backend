@@ -42,14 +42,14 @@ public class OpenAISSEEventSourceListener<T extends ResponseBodyEmitter> extends
     @Override
     public void onEvent(EventSource eventSource, String id, String type, String data) {
         log.info("OpenAI返回数据：{}", data);
-        if (data.equals("[DONE]")) {
+        ObjectMapper mapper = new ObjectMapper();
+        OpenAiResponse openAiResponse = mapper.readValue(data, OpenAiResponse.class); // 读取Json
+        if ("stop".equals(openAiResponse.getChoices().get(0).getFinishReason())) {
             log.info("OpenAI返回数据结束了");
             // 传输完成后自动关闭sse
             emitter.complete();
             return;
         }
-        ObjectMapper mapper = new ObjectMapper();
-        OpenAiResponse openAiResponse = mapper.readValue(data, OpenAiResponse.class); // 读取Json
         try {
             emitter.send(openAiResponse.getChoices().get(0).getDelta().getContent());
         } catch (Exception e) {

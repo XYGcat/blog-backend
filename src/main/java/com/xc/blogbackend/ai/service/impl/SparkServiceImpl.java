@@ -10,6 +10,7 @@ import com.xc.blogbackend.ai.model.spark.SparkRequest;
 import com.xc.blogbackend.ai.model.spark.SparkResponse;
 import io.github.cdimascio.dotenv.Dotenv;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
 
@@ -23,27 +24,45 @@ import java.util.concurrent.CompletableFuture;
 @Service("SPARKAI")
 public class SparkServiceImpl implements AiService {
 
-    private final String appId;
-    private final String apiKey;
-    private final String apiSecret;
-    private final String apiHost;
-    private final String model;
+    @Value("${spring.profiles.active}")
+    private String env;
+
+    private String appId;
+    private String apiKey;
+    private String apiSecret;
+    private String apiHost;
+    private String model;
 
     /**
      * 构造函数，从环境变量中获取 Spark AI 的配置信息
      */
     public SparkServiceImpl() {
-        Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
-
-        this.appId = dotenv.get("SPARK_APP_ID");
-        this.apiKey = dotenv.get("SPARK_API_KEY");
-        this.apiSecret = dotenv.get("SPARK_API_SECRET");
-        this.apiHost = AiModelEnum.SPARK_MAX.getHost();
-        this.model = AiModelEnum.SPARK_MAX.getModel();
     }
 
     @Override
     public ResponseBodyEmitter chatProcess(ChatRequest chatRequest, String... aiModel) {
+        log.info("当前环为境：{}", env);
+        if (aiModel != null && aiModel.length > 0){
+            if ("dev".equals(env)) {
+                // 在开发环境中使用 dotenv
+                Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+                if (dotenv == null) {
+                    log.error("dotenv is null");
+                }
+                this.appId = dotenv.get("SPARK_APP_ID");
+                this.apiKey = dotenv.get("SPARK_API_KEY");
+                this.apiSecret = dotenv.get("SPARK_API_SECRET");
+            } else {
+                // 在生产环境中从系统环境变量中获取配置
+                this.appId = System.getenv("SPARK_APP_ID");
+                this.apiKey = System.getenv("SPARK_API_KEY");
+                this.apiSecret = System.getenv("SPARK_API_SECRET");
+            }
+
+            this.apiHost = AiModelEnum.SPARK_MAX.getHost();
+            this.model = AiModelEnum.SPARK_MAX.getModel();
+        }
+
         // 创建 ResponseBodyEmitter 实例
         ResponseBodyEmitter emitter = new ResponseBodyEmitter();
 

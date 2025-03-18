@@ -9,6 +9,7 @@ import com.xc.blogbackend.ai.model.openai.Message;
 import com.xc.blogbackend.ai.model.spark.ChatRequest;
 import io.github.cdimascio.dotenv.Dotenv;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
 
@@ -26,22 +27,35 @@ public class OpenAiServiceImpl implements AiService {
     private String apiHost;
     private String model;
 
-    private final Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+    private Dotenv dotenv;
+
+    @Value("${spring.profiles.active}")
+    private String env;
 
     /**
-     * 构造函数，从环境变量中获取 Open AI 的配置信息
+     * 构造函数
      */
     public OpenAiServiceImpl() {
-
-        this.apiKey = dotenv.get("OPENAI_API_KEY");
-        this.apiHost = AiModelEnum.OPENAI_GPT_3_5_TURBO.getHost();
-        this.model = AiModelEnum.OPENAI_GPT_3_5_TURBO.getModel();
     }
 
     @Override
     public ResponseBodyEmitter chatProcess(ChatRequest chatRequest, String... aiModel) {
-        if (aiModel != null){
-            this.apiKey = dotenv.get(String.format("%s_API_KEY", AiModelEnum.getName(aiModel[0])));
+        log.info("当前环为境：{}", env);
+        if (aiModel != null && aiModel.length > 0){
+            if ("dev".equalsIgnoreCase(env)) {
+                // 开发环境使用 dotenv 获取配置信息
+                dotenv = Dotenv.configure().ignoreIfMissing().load();
+                if (dotenv == null) {
+                    log.error("dotenv not found");
+                }
+                this.apiKey = dotenv.get(String.format("%s_API_KEY", AiModelEnum.getName(aiModel[0])));
+            } else {
+                // 生产环境从系统环境变量获取
+                this.apiKey = System.getenv(String.format("%s_API_KEY", AiModelEnum.getName(aiModel[0])));
+            }
+            if (this.apiKey == null) {
+                log.error("{}_API_KEY is not set", AiModelEnum.getName(aiModel[0]));
+            }
             this.apiHost = AiModelEnum.getHost(aiModel[0]);
             this.model = aiModel[0];
         }
