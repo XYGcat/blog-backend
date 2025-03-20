@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 /**
  * 前台_首页 Controller
@@ -71,8 +73,8 @@ public class FrontHomeController {
      */
     @ApiOperation(value = "获取随机美女图")
     @GetMapping("/getGirlImg")
-    public BaseResponse<String> getGirl() {
-        String girl = frontHomeService.getGirlImg();
+    public BaseResponse<ImageVo> getGirl() {
+        ImageVo girl = frontHomeService.getGirlImg();
         return ResultUtils.success(girl,"获取图片成功");
     }
 
@@ -82,6 +84,15 @@ public class FrontHomeController {
         // 随机数
         int nextInt = new Random().nextInt(50);
         List<ImageVo> girlImgList = frontHomeService.getGirlImgList(nextInt + 1);
-        return ResultUtils.success(girlImgList,"获取图片列表成功");
+
+        // 随机打乱列表
+        Collections.shuffle(girlImgList);
+
+        // 获取前 8 条数据
+        List<ImageVo> imageVos = girlImgList.stream()
+                .limit(8)
+                .collect(Collectors.toList());
+
+        return ResultUtils.success(imageVos,"获取图片列表成功");
     }
 }

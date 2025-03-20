@@ -36,7 +36,7 @@ public interface FrontHomeService {
      * 随机获取girl图片
      * @return
      */
-    String getGirlImg();
+    ImageVo getGirlImg();
 
     /**
      * 获取girl图片列表

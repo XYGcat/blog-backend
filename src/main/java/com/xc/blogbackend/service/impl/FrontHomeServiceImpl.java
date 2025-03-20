@@ -1,14 +1,15 @@
 package com.xc.blogbackend.service.impl;
 
+import com.xc.blogbackend.client.WebClientService;
 import com.xc.blogbackend.common.RollApiResponse;
-import com.xc.blogbackend.constant.RollApi;
+import com.xc.blogbackend.constant.UtilsApi;
 import com.xc.blogbackend.model.domain.vo.DailySentenceVo;
 import com.xc.blogbackend.model.domain.vo.ImageVo;
 import com.xc.blogbackend.model.domain.vo.WeatherVo;
 import com.xc.blogbackend.service.FrontHomeService;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import java.text.MessageFormat;
 import java.util.Collections;
@@ -17,106 +18,115 @@ import java.util.Map;
 
 @Service
 public class FrontHomeServiceImpl implements FrontHomeService {
+
+    private final WebClientService webClientService;
+
+    public FrontHomeServiceImpl(WebClientService webClientService) {
+        this.webClientService = webClientService;
+    }
+
     @Override
     public DailySentenceVo getDailySentence() {
-        WebClient webClient = WebClient.create();
 
-        String url = MessageFormat.format(RollApi.ROLL_API_DAILY_WORD, RollApi.APP_ID, RollApi.APP_SECRET);
+        String url = UtilsApi.YY_API_DAILY_WORD;
 
-        RollApiResponse<List<Map<String,String>>> response = webClient
-                .get()
-                .uri(url)
-                .retrieve()                                 // 提取响应
-                .bodyToMono(new ParameterizedTypeReference<RollApiResponse<List<Map<String, String>>>>() {})
-                .block();
+        Map<String, String> response = webClientService.get(
+                url,
+                new ParameterizedTypeReference<Map<String, String>>() {});
 
-        DailySentenceVo dailySentenceVo = new DailySentenceVo();
-
-        if (response != null && response.getCode() == 1) {
-            String text = response.getData().get(0).get("content");
-            dailySentenceVo.setText(text);
+        if (response != null) {
+            DailySentenceVo dailySentenceVo = new DailySentenceVo();
+            dailySentenceVo.setHitokoto(response.get("hitokoto"));
+            dailySentenceVo.setFrom(response.get("from"));
+            dailySentenceVo.setFromWho(response.get("from_who"));
             return dailySentenceVo;
         }
         return null;
     }
 
+//    @Override
+//    public DailySentenceVo getDailySentence() {
+//
+//        String url = MessageFormat.format(
+//                UtilsApi.ROLL_API_DAILY_WORD,
+//                UtilsApi.ROLL_APP_ID,
+//                UtilsApi.ROLL_APP_SECRET);
+//
+//        RollApiResponse<List<Map<String,String>>> response = webClientService.get(
+//                url,
+//                new ParameterizedTypeReference<RollApiResponse<List<Map<String, String>>>>() {});
+//
+//        if (response != null && response.getCode() == 1) {
+//            DailySentenceVo dailySentenceVo = new DailySentenceVo();
+//            dailySentenceVo.setText(response.getData().get(0).get("content"));
+//            return dailySentenceVo;
+//        }
+//        return null;
+//    }
+
     @Override
     public WeatherVo getWeatherCurrent(String city) {
-        WebClient webClient = WebClient.create();
+        String url = MessageFormat.format(
+                UtilsApi.ROLL_API_WEATHER_CURRENT,
+                city,
+                UtilsApi.ROLL_APP_ID,
+                UtilsApi.ROLL_APP_SECRET
+        );
 
-        String url = MessageFormat.format(RollApi.ROLL_API_WEATHER_CURRENT,city, RollApi.APP_ID, RollApi.APP_SECRET);
+        RollApiResponse<WeatherVo> response = webClientService.get(
+                url,
+                new ParameterizedTypeReference<RollApiResponse<WeatherVo>>() {});
 
-        RollApiResponse<WeatherVo> response = webClient
-                .get()
-                .uri(url)
-                .retrieve()                                 // 提取响应
-                .bodyToMono(new ParameterizedTypeReference<RollApiResponse<WeatherVo>>() {})
-                .block();                                   // 阻塞等待结果
-
-        if (response != null && response.getCode() == 1) {
-            return response.getData();
-        }else {
-            return null;
-        }
+        return response != null && response.getCode() == 1 ? response.getData() : null;
     }
 
     @Override
     public WeatherVo getWeatherForecast(String city) {
-        WebClient webClient = WebClient.create();
+        String url = MessageFormat.format(
+                UtilsApi.ROLL_API_WEATHER_FORECAST,
+                city,
+                UtilsApi.ROLL_APP_ID,
+                UtilsApi.ROLL_APP_SECRET
+        );
 
-        String url = MessageFormat.format(RollApi.ROLL_API_WEATHER_FORECAST,city, RollApi.APP_ID, RollApi.APP_SECRET);
+        RollApiResponse<WeatherVo> response = webClientService.get(
+                url,
+                new ParameterizedTypeReference<RollApiResponse<WeatherVo>>() {}
+        );
 
-        RollApiResponse<WeatherVo> response = webClient
-                .get()
-                .uri(url)
-                .retrieve()                                 // 提取响应
-                .bodyToMono(new ParameterizedTypeReference<RollApiResponse<WeatherVo>>() {})
-                .block();                                   // 阻塞等待结果
-
-        if (response != null && response.getCode() == 1) {
-            return response.getData();
-        }else {
-            return null;
-        }
+        return response != null && response.getCode() == 1 ? response.getData() : null;
     }
 
     @Override
-    public String getGirlImg() {
-        WebClient webClient = WebClient.create();
+    public ImageVo getGirlImg() {
+        String url = UtilsApi.LZ_API_GIRL_IMG_LIST_URL;
 
-        String url = MessageFormat.format(RollApi.ROLL_API_GIRL_IMG, RollApi.APP_ID, RollApi.APP_SECRET);
-
-        RollApiResponse<List<Map<String,String>>> response = webClient
-                .get()
-                .uri(url)
-                .retrieve()                                 // 提取响应
-                .bodyToMono(new ParameterizedTypeReference<RollApiResponse<List<Map<String,String>>>>() {})
-                .block();                                   // 阻塞等待结果
-
-        if (response != null && response.getCode() == 1) {
-            return response.getData().get(0).get("imageUrl");
-        }else {
-            return null;
+        RollApiResponse<String> response = webClientService.get(
+                url,
+                new ParameterizedTypeReference<RollApiResponse<String>>() {}
+        );
+        if (ObjectUtils.isNotEmpty(response) && response.getCode() == 200) {
+            ImageVo imageVo = new ImageVo();
+            imageVo.setImageUrl(response.getData());
+            return imageVo;
         }
+        return null;
     }
 
     @Override
     public List<ImageVo> getGirlImgList(int page) {
-        WebClient webClient = WebClient.create();
+        String url = MessageFormat.format(
+                UtilsApi.ROLL_API_GIRL_IMG_LIST,
+                page,
+                UtilsApi.ROLL_APP_ID,
+                UtilsApi.ROLL_APP_SECRET
+        );
 
-        String url = MessageFormat.format(RollApi.ROLL_API_GIRL_IMG_LIST,page, RollApi.APP_ID, RollApi.APP_SECRET);
+        RollApiResponse<List<ImageVo>> response = webClientService.get(
+                url,
+                new ParameterizedTypeReference<RollApiResponse<List<ImageVo>>>() {}
+        );
 
-        RollApiResponse<List<ImageVo>> response = webClient
-                .get()
-                .uri(url)
-                .retrieve()                                 // 提取响应
-                .bodyToMono(new ParameterizedTypeReference<RollApiResponse<List<ImageVo>>>() {})
-                .block();                                   // 阻塞等待结果
-
-        if (response != null && response.getCode() == 1) {
-            return response.getData();
-        }else {
-            return Collections.emptyList();
-        }
+        return response != null && response.getCode() == 1 ? response.getData() : Collections.emptyList();
     }
 }

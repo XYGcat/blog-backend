@@ -13,12 +13,17 @@ public class DailySentenceVo {
     /**
      * 句子
      */
-    private String text;
+    private String hitokoto;
+
+    /**
+     * 出处
+     */
+    private String from;
 
     /**
      * 作者
      */
-    private String author;
+    private String fromWho;
 
     /**
      * 标签
