@@ -16,5 +16,5 @@ public interface AiService {
      * @param chatRequest 用户输入
      * @return AI 返回的响应文本
      */
-    ResponseBodyEmitter chatProcess(ChatRequest chatRequest, String... aiModel);
+    ResponseBodyEmitter chatProcess(ChatRequest chatRequest);
 }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * AI接口
@@ -36,7 +37,7 @@ public class AiController {
     @PostMapping("/chat")
     public ResponseBodyEmitter chatProcess(@RequestBody ChatRequest chatRequest) {
         AiService aiService = aiServiceFactory.getAiService("OPENAI");
-        return aiService.chatProcess(chatRequest, AiModelEnum.ALIYUN_DEEPSEEK_V3.getModel());
+        return aiService.chatProcess(chatRequest);
     }
 
     /**
@@ -49,5 +50,11 @@ public class AiController {
     @PostMapping("/chat/config")
     public BaseResponse<Boolean> chatConfig(HttpServletRequest request){
         return ResultUtils.success(true);
+    }
+
+    @ApiOperation(value = "获取大模型列表")
+    @PostMapping("/modelList")
+    public BaseResponse<List<String>> aiModelList(){
+        return ResultUtils.success(AiModelEnum.getAllModel());
     }
 }

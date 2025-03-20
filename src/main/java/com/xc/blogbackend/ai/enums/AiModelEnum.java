@@ -3,6 +3,9 @@ package com.xc.blogbackend.ai.enums;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 大模型枚举
  *
@@ -60,5 +63,18 @@ public enum AiModelEnum {
             }
         }
         return null;
+    }
+
+    /**
+     * 获取所有模型
+     *
+     * @return 模型列表
+     */
+    public static List<String> getAllModel(){
+        List<String> allModel = new ArrayList<>();
+        for (AiModelEnum value : values()){
+            allModel.add(value.getModel());
+        }
+        return allModel;
     }
 }

@@ -63,7 +63,7 @@ public class OpenAiStreamClient {
      */
     private OpenAiStreamClient(Builder builder) {
         if (StringUtils.isEmpty(builder.apiKey)) {
-            throw new BusinessException(AiErrorEnum.API_KEYS_NOT_NUL);
+            throw new BusinessException(AiErrorEnum.API_KEYS_NOT_NULL);
         }
         apiKey = builder.apiKey;
 

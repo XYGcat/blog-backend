@@ -40,28 +40,26 @@ public class SparkServiceImpl implements AiService {
     }
 
     @Override
-    public ResponseBodyEmitter chatProcess(ChatRequest chatRequest, String... aiModel) {
+    public ResponseBodyEmitter chatProcess(ChatRequest chatRequest) {
         log.info("当前环为境：{}", env);
-        if (aiModel != null && aiModel.length > 0){
-            if ("dev".equals(env)) {
-                // 在开发环境中使用 dotenv
-                Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
-                if (dotenv == null) {
-                    log.error("dotenv is null");
-                }
-                this.appId = dotenv.get("SPARK_APP_ID");
-                this.apiKey = dotenv.get("SPARK_API_KEY");
-                this.apiSecret = dotenv.get("SPARK_API_SECRET");
-            } else {
-                // 在生产环境中从系统环境变量中获取配置
-                this.appId = System.getenv("SPARK_APP_ID");
-                this.apiKey = System.getenv("SPARK_API_KEY");
-                this.apiSecret = System.getenv("SPARK_API_SECRET");
+        if ("dev".equals(env)) {
+            // 在开发环境中使用 dotenv
+            Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+            if (dotenv == null) {
+                log.error("dotenv is null");
             }
-
-            this.apiHost = AiModelEnum.SPARK_MAX.getHost();
-            this.model = AiModelEnum.SPARK_MAX.getModel();
+            this.appId = dotenv.get("SPARK_APP_ID");
+            this.apiKey = dotenv.get("SPARK_API_KEY");
+            this.apiSecret = dotenv.get("SPARK_API_SECRET");
+        } else {
+            // 在生产环境中从系统环境变量中获取配置
+            this.appId = System.getenv("SPARK_APP_ID");
+            this.apiKey = System.getenv("SPARK_API_KEY");
+            this.apiSecret = System.getenv("SPARK_API_SECRET");
         }
+
+        this.apiHost = AiModelEnum.SPARK_MAX.getHost();
+        this.model = AiModelEnum.SPARK_MAX.getModel();
 
         // 创建 ResponseBodyEmitter 实例
         ResponseBodyEmitter emitter = new ResponseBodyEmitter();

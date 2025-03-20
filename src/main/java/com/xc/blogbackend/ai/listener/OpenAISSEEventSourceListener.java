@@ -16,6 +16,8 @@ import java.util.Objects;
 public class OpenAISSEEventSourceListener<T extends ResponseBodyEmitter> extends EventSourceListener {
 
     private final T emitter;
+    // 标记emitter是否完成
+    private boolean emitterCompleted = false;
 
     public OpenAISSEEventSourceListener(T emitter) {
         this.emitter = emitter;
@@ -42,20 +44,26 @@ public class OpenAISSEEventSourceListener<T extends ResponseBodyEmitter> extends
     @Override
     public void onEvent(EventSource eventSource, String id, String type, String data) {
         log.info("OpenAI返回数据：{}", data);
-        ObjectMapper mapper = new ObjectMapper();
-        OpenAiResponse openAiResponse = mapper.readValue(data, OpenAiResponse.class); // 读取Json
-        if ("stop".equals(openAiResponse.getChoices().get(0).getFinishReason())) {
+        if (data.equals("[DONE]")) {
             log.info("OpenAI返回数据结束了");
             // 传输完成后自动关闭sse
-            emitter.complete();
+            completeEmitter();
             return;
         }
+        if (emitterCompleted) {
+            // 如果 emitter 已完成，则直接返回，不再处理后续逻辑
+            log.warn("Emitter 已完成，忽略后续事件");
+            return;
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        OpenAiResponse openAiResponse = mapper.readValue(data, OpenAiResponse.class); // 读取Json
         try {
             emitter.send(openAiResponse.getChoices().get(0).getDelta().getContent());
         } catch (Exception e) {
-            log.error("sse信息推送失败！");
+            log.error("sse信息推送失败！", e);
             eventSource.cancel();
-            e.printStackTrace();
+            // 确保异常发生后关闭 emitter
+            completeEmitter();
         }
     }
 
@@ -66,7 +74,7 @@ public class OpenAISSEEventSourceListener<T extends ResponseBodyEmitter> extends
     @Override
     public void onClosed(EventSource eventSource) {
         log.info("OpenAI关闭sse连接...");
-        emitter.complete();
+        completeEmitter();
     }
 
     /**
@@ -79,15 +87,29 @@ public class OpenAISSEEventSourceListener<T extends ResponseBodyEmitter> extends
     @Override
     public void onFailure(EventSource eventSource, Throwable t, Response response) {
         if (Objects.isNull(response)) {
+            log.error("OpenAI SSE 连接失败，没有返回数据。", t);
             return;
         }
         ResponseBody body = response.body();
         if (Objects.nonNull(body)) {
-            log.error("OpenAI  sse连接异常data：{}，异常：{}", body.string(), t);
+            log.error("OpenAI  sse连接异常 data：{}，异常：{}", body.string(), t);
         } else {
             log.error("OpenAI  sse连接异常data：{}，异常：{}", response, t);
         }
         eventSource.cancel();
-        emitter.completeWithError(t);
+        completeEmitter();
+        // 关闭流，并把异常传递给客户端
+//        emitter.completeWithError(t);
+    }
+
+    /**
+     * 完成 emitter 发送，防止多次关闭
+     */
+    private void completeEmitter() {
+        if (!emitterCompleted) {
+            emitter.complete();
+            // 标记 emitter 已完成
+            emitterCompleted = true;
+        }
     }
 }

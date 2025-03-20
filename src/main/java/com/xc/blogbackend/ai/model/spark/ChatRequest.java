@@ -8,6 +8,9 @@ import lombok.Data;
 @Data
 public class ChatRequest {
 
+    // 模型
+    private String model;
+
     // 聊天消息
     private String prompt;
 

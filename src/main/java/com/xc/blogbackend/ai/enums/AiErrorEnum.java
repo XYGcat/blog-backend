@@ -10,8 +10,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum AiErrorEnum {
 
-    MESSAGE_NOT_NUL(500, "Message 不能为空"),
-    API_KEYS_NOT_NUL(500, "API KEYS 不能为空"),
+    MODEL_NOT_NULL(500, "模型不能为空"),
+    MESSAGE_NOT_NULL(500, "Message 不能为空"),
+    API_KEYS_NOT_NULL(500, "API KEYS 不能为空"),
     NO_ACTIVE_API_KEYS(500, "没有可用的API KEYS"),
     SYS_ERROR(500, "系统繁忙"),
     PARAM_ERROR(501, "参数异常"),

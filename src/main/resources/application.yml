@@ -6,6 +6,10 @@ spring:
   #session 失效时间
   session:
     timeout: 86400
+  # 异步请求超时时间
+  mvc:
+    async:
+      request-timeout: 300000
   redis:
     host: 118.126.97.205
     port: 6379

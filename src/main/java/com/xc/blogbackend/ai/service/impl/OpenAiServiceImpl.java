@@ -2,13 +2,16 @@ package com.xc.blogbackend.ai.service.impl;
 
 import com.xc.blogbackend.ai.AiService;
 import com.xc.blogbackend.ai.client.OpenAiStreamClient;
+import com.xc.blogbackend.ai.enums.AiErrorEnum;
 import com.xc.blogbackend.ai.enums.AiModelEnum;
 import com.xc.blogbackend.ai.listener.OpenAISSEEventSourceListener;
 import com.xc.blogbackend.ai.model.openai.ChatCompletion;
 import com.xc.blogbackend.ai.model.openai.Message;
 import com.xc.blogbackend.ai.model.spark.ChatRequest;
+import com.xc.blogbackend.exception.BusinessException;
 import io.github.cdimascio.dotenv.Dotenv;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
@@ -39,32 +42,34 @@ public class OpenAiServiceImpl implements AiService {
     }
 
     @Override
-    public ResponseBodyEmitter chatProcess(ChatRequest chatRequest, String... aiModel) {
+    public ResponseBodyEmitter chatProcess(ChatRequest chatRequest) {
         log.info("当前环为境：{}", env);
-        if (aiModel != null && aiModel.length > 0){
-            if ("dev".equalsIgnoreCase(env)) {
-                // 开发环境使用 dotenv 获取配置信息
-                dotenv = Dotenv.configure().ignoreIfMissing().load();
-                if (dotenv == null) {
-                    log.error("dotenv not found");
-                }
-                this.apiKey = dotenv.get(String.format("%s_API_KEY", AiModelEnum.getName(aiModel[0])));
-            } else {
-                // 生产环境从系统环境变量获取
-                this.apiKey = System.getenv(String.format("%s_API_KEY", AiModelEnum.getName(aiModel[0])));
-            }
-            if (this.apiKey == null) {
-                log.error("{}_API_KEY is not set", AiModelEnum.getName(aiModel[0]));
-            }
-            this.apiHost = AiModelEnum.getHost(aiModel[0]);
-            this.model = aiModel[0];
+        String requestModel = chatRequest.getModel();
+        if (ObjectUtils.isEmpty(requestModel)){
+            throw new BusinessException(AiErrorEnum.MODEL_NOT_NULL);
         }
+        if ("dev".equalsIgnoreCase(env)) {
+            // 开发环境使用 dotenv 获取配置信息
+            dotenv = Dotenv.configure().ignoreIfMissing().load();
+            if (dotenv == null) {
+                log.error("dotenv not found");
+            }
+            this.apiKey = dotenv.get(String.format("%s_API_KEY", AiModelEnum.getName(requestModel)));
+        } else {
+            // 生产环境从系统环境变量获取
+            this.apiKey = System.getenv(String.format("%s_API_KEY", AiModelEnum.getName(requestModel)));
+        }
+        if (this.apiKey == null) {
+            throw new BusinessException(AiErrorEnum.API_KEYS_NOT_NULL);
+        }
+        this.apiHost = AiModelEnum.getHost(requestModel);
+        this.model = requestModel;
 
         // 创建 ResponseBodyEmitter 实例
         ResponseBodyEmitter emitter = new ResponseBodyEmitter();
 
         // 异步执行聊天处理逻辑
-        CompletableFuture<Void> user = CompletableFuture.runAsync(() -> {
+        CompletableFuture.runAsync(() -> {
             // 封装 OpenAi 请求参数
             String prompt = chatRequest.getPrompt();
             Message message = Message.builder().role("user").content(prompt).build();
