@@ -1,13 +1,13 @@
 package com.xc.blogbackend.ai.service.impl;
 
-import com.xc.blogbackend.ai.AiService;
-import com.xc.blogbackend.ai.client.AiWebSocketClient;
+import com.xc.blogbackend.ai.client.SparkAiSocketClient;
 import com.xc.blogbackend.ai.enums.AiModelEnum;
 import com.xc.blogbackend.ai.handler.AiChatRequestHandler;
 import com.xc.blogbackend.ai.listener.SparkListener;
 import com.xc.blogbackend.ai.model.spark.ChatRequest;
 import com.xc.blogbackend.ai.model.spark.SparkRequest;
 import com.xc.blogbackend.ai.model.spark.SparkResponse;
+import com.xc.blogbackend.ai.service.AiService;
 import io.github.cdimascio.dotenv.Dotenv;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -73,7 +73,7 @@ public class SparkServiceImpl implements AiService {
             SparkRequest sparkRequest = aiChatRequestHandler.handle(prompt, appId, model);
 
             // 创建 SparkDeskClient 实例用于与 Spark 模型通信
-            AiWebSocketClient aiWebSocketClient = AiWebSocketClient.builder()
+            SparkAiSocketClient sparkAiSocketClient = SparkAiSocketClient.builder()
                     .host(apiHost)
                     .appid(appId)
                     .apiKey(apiKey)
@@ -81,7 +81,7 @@ public class SparkServiceImpl implements AiService {
                     .build();
 
             // 发起聊天请求并设置回调
-            aiWebSocketClient.chat(new SparkListener(sparkRequest) {
+            sparkAiSocketClient.chat(new SparkListener(sparkRequest) {
                 @Override
                 public void onChatOutput(SparkResponse sparkResponse) {
                     try {

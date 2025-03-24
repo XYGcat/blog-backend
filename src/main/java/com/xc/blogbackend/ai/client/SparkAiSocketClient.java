@@ -1,6 +1,7 @@
 package com.xc.blogbackend.ai.client;
 
 import com.xc.blogbackend.ai.listener.AiListener;
+import com.xc.blogbackend.ai.utils.AuthUtils;
 import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -9,14 +10,16 @@ import okhttp3.Request;
 import okhttp3.WebSocket;
 
 /**
- * OpenAI WebSocket 客户端
+ * WebSocket 客户端封装类
  */
 @Data
 @Slf4j
-public class OpenAiWebSocketClient {
-    private String host;                       // WebSocket 服务器地址
-    private String apiKey;                     // API 密钥
-    private OkHttpClient okHttpClient;         // OkHttp WebSocket 客户端
+public class SparkAiSocketClient {
+    private String host; // WebSocket 服务器地址
+    private String appid; // 应用 ID
+    private String apiKey; // API 密钥
+    private String apiSecret; // API 密钥密钥
+    private OkHttpClient okHttpClient; // OkHttp WebSocket 客户端
 
     /**
      * 静态工厂方法，返回 Builder 实例
@@ -26,11 +29,13 @@ public class OpenAiWebSocketClient {
     }
 
     /**
-     * Builder 设计模式，用于构造实例
+     * Builder 设计模式，用于构造 SparkAiSocketClient 实例
      */
     public static final class Builder {
         private String host;
+        private String appid;
         private String apiKey;
+        private String apiSecret;
         private OkHttpClient okHttpClient;
 
         private Builder() {}
@@ -40,8 +45,18 @@ public class OpenAiWebSocketClient {
             return this;
         }
 
+        public Builder appid(String appid) {
+            this.appid = appid;
+            return this;
+        }
+
         public Builder apiKey(String apiKey) {
             this.apiKey = apiKey;
+            return this;
+        }
+
+        public Builder apiSecret(String apiSecret) {
+            this.apiSecret = apiSecret;
             return this;
         }
 
@@ -49,18 +64,23 @@ public class OpenAiWebSocketClient {
             this.okHttpClient = okHttpClient;
             return this;
         }
-        
-        public OpenAiWebSocketClient build() {
-            OpenAiWebSocketClient aiWebSocketClient = new OpenAiWebSocketClient();
-            aiWebSocketClient.host = this.host;
-            aiWebSocketClient.apiKey = this.apiKey;
+
+        /**
+         * 构建 SparkAiSocketClient 实例
+         */
+        public SparkAiSocketClient build() {
+            SparkAiSocketClient sparkAiSocketClient = new SparkAiSocketClient();
+            sparkAiSocketClient.host = this.host;
+            sparkAiSocketClient.appid = this.appid;
+            sparkAiSocketClient.apiKey = this.apiKey;
+            sparkAiSocketClient.apiSecret = this.apiSecret;
 
             // 确保 OkHttpClient 不为空
             if (this.okHttpClient == null) {
                 this.okHttpClient = new OkHttpClient.Builder().build();
             }
-            aiWebSocketClient.okHttpClient = this.okHttpClient;
-            return aiWebSocketClient;
+            sparkAiSocketClient.okHttpClient = this.okHttpClient;
+            return sparkAiSocketClient;
         }
     }
 
@@ -72,8 +92,14 @@ public class OpenAiWebSocketClient {
     @SneakyThrows
     public <T extends AiListener> WebSocket chat(T aiListener) {
         try {
+            // 获取鉴权后的 WebSocket 连接地址
+            String authUrl = AuthUtils.getAuthUrl(host, apiKey, apiSecret);
+            String url = authUrl.startsWith("https")
+                    ? authUrl.replaceFirst("https", "wss")
+                    : authUrl.replaceFirst("http", "ws");
+
             // 构造 WebSocket 请求
-            Request request = new Request.Builder().url(host).build();
+            Request request = new Request.Builder().url(url).build();
 
             // 创建 WebSocket 连接并绑定监听器
             return this.okHttpClient.newWebSocket(request, aiListener);

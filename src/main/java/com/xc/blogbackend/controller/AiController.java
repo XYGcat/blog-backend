@@ -1,9 +1,9 @@
 package com.xc.blogbackend.controller;
 
-import com.xc.blogbackend.ai.AiService;
 import com.xc.blogbackend.ai.enums.AiModelEnum;
 import com.xc.blogbackend.ai.factory.AiServiceFactory;
 import com.xc.blogbackend.ai.model.spark.ChatRequest;
+import com.xc.blogbackend.ai.service.AiService;
 import com.xc.blogbackend.common.BaseResponse;
 import com.xc.blogbackend.common.ResultUtils;
 import io.swagger.annotations.Api;

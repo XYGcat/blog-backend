@@ -1,4 +1,4 @@
-package com.xc.blogbackend.utils;
+package com.xc.blogbackend.ai.utils;
 
 import okhttp3.HttpUrl;
 

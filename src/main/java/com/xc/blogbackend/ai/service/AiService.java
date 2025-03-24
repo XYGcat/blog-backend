@@ -1,4 +1,4 @@
-package com.xc.blogbackend.ai;
+package com.xc.blogbackend.ai.service;
 
 import com.xc.blogbackend.ai.model.spark.ChatRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
