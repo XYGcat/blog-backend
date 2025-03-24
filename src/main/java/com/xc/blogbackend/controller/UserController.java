@@ -7,20 +7,18 @@ import com.xc.blogbackend.enums.ErrorCode;
 import com.xc.blogbackend.exception.BusinessException;
 import com.xc.blogbackend.model.domain.entity.BlogUser;
 import com.xc.blogbackend.model.domain.reqDto.UserRegisterRequest;
-import com.xc.blogbackend.model.domain.reqDto.loginReqDto;
 import com.xc.blogbackend.model.domain.resDto.PageInfoResult;
 import com.xc.blogbackend.model.domain.vo.UserVo;
 import com.xc.blogbackend.service.BlogUserService;
 import com.xc.blogbackend.utils.IpUtils;
-import com.xc.blogbackend.utils.JwtGenerator;
 import com.xc.blogbackend.utils.Qiniu;
 import com.xc.blogbackend.utils.StringManipulation;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
@@ -34,39 +32,12 @@ import static com.xc.blogbackend.constant.UserConstant.USER_LOGIN_STATE;
 @Api(tags = "用户接口")
 @RestController
 @RequestMapping("/user")
+@RequiredArgsConstructor
 public class UserController {
 
-    @Resource
-    private BlogUserService blogUserService;
+    private final BlogUserService blogUserService;
 
-    @Resource
-    private Qiniu qiniu;
-
-    /**
-     * 登录接口
-     *
-     * @param loginReqDto
-     * @param request
-     * @return
-     */
-    @ApiOperation(value = "登录接口")
-    @PostMapping("/login")
-    public BaseResponse<UserVo> userLogin(@RequestBody loginReqDto loginReqDto, HttpServletRequest request){
-        String ipAddress = IpUtils.getClientIp(request);
-        String username = loginReqDto.getUsername();
-        String password = loginReqDto.getPassword();
-        if(StringUtils.isAnyBlank(username,password)){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR,"请输入账号密码！");
-        }
-
-        UserVo blogUser = blogUserService.userLogin(username, password,ipAddress, request);
-
-        //创建Token
-        String token = JwtGenerator.generateToken(blogUser);
-        blogUser.setToken(token);
-
-        return ResultUtils.success(blogUser);
-    }
+    private final Qiniu qiniu;
 
     /**
      * 注册接口

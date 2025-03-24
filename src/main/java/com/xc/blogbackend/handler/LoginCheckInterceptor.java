@@ -1,11 +1,11 @@
 package com.xc.blogbackend.handler;
 
-import cn.hutool.core.util.ObjectUtil;
 import com.xc.blogbackend.context.UserContext;
 import com.xc.blogbackend.enums.ErrorCode;
 import com.xc.blogbackend.exception.BusinessException;
 import com.xc.blogbackend.model.domain.vo.UserVo;
-import com.xc.blogbackend.utils.JwtGenerator;
+import com.xc.blogbackend.utils.JwtUtils;
+import io.jsonwebtoken.Claims;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -29,20 +29,25 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
         String authorization = request.getHeader("Authorization");
 
         if (authorization == null) {
-            // 验证失败
-            throw new BusinessException(401,"您没有权限访问，请先登录");
+            throw new BusinessException(ErrorCode.NO_LOGIN,"您没有权限访问，请先登录");
         }
 
-        //检查并提取了有效的 JWT 令牌内容，去掉了 "Bearer " 前缀，以便后续的验证和处理
+        //检查并提取有效的 JWT 令牌内容
         String token = authorization.startsWith("Bearer ")
                 ? authorization.replace("Bearer ", "")
                 : authorization;
 
-        UserVo userVo = JwtGenerator.parseToken(token);
-        if (ObjectUtil.isEmpty(userVo)) {
-            throw new BusinessException(ErrorCode.NO_LOGIN);
+        Claims claims = JwtUtils.parseToken(token);
+        Boolean tokenExpired = JwtUtils.isTokenExpired(claims);
+        if (tokenExpired){
+            throw new BusinessException(ErrorCode.ACCESS_TOKEN_EXPIRE, "访问token已过期");
         }
-        UserContext.setUser(userVo); // 将用户信息放入 ThreadLocal
+
+        // 使用反射将Claims中的值填充到UserVo对象中
+        UserVo userVo = new UserVo();
+        JwtUtils.populateFromMap(userVo, claims);
+        // 将用户信息放入 ThreadLocal
+        UserContext.setUser(userVo);
 
         return true;
     }

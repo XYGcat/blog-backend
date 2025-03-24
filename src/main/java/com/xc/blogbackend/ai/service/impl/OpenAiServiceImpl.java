@@ -1,6 +1,5 @@
 package com.xc.blogbackend.ai.service.impl;
 
-import com.xc.blogbackend.ai.AiService;
 import com.xc.blogbackend.ai.client.OpenAiStreamClient;
 import com.xc.blogbackend.ai.enums.AiErrorEnum;
 import com.xc.blogbackend.ai.enums.AiModelEnum;
@@ -8,6 +7,7 @@ import com.xc.blogbackend.ai.listener.OpenAISSEEventSourceListener;
 import com.xc.blogbackend.ai.model.openai.ChatCompletion;
 import com.xc.blogbackend.ai.model.openai.Message;
 import com.xc.blogbackend.ai.model.spark.ChatRequest;
+import com.xc.blogbackend.ai.service.AiService;
 import com.xc.blogbackend.exception.BusinessException;
 import io.github.cdimascio.dotenv.Dotenv;
 import lombok.extern.slf4j.Slf4j;

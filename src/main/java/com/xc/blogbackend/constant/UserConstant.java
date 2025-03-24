@@ -22,7 +22,7 @@ public interface UserConstant {
     /**
      * Token加密密文，私钥
      */
-    String JWT_SECRET = "Let life be beautiful like summer flowers and death like autumn leaves";
+    String JWT_SECRET_KEY = "Let life be beautiful like summer flowers and death like autumn leaves";
 
     /**
      * 登录验证拦截器排除特定的请求路径

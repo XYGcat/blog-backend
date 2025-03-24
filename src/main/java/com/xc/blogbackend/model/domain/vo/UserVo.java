@@ -2,6 +2,7 @@ package com.xc.blogbackend.model.domain.vo;
 
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
  * 用户信息对象
  */
 @Data
+@Accessors(chain = true)
 @ApiModel("用户信息对象")
 public class UserVo implements Serializable {
 
@@ -26,9 +28,14 @@ public class UserVo implements Serializable {
     private String ipAddress;
 
     /**
-     * 添加一个token字段
+     * 登录token
      */
-    private String token;
+    private String accessToken;
+
+    /**
+     * 刷新token
+     */
+    private String refreshToken;
 
     /**
      * 账号，唯一
