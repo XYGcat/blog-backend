@@ -2,6 +2,7 @@ package com.xc.blogbackend.utils;
 
 import com.xc.blogbackend.enums.ErrorCode;
 import com.xc.blogbackend.exception.BusinessException;
+import com.xc.blogbackend.model.domain.vo.TokenVo;
 import com.xc.blogbackend.model.domain.vo.UserVo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -15,6 +16,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.lang.reflect.Field;
 import java.time.Instant;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -60,7 +62,7 @@ public class JwtUtils {
      * @param includeUserInfo 是否在Payload中包含用户信息
      * @return
      */
-    public static String generateToken(UserVo userInfo, int expireTime, boolean includeUserInfo) {
+    public static Map<String, String> generateToken(UserVo userInfo, int expireTime, boolean includeUserInfo) {
         // 设置Payload部分（声明）
         Claims claims = Jwts.claims();
         claims.setSubject(String.valueOf(userInfo.getId()));
@@ -73,16 +75,24 @@ public class JwtUtils {
         // 设置令牌的过期时间
         Instant expirationInstant = Instant.now().plusSeconds(expireTime);
         Date expirationDate = Date.from(expirationInstant);
+        String expires = String.valueOf(expirationInstant.toEpochMilli());
+
         // 生成签名的密钥
         SecretKey key = generalKey();
 
         // 生成JWT令牌
-        return Jwts.builder()
+        String token = Jwts.builder()
                 .setClaims(claims)                  // 设置载荷信息
                 .setId(getJwtId())                  // JWT唯一身份标识
                 .setExpiration(expirationDate)      // 设置过期时间
-                .signWith(key,signatureAlgorithm)   // 设置签名及算法
+                .signWith(key, signatureAlgorithm)   // 设置签名及算法
                 .compact();
+
+        Map<String, String> map = new HashMap<>();
+        map.put("token", token);
+        map.put("expires", expires);
+
+        return map;
     }
 
     /**
@@ -91,8 +101,11 @@ public class JwtUtils {
      * @param userInfo 用户信息
      * @return
      */
-    public static String generateAccessToken(UserVo userInfo) {
-        return generateToken(userInfo, ACCESS_TOKEN_EXPIRE_TIME, true);
+    public static TokenVo generateAccessToken(UserVo userInfo) {
+        Map<String, String> tokenMap = generateToken(userInfo, ACCESS_TOKEN_EXPIRE_TIME, true);
+        return new TokenVo()
+                .setAccessToken(tokenMap.get("token"))
+                .setAccessExpires(Long.valueOf(tokenMap.get("expires")));
     }
 
     /**
@@ -101,8 +114,11 @@ public class JwtUtils {
      * @param userInfo 用户信息
      * @return
      */
-    public static String generateRefreshToken(UserVo userInfo) {
-        return generateToken(userInfo, REFRESH_TOKEN_EXPIRE_TIME, false);
+    public static TokenVo generateRefreshToken(UserVo userInfo) {
+        Map<String, String> tokenMap = generateToken(userInfo, REFRESH_TOKEN_EXPIRE_TIME, false);
+        return new TokenVo()
+                .setRefreshToken(tokenMap.get("token"))
+                .setRefreshExpires(Long.valueOf(tokenMap.get("expires")));
     }
 
     /**

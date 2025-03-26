@@ -28,14 +28,9 @@ public class UserVo implements Serializable {
     private String ipAddress;
 
     /**
-     * 登录token
+     * token信息
      */
-    private String accessToken;
-
-    /**
-     * 刷新token
-     */
-    private String refreshToken;
+    private TokenVo tokens;
 
     /**
      * 账号，唯一

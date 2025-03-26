@@ -7,8 +7,13 @@ import com.xc.blogbackend.enums.ErrorCode;
 import com.xc.blogbackend.exception.BusinessException;
 import com.xc.blogbackend.model.domain.entity.BlogUser;
 import com.xc.blogbackend.model.domain.reqDto.UserRegisterRequest;
+import com.xc.blogbackend.model.domain.reqDto.loginReqDto;
 import com.xc.blogbackend.model.domain.resDto.PageInfoResult;
+import com.xc.blogbackend.model.domain.vo.MenuVo;
+import com.xc.blogbackend.model.domain.vo.TokenVo;
 import com.xc.blogbackend.model.domain.vo.UserVo;
+import com.xc.blogbackend.service.AuthService;
+import com.xc.blogbackend.service.BgMenuService;
 import com.xc.blogbackend.service.BlogUserService;
 import com.xc.blogbackend.utils.IpUtils;
 import com.xc.blogbackend.utils.Qiniu;
@@ -17,9 +22,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 
 import static com.xc.blogbackend.constant.UserConstant.USER_LOGIN_STATE;
@@ -35,9 +42,46 @@ import static com.xc.blogbackend.constant.UserConstant.USER_LOGIN_STATE;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final BlogUserService blogUserService;
-
+    private final BlogUserService userService;
     private final Qiniu qiniu;
+    private final RedisTemplate redisTemplate;
+    private final AuthService authService;
+    private final BgMenuService menuService;
+
+    /**
+     * 登录接口
+     *
+     * @param loginReqDto
+     * @param request
+     * @return
+     */
+    @ApiOperation(value = "登录接口")
+    @PostMapping("/login")
+    public BaseResponse<UserVo> userLogin(@RequestBody loginReqDto loginReqDto, HttpServletRequest request){
+        String ipAddress = IpUtils.getClientIp(request);
+        String username = loginReqDto.getUsername();
+        String password = loginReqDto.getPassword();
+
+        UserVo userInfo = userService.userLogin(username, password,ipAddress, request);
+        TokenVo tokenVo = authService.generateTokensAndSetToUser(userInfo);
+        userInfo.setTokens(tokenVo);
+
+        return ResultUtils.success(userInfo);
+    }
+
+    /**
+     * 登出接口
+     *
+     * @return
+     */
+    @ApiOperation(value = "登出接口")
+    @PostMapping("/logout")
+    public BaseResponse<UserVo> logout(@RequestBody String userId) {
+        redisTemplate.delete("REFRESH_TOKEN_" + userId);
+        List<MenuVo> menuVos = menuService.roleQueryMenus(null);
+        UserVo userVo = new UserVo().setMenus(menuVos);
+        return ResultUtils.success(userVo);
+    }
 
     /**
      * 注册接口
@@ -59,7 +103,7 @@ public class UserController {
         }
         //获取客户端ip
         String ip = IpUtils.getClientIp(request);
-        Map<String,String> result = blogUserService.userRegister(username, password, checkPassword, ip);
+        Map<String,String> result = userService.userRegister(username, password, checkPassword, ip);
         return ResultUtils.success(result);
     }
 
@@ -74,7 +118,7 @@ public class UserController {
     public BaseResponse<UserVo> getUserInfo(@PathVariable Long id){
         if (id != null) {
             //// TODO: 2023-11-20 过滤返回值
-            UserVo userInfo = blogUserService.getOneUserInfo(id);
+            UserVo userInfo = userService.getOneUserInfo(id);
 
             //添加七牛云访问Token
             try {
@@ -103,7 +147,7 @@ public class UserController {
         String nickName = (String) request.get("nick_name");
         Integer role = (Integer) request.get("role");
         Integer size = (Integer) request.get("size");
-        PageInfoResult<BlogUser> userList = blogUserService.getUserList(current, nickName, role, size);
+        PageInfoResult<BlogUser> userList = userService.getUserList(current, nickName, role, size);
 
         return ResultUtils.success(userList,"分页获取用户列表成功");
     }
@@ -120,7 +164,7 @@ public class UserController {
         Long id = (Long) request.get("id");
         String avatar = (String) request.get("avatar");
 
-        UserVo userInfo = blogUserService.getOneUserInfo(id);
+        UserVo userInfo = userService.getOneUserInfo(id);
 
         // 服务器删除原来的头像
         if (userInfo.getAvatar() != null && userInfo.getAvatar() != avatar) {
@@ -128,7 +172,7 @@ public class UserController {
             Boolean aBoolean = qiniu.deleteFile(subString);
         }
 
-        Boolean aBoolean = blogUserService.updateOwnUserInfo(request);
+        Boolean aBoolean = userService.updateOwnUserInfo(request);
 
         return ResultUtils.success(aBoolean,"修改用户成功");
     }
@@ -150,7 +194,7 @@ public class UserController {
         BlogUser safetyUser = (BlogUser) httpServletRequest.getSession().getAttribute(USER_LOGIN_STATE);
         Long id = safetyUser.getId();
 
-        Boolean aBoolean = blogUserService.updatePassword(id, password, password1);
+        Boolean aBoolean = userService.updatePassword(id, password, password1);
 
         return ResultUtils.success(aBoolean,"修改用户密码成功");
     }
@@ -165,7 +209,7 @@ public class UserController {
     @ApiOperation(value = "修改用户角色")
     @PutMapping("/updateRole/{id}/{role}")
     public BaseResponse<Boolean> updateRole(@PathVariable Long id,@PathVariable Integer role){
-        Boolean aBoolean = blogUserService.updateRole(id, role);
+        Boolean aBoolean = userService.updateRole(id, role);
 
         return ResultUtils.success(aBoolean,"修改角色成功");
     }
