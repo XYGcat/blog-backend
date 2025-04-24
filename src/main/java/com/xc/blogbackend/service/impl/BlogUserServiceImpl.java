@@ -8,6 +8,7 @@ import com.xc.blogbackend.constant.UserConstant;
 import com.xc.blogbackend.enums.ErrorCode;
 import com.xc.blogbackend.exception.BusinessException;
 import com.xc.blogbackend.mapper.BlogUserMapper;
+import com.xc.blogbackend.model.domain.entity.BgUserRole;
 import com.xc.blogbackend.model.domain.entity.BlogUser;
 import com.xc.blogbackend.model.domain.resDto.PageInfoResult;
 import com.xc.blogbackend.model.domain.vo.MenuVo;
@@ -19,12 +20,12 @@ import com.xc.blogbackend.service.BlogUserService;
 import com.xc.blogbackend.utils.FieldCopyUtils;
 import com.xc.blogbackend.utils.IpUtils;
 import com.xc.blogbackend.utils.RandomUsernameGenerator;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
@@ -40,19 +41,16 @@ import static com.xc.blogbackend.constant.UserConstant.USER_LOGIN_STATE;
 * @description 针对表【bg_user】的数据库操作Service实现
 * @createDate 2023-11-10 18:27:39
 */
-@Service
 @Slf4j
+@Service
+@RequiredArgsConstructor
 public class BlogUserServiceImpl extends ServiceImpl<BlogUserMapper, BlogUser>
     implements BlogUserService {
 
-    @Resource
-    private BlogUserMapper blogUserMapper;
-
-    @Resource
-    private BgMenuService bgMenuService;
-
-    @Resource
-    private BgRoleService bgRoleService;
+    private final BlogUserMapper blogUserMapper;
+    private final BgMenuService bgMenuService;
+    private final BgRoleService bgRoleService;
+    private final BgUserRoleServiceImpl userRoleService;
 
     @Override
     public UserVo userLogin(String username, String password, String ip, HttpServletRequest request){
@@ -151,6 +149,11 @@ public class BlogUserServiceImpl extends ServiceImpl<BlogUserMapper, BlogUser>
         if(!saveResult){
             throw new BusinessException(ErrorCode.PARAMS_ERROR,"为空");
         }
+        BgUserRole userRole = new BgUserRole()
+                .setUserId(blogUser.getId())
+                .setRoleId(3L);
+        userRoleService.save(userRole);
+
         Map<String, String> userMap = new HashMap<>();
         userMap.put("id",String.valueOf(blogUser.getId()));
         userMap.put("username",blogUser.getUsername());

@@ -8,6 +8,7 @@ import com.xc.blogbackend.common.BaseResponse;
 import com.xc.blogbackend.common.ResultUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,15 +24,12 @@ import java.util.List;
  * @author xc
  */
 @Api(tags = "AI接口")
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/ai")
 public class AiController {
 
     private final AiServiceFactory aiServiceFactory;
-
-    public AiController(AiServiceFactory aiServiceFactory) {
-        this.aiServiceFactory = aiServiceFactory;
-    }
 
     @ApiOperation(value = "AI对话")
     @PostMapping("/chat")
